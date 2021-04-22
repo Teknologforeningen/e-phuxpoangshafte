@@ -2,17 +2,10 @@
 
 ## How to use this?
 
-Open a terminal and follow these steps:
-
-```
-make install
-make run
-```
-
-This will start the app as a whole
-
-If you want to run it as a docker image run:
+First, make sure that you have docker and mongodb installed on your computer. Then you can run the following to set up the local environment:
 
 ```
 docker-compose up --build
 ```
+
+The backend runs on port 8069 and the frontend on 3069
