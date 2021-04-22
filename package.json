@@ -1,0 +1,20 @@
+{
+  "name": "medium-react-typescript-mongo-example",
+  "version": "1.0.0",
+  "description": "Repo demonstrating docker-compose orchestration",
+  "main": "index.js",
+  "repository": "git@gitlab.com:msholty-fd/medium-react-typescript-mongo-example.git",
+  "author": "Michael Sholty <mike.sholty@me.com>",
+  "license": "MIT",
+  "private": false,
+  "devDependencies": {
+    "husky": "3.0.0",
+    "prettier": "1.18.2",
+    "pretty-quick": "1.11.1"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "pretty-quick --staged"
+    }
+  }
+}
