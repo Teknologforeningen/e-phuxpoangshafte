@@ -15,10 +15,3 @@ services:
         ports:
         - "127.0.0.1:8069:8000"
         container_name: back_phux
-    mongo:
-        restart: always
-        image: mongo:latest
-        ports:
-            - "127.0.0.1:27017:27017"
-        volumes:
-        - mongo_data:/data/db

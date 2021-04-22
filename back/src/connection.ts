@@ -1,5 +1,12 @@
 import mongoose from 'mongoose';
-const connection = 'mongodb://localhost:27017/testdb';
+require('dotenv').config();
+const MONGODB_URI = process.env.MONGODB_URI;
 export const connectDb = () => {
-  return mongoose.connect(connection);
+  console.log('connecting to', MONGODB_URI);
+  return mongoose.connect(MONGODB_URI, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    useFindAndModify: false,
+    useCreateIndex: true,
+  });
 };
