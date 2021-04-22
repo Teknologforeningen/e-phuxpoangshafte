@@ -1,0 +1,24 @@
+version: '3'
+volumes:
+  mongo_data:
+services:
+    front:
+        build: ./front
+        restart: always
+        ports:
+        - "127.0.0.1:3069:80"
+        container_name: front_phux
+    back:
+        restart: always
+        build: ./back
+        command: yarn start
+        ports:
+        - "127.0.0.1:8069:8000"
+        container_name: back_phux
+    mongo:
+        restart: always
+        image: mongo:3.6.4
+        volumes:
+        - mongo_data:/data/db
+        ports:
+        - 27017:27017

@@ -1,27 +1,18 @@
-# medium-react-typescript-mongo-example
+# E-Phuxpoängshäfte
 
-A project skeleton consisting of a React front-end, Node/TypeScript back-end, and MongoDB database. The point of this exercise is to illustrate how docker and docker-compose can orchestrate all of these pieces of the tech stack (services) together.
-
-## Starting the Front-end
+## How to use this?
 
 Open a terminal and follow these steps:
 
 ```
-cd client
-yarn install
-yarn start
+make install
+make run
 ```
 
-This will install all the necessary dependencies for the `client` front-end project and start it up. The app will load up using `parcel`.
+This will start the app as a whole
 
-## Starting the API
-
-In a separate tab in your terminal, execute the following commands:
+If you want to run it as a docker image run:
 
 ```
-cd api
-yarn install
-yarn watch
+docker-compose up --build
 ```
-
-This will install all the necessary dependencies and start the node application using `ts-node` and `nodemon`.
