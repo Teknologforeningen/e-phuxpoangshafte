@@ -12,7 +12,6 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
 app.post('/auth', async (req, res) => {
-  console.log(req);
   const username = req.body.username;
   const password = req.body.password;
 });

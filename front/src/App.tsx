@@ -1,26 +1,28 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from 'react';
+import { useApolloClient } from '@apollo/client';
+import LoginForm from './components/LoginForm';
 
-function App() {
+const App = () => {
+  const [errorMessage, setErrorMessage] = useState<string>('');
+  const [token, setToken] = useState(null);
+  const client = useApolloClient();
+
+  const notify = (message: string) => {
+    setErrorMessage(message);
+    setTimeout(() => {
+      setErrorMessage('');
+    }, 10000);
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
+    <div>
+      <header>
+        <div>
+          <LoginForm setToken={setToken} setError={notify} />
+        </div>
       </header>
     </div>
   );
-}
+};
 
 export default App;
