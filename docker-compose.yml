@@ -5,30 +5,46 @@ services:
         build: ./front
         restart: always
         ports:
-        - "127.0.0.1:3000:80"
+            - "127.0.0.1:3000:80"
         container_name: front_phux
     back:
         restart: always
         build: ./back
         command: yarn start
         ports:
-        - "127.0.0.1:8000:8000"
+            - "127.0.0.1:8000:8000"
         container_name: back_phux
+        networks:
+            - db
         environment:
-        -  ME_CONFIG_MONGODB_ADMINUSERNAME=root
-        - ME_CONFIG_MONGODB_ADMINPASSWORD=rootpassword
-        networks: #here
-            - my-network 
-    mongo:
-        container_name: mongo
-        image: mongo
-        environment:
-            - MONGO_INITDB_ROOT_USERNAME=root
-            - MONGO_INITDB_ROOT_PASSWORD=rootpassword
+            - API_PORT=8000
+            - DB_USER=ephuxpoang
+            - DB_PASSWORD=ephuxpoang
+            - DB_NAME=phux-db
+            - DB_HOST=phux-db
+        restart: always
+        depends_on:
+            - db
+    db:
+        container_name: phux-db
+        image: postgres:9.6.5-alpine
         ports:
-        - 27017:27017
-        networks: #here
-            - my-network 
+            - "127.0.0.1:5432:5432" # For being able to connect from host to container database
+        networks:
+            - db
+        environment:
+            - POSTGRES_USER=ephuxpoang
+            - POSTGRES_PASSWORD=ephuxpoang
+            - POSTGRES_DB=phux-db
+            - POSTGRES_HOST=phux-db
+        volumes:
+            - db-data:/var/lib/postgresql/data/
+        restart: always
+
+volumes:
+  db-data:
+    driver: local
+
 networks:
-    my-network:
-        driver: bridge
+  db:
+    driver: bridge

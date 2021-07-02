@@ -2,7 +2,6 @@ import express from 'express';
 import bodyParser from 'body-parser';
 // rest of the code remains same
 import cors from 'cors';
-import { connectDb } from './connection';
 require('dotenv').config();
 const app: express.Application = express();
 const port = 8000;
@@ -23,13 +22,6 @@ app.get('/', async (req, res) => {
   });
 });
 
-app.listen(port, () => {
-  console.log(`⚡️[server]: Server is running at https://localhost:${port}`);
-  connectDb()
-    .then(() => {
-      console.log('MongoDb connected');
-    })
-    .catch(error => {
-      console.log('error connection to MongoDB:', error.message);
-    });
+app.listen(process.env.API_PORT, () => {
+  console.log(`API listening on port ${process.env.API_PORT}`);
 });

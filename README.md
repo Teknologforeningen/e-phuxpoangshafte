@@ -8,7 +8,7 @@ First, make sure that you have docker and mongodb installed on your computer. Th
 docker-compose up --build
 ```
 
-The backend runs on port 8069 and the frontend on 3069
+The backend runs on port 8000 and the frontend on 3000
 
 However, if you want to run the front & backend separately, you can do it by running the makefile:
 
