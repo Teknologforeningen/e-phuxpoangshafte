@@ -1,7 +1,9 @@
 import express from 'express';
 import cors from 'cors';
 require('dotenv').config();
-import { connectionTest } from './connection'
+var models = require('../db/models');
+import User from '../db/models/models/users.model';
+
 const app: express.Application = express();
 
 app.use(cors());
@@ -18,10 +20,13 @@ app.get('/', async (req, res) => {
     status: true,
     message: 'Stuff happened',
   });
-  connectionTest()
 });
 
-const PORT = process.env.API_PORT || 8000
-app.listen(PORT, () => {
-  console.log(`API listening on port ${PORT}`);
+const PORT = process.env.API_PORT || 8000;
+models.sequelize.sync().then(() => {
+  const user = new User({ first_name: 'John', last_name: 'Doe' });
+  user.save();
+  app.listen(PORT, () => {
+    console.log(`API listening on port ${PORT}`);
+  });
 });
