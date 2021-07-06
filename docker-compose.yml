@@ -37,6 +37,7 @@ services:
             - POSTGRES_PASSWORD=ephuxpoang
             - POSTGRES_DB=phux-db
             - POSTGRES_HOST=phux-db
+            - POSTGRES_PORT=5432
         volumes:
             - db-data:/var/lib/postgresql/data/
         restart: always

@@ -1,14 +1,12 @@
 import express from 'express';
-import bodyParser from 'body-parser';
-// rest of the code remains same
 import cors from 'cors';
 require('dotenv').config();
+import { connectionTest } from './connection'
 const app: express.Application = express();
-const port = 8000;
 
 app.use(cors());
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use(bodyParser.json());
+app.use(express.urlencoded({ extended: false }));
+app.use(express.json());
 
 app.post('/auth', async (req, res) => {
   const username = req.body.username;
@@ -20,8 +18,10 @@ app.get('/', async (req, res) => {
     status: true,
     message: 'Stuff happened',
   });
+  connectionTest()
 });
 
-app.listen(process.env.API_PORT, () => {
-  console.log(`API listening on port ${process.env.API_PORT}`);
+const PORT = process.env.API_PORT || 8000
+app.listen(PORT, () => {
+  console.log(`API listening on port ${PORT}`);
 });
