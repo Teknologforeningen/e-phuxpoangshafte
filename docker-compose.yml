@@ -20,8 +20,8 @@ services:
             - API_PORT=8000
             - DB_USER=ephuxpoang
             - DB_PASSWORD=ephuxpoang
-            - DB_NAME=phux-db
-            - DB_HOST=phux-db
+            - DB_NAME=phuxdb
+            - DB_HOST=phuxdb
         restart: always
         depends_on:
             - db
@@ -35,8 +35,8 @@ services:
         environment:
             - POSTGRES_USER=ephuxpoang
             - POSTGRES_PASSWORD=ephuxpoang
-            - POSTGRES_DB=phux-db
-            - POSTGRES_HOST=phux-db
+            - POSTGRES_DB=phuxdb
+            - POSTGRES_HOST=phuxdb
             - POSTGRES_PORT=5432
         volumes:
             - db-data:/var/lib/postgresql/data/
