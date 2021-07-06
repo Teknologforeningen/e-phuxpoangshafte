@@ -20,12 +20,15 @@ app.get('/', async (req, res) => {
     status: true,
     message: 'Stuff happened',
   });
+  User.findOne().then(user => {
+    console.log(user);
+  });
 });
 
 const PORT = process.env.API_PORT || 8000;
 models.sequelize.sync().then(() => {
-  const user = new User({ first_name: 'John', last_name: 'Doe' });
-  user.save();
+  //const user = new User({ first_name: 'John', last_name: 'Doe' });
+  //user.save();
   app.listen(PORT, () => {
     console.log(`API listening on port ${PORT}`);
   });
