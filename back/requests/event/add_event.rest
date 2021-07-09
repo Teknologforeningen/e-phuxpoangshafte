@@ -1,0 +1,13 @@
+POST http://localhost:8000/events
+Content-Type: application/json
+
+{ 
+    "name": "NaMö",
+    "description": "Nationsmöte",
+    "startTime": "01-01-2021",
+    "endTime": "02-01-2021",
+    "points": "10",
+    "userLimit": 200,
+    "categoryId": 1,
+    "mandatory": true
+}
