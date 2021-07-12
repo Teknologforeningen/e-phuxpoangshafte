@@ -11,29 +11,23 @@ interface DoneEventsTypeCreation extends Optional<DoneEventsType, 'id'> {}
   timestamps: true,
 })
 class DoneEvents extends Model<DoneEventsTypeCreation> {
-  /*  id: number
-  type: EventStatus
-  timeOfsignup: Date
-  timeOfComplition: Date
-  EventID: number
-  UserID: number*/
   @CreatedAt
   creationDate: Date;
 
   @Column
-  type: EventStatus;
+  status: EventStatus;
 
   @Column
-  timeOfsignup: Date;
+  timeOfSignup: Date;
 
   @Column
-  timeOfCompletion: Date
+  timeOfCompletion: Date | null
 
   @ForeignKey(() => User)
-  user: User
+  userID: User
 
-  @ForeignKey(()=> Event)
-  event: Event
+  @ForeignKey(() => Event)
+  eventID: Event
 }
 
 export default DoneEvents;

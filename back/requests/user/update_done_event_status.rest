@@ -1,0 +1,25 @@
+PUT http://localhost:8000/users/1/done_events/1
+Content-Type: application/json
+
+{
+  "status": "confirmed"
+}
+
+###
+
+PUT http://localhost:8000/users/1/done_events/1
+Content-Type: application/json
+
+{
+  "status": "cancelled"
+}
+
+###
+
+PUT http://localhost:8000/users/1/done_events/1
+Content-Type: application/json
+
+{
+  "status": "completed"
+}
+

@@ -1,9 +1,8 @@
-import Category from 'db/models/models/category.model';
 import express from 'express';
 
 const eventRouter = require('express').Router()
 import Event from '../db/models/models/event.model';
-
+import { userExtractor } from '../utils.ts/middleware';
 import { Event as EventType } from '../types'
 
 
@@ -12,7 +11,11 @@ eventRouter.get('/', async (req, res) => {
   res.json(events)
 })
 
-eventRouter.post('/', async (req, res) => {
+eventRouter.post('/', userExtractor, async (req, res) => {
+  const authUser = req.user
+  if(authUser.role !== "admin"){
+    return res.status(401).json({error: 'You are not authorized for this page'})
+  }
   const body = req.body
   const eventToAdd: Omit<EventType, 'id'> = {
     name: body.name,

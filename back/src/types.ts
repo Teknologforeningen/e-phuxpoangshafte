@@ -6,7 +6,7 @@ export enum userRole {
 export interface User {
   id?: number,
   role: userRole,
-  username: string,
+  email: string,
   password: string,
   firstName: string,
   lastName: string,
@@ -43,9 +43,9 @@ export enum EventStatus{
 
 export interface DoneEvents {
   id: number
-  type: EventStatus
-  timeOfsignup: Date
+  status: EventStatus
+  timeOfSignup: Date
   timeOfCompletion: Date
-  EventID: number
-  UserID: number
+  eventID: number
+  userID: number
 }

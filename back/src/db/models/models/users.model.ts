@@ -15,7 +15,7 @@ class User extends Model<UserTypeCreation> {
   creationDate: Date;
 
   @Column({ unique: true, allowNull: false})
-  username: string;
+  email: string;
 
   @Column({ allowNull: false})
   password: string

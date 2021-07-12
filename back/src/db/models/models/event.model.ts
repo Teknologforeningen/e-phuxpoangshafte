@@ -1,8 +1,9 @@
 'use strict';
 import { Optional } from 'sequelize';
-import { Table, Column, Model, CreatedAt, ForeignKey, BelongsTo } from 'sequelize-typescript';
+import { Table, Column, Model, CreatedAt, ForeignKey, BelongsTo, HasMany } from 'sequelize-typescript';
 import { Event as EventType } from 'types';
 import Category from './category.model';
+import DoneEvent from './done_event.model';
 
 interface EventTypeCreation extends Optional<EventType, 'id'> {}
 
@@ -40,6 +41,9 @@ class Event extends Model<EventType, EventTypeCreation> {
 
   @BelongsTo(() => Category)
   category: Category
+
+  @HasMany(() => DoneEvent)
+  events: DoneEvent[]
 }
 
 export default Event;

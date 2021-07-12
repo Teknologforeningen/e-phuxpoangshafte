@@ -1,5 +1,6 @@
 import express from 'express';
 import { Events } from 'pg';
+import { userExtractor } from '../utils.ts/middleware';
 
 const categoryRouter = require('express').Router()
 import Category from '../db/models/models/category.model';
@@ -12,7 +13,11 @@ categoryRouter.get('/', async (req, res) => {
   res.json(categories)
 })
 
-categoryRouter.post('/', async (req, res) => {
+categoryRouter.post('/', userExtractor, async (req, res) => {
+  const authUser = req.user
+  if(authUser.role !== "admin"){
+    return res.status(401).json({error: 'You are not authorized for this page'})
+  }
   const body = req.body
   const categoryToAdd: Omit<CategoryType, 'id'> = {
     name: body.name,
@@ -23,7 +28,11 @@ categoryRouter.post('/', async (req, res) => {
   res.json(user)
 })
 
-categoryRouter.put('/:id', async (req, res) => {
+categoryRouter.put('/:id', userExtractor, async (req, res) => {
+  const authUser = req.user
+  if(authUser.role !== "admin"){
+    return res.status(401).json({error: 'You are not authorized for this page'})
+  }
   const categoryId = req.params.id
   const body = req.body
   const categoryToUpdate = await Category.findByPk(categoryId)

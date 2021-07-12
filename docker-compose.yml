@@ -22,6 +22,7 @@ services:
             - DB_PASSWORD=ephuxpoang
             - DB_NAME=phuxdb
             - DB_HOST=phuxdb
+            - SECRET=kossusmakarbasturmetalkopp2021
         restart: always
         depends_on:
             - db
