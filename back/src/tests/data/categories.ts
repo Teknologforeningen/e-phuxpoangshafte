@@ -1,20 +1,11 @@
-POST http://localhost:8000/api/categories
-Content-Type: application/json
-
-{ 
+export const multipleCategories = [
+  { 
     "name": "Obligatoriska",
     "description": "Dessa poäng är alla obligatoriska att göra "
-}
-
-###
-
-POST http://localhost:8000/api/categories
-Content-Type: application/json
-
-{ 
+  },
+  { 
     "name": "Fest",
     "description": "Helt jävla festliga poäng",
     "minPoints": 100
-}
-
-###
+  }
+]

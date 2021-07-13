@@ -1,11 +1,22 @@
 import React, { useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { loginUser } from '../reducers/authReducer';
 
 const LoginForm = (props: any) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const dispatch = useDispatch()
 
   const submit = async (event: any) => {
     event.preventDefault();
+    try {
+      dispatch(loginUser(username, password))
+      setUsername('')
+      setPassword('')
+    }
+    catch (e){
+      console.log('Error loging in:', e)
+    }
   };
 
   return (

@@ -1,5 +1,6 @@
-PUT http://localhost:8000/users/1/done_events/1
+PUT http://localhost:8000/api/users/1/done_events/1
 Content-Type: application/json
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InBodXhpdmF0b3JAdGYuZmkiLCJpZCI6MiwiaWF0IjoxNjI2MTc3Mjg3fQ.Maf83blQLepND4MqDxRIvO5Em0hEypWMwf02fcmgCiw
 
 {
   "status": "confirmed"
@@ -7,8 +8,9 @@ Content-Type: application/json
 
 ###
 
-PUT http://localhost:8000/users/1/done_events/1
+PUT http://localhost:8000/api/users/1/done_events/1
 Content-Type: application/json
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InBodXhpdmF0b3JAdGYuZmkiLCJpZCI6MiwiaWF0IjoxNjI2MTc3Mjg3fQ.Maf83blQLepND4MqDxRIvO5Em0hEypWMwf02fcmgCiw
 
 {
   "status": "cancelled"
@@ -16,8 +18,9 @@ Content-Type: application/json
 
 ###
 
-PUT http://localhost:8000/users/1/done_events/1
+PUT http://localhost:8000/api/users/1/done_events/1
 Content-Type: application/json
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InBodXhpdmF0b3JAdGYuZmkiLCJpZCI6MiwiaWF0IjoxNjI2MTc3Mjg3fQ.Maf83blQLepND4MqDxRIvO5Em0hEypWMwf02fcmgCiw
 
 {
   "status": "completed"

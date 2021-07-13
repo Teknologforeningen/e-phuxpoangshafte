@@ -1,7 +1,17 @@
-POST http://localhost:8000/auth
+POST http://localhost:8000/api/auth
 Content-Type: application/json
 
 { 
     "email": "john.doe@aalto.fi",
     "password": "hunter2"
+}
+
+###
+
+POST http://localhost:8000/api/auth
+Content-Type: application/json
+
+{ 
+    "email": "phuxivator@tf.fi",
+    "password": "naritet4ever"
 }

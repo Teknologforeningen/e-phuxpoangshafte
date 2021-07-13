@@ -1,1 +1,1 @@
-GET http://localhost:8000/users/1/done_events/
+GET http://localhost:8000/api/users/1/done_events/

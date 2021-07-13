@@ -87,7 +87,14 @@ userRouter.get('/:userID/done_events/', userExtractor, async (req, res) => {
   res.status(200).json(done_events)
 })
 
-userRouter.post('/:userid/done_events/:eventid', async (req, res) => {
+userRouter.post('/:userid/done_events/:eventid', userExtractor, async (req, res) => {
+  const authUser = req.user
+  const userID = req.params.userid
+  if(authUser.id != userID && authUser.role !== "admin"){
+    console.log("Same user as",authUser.id + ":", authUser.id === userID)
+    console.log("Is", authUser.firstName ,"admin:", authUser.role === "admin")
+    return res.status(401).json({error: 'You are not authorized for this page'})
+  }
   const doneEvent: Omit<DoneEventType, 'id'> = {
     status: EventStatus.Pending,
     timeOfSignup: new Date(),
