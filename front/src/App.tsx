@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
-import { Redirect, Route, Switch } from 'react-router-dom';
+import { BrowserRouter, Redirect, Route, Switch } from 'react-router-dom';
 import LoginForm from './components/LoginForm';
+import HelloPage from './components/HelloPage';
 import PrivateRoute from './components/routing/PrivateRoute';
+import * as AuthSelectors from './selectors/AuthSelectors';
 
 const App = () => {
   /*const [errorMessage, setErrorMessage] = useState<string>('');
@@ -14,30 +16,25 @@ const App = () => {
     }, 10000);
   };
   */
-  const auth = useSelector(state => state.auth)
+  const auth = useSelector(AuthSelectors.auth);
 
-  if(!auth){
-    return(
-      <Redirect to={{pathname: "/login"}}
-    />
-    )
+  if (!auth) {
+    return <Redirect to={{ pathname: '/login' }} />;
   }
 
   return (
     <div>
       <h1>Phuxpoäng</h1>
-      <Switch>
-        <Route path="/login">
-          <LoginForm />
-        </Route>
-        <PrivateRoute path="/">
-          Hello {auth.email}
-        </PrivateRoute>
-      </Switch>
+      <BrowserRouter>
+        <Switch>
+          <Route path="/login">
+            <LoginForm />
+          </Route>
+          <PrivateRoute component={HelloPage} path="/dashboard" exact />
+        </Switch>
+      </BrowserRouter>
     </div>
   );
 };
-
-
 
 export default App;

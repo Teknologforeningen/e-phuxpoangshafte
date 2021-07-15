@@ -1,28 +1,31 @@
-import authService from '../services/auth'
-import { localStorageSetter } from '../utils.ts/localStorage'
+import authService from '../services/auth';
+import { AuthActions } from '../actions';
+import { AuthState } from '../types';
+import { localStorageSetter } from '../utils.ts/localStorage';
 
 export const loginUser = (username: string, password: string) => {
-  return async (dispatch: any ) => {
-    const loggedInUser = await authService.login({username,password})
-    localStorageSetter('auth', JSON.stringify(loggedInUser))
+  return async (dispatch: any) => {
+    const loggedInUser = await authService.login({ username, password });
+    localStorageSetter('auth', JSON.stringify(loggedInUser));
     dispatch({
       type: 'LOGIN',
-      data: loggedInUser
-    })
-    return loggedInUser
-  }
-}
+      data: loggedInUser,
+    });
+    return loggedInUser;
+  };
+};
 
-const noLoggedInUserState = false
+const INITIAL_STATE: AuthState = {
+  auth: false,
+};
 
-const authReducer = (state = noLoggedInUserState, action: { type: string; data: any }) => {
-  switch(action.type){
+const authReducer = (state = INITIAL_STATE, action: AuthActions) => {
+  switch (action.type) {
     case 'LOGIN':
-      return action.data
-    default: 
-      return state
+      return { ...state, auth: action.auth };
+    default:
+      return state;
   }
-}
+};
 
-
-export default authReducer
+export default authReducer;
