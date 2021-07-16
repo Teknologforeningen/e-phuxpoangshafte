@@ -1,51 +1,51 @@
 export enum userRole {
-  Basic = 'basic',
-  Admin = 'admin'
+  BASIC = 'BASIC',
+  ADMIN = 'ADMIN',
 }
 
 export interface User {
-  id?: number,
-  role: userRole,
-  email: string,
-  password: string,
-  firstName: string,
-  lastName: string,
-  fieldOfStudy: string,
-  events: Array<Event['id']>,
-  capWithTF: boolean
+  id?: number;
+  role: userRole;
+  email: string;
+  password: string;
+  firstName: string;
+  lastName: string;
+  fieldOfStudy: string;
+  events: Array<Event['id']>;
+  capWithTF: boolean;
 }
 
 export interface Category {
-  id: number
-  name: string
-  description: string
-  minPoints: number | null
+  id: number;
+  name: string;
+  description: string;
+  minPoints: number | null;
 }
 
 export interface Event {
-  id: number
-  name: string
-  description: string
-  startTime: Date
-  endTime: Date
-  points?: number
-  userLimit?: number
-  categoryId: number
-  mandatory: boolean
+  id: number;
+  name: string;
+  description: string;
+  startTime: Date;
+  endTime: Date;
+  points?: number;
+  userLimit?: number;
+  categoryId: number;
+  mandatory: boolean;
 }
 
-export enum EventStatus{
-  Pending = 'pending',
-  Confirmed = 'confirmed',
-  Cancelled = 'cancelled',
-  Completed = 'completed'
+export enum EventStatus {
+  PENDING = 'PENDING',
+  CONFIRMED = 'CONFIRMED',
+  CANCELLED = 'CANCELLED',
+  COMPLETED = 'COMPLETED',
 }
 
 export interface DoneEvents {
-  id: number
-  status: EventStatus
-  timeOfSignup: Date
-  timeOfCompletion: Date
-  eventID: number
-  userID: number
+  id: number;
+  status: EventStatus;
+  timeOfSignup: Date;
+  timeOfCompletion: Date;
+  eventID: number;
+  userID: number;
 }

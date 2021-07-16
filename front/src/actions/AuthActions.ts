@@ -1,13 +1,13 @@
-export type AuthActions = Login;
+export type AuthActions = UserLogin;
 
-interface Login {
-  type: 'LOGIN';
+interface UserLogin {
+  type: 'USER_LOGIN';
   auth: boolean;
 }
 
-export const login = (auth: boolean): Login => {
+export const userLogin = (auth: boolean): UserLogin => {
   return {
-    type: 'LOGIN',
+    type: 'USER_LOGIN',
     auth,
   };
 };

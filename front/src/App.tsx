@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
-import { useSelector } from 'react-redux';
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { BrowserRouter, Redirect, Route, Switch } from 'react-router-dom';
-import LoginForm from './components/LoginForm';
-import HelloPage from './components/HelloPage';
+import LoginForm from './views/LoginForm';
+import HelloPage from './views/HelloPage';
 import PrivateRoute from './components/routing/PrivateRoute';
 import * as AuthSelectors from './selectors/AuthSelectors';
 
@@ -16,6 +16,14 @@ const App = () => {
     }, 10000);
   };
   */
+
+  const dispatch = useDispatch();
+  useEffect(() => {
+    /*const loggedInUser = await authService.login({ username, password });
+    localStorageSetter('auth', JSON.stringify(loggedInUser));
+    dispatch(login(loggedInUser));*/
+  }, []);
+
   const auth = useSelector(AuthSelectors.auth);
 
   if (!auth) {

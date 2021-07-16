@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { loginUser } from '../reducers/AuthReducer';
+import { userLogin } from '../actions';
+import authService from '../services/auth';
+import { localStorageSetter } from '../utils.ts/localStorage';
 
 const LoginForm = (props: any) => {
   const [username, setUsername] = useState('');
@@ -10,7 +12,10 @@ const LoginForm = (props: any) => {
   const submit = async (event: any) => {
     event.preventDefault();
     try {
-      dispatch(loginUser(username, password));
+      const loggedInUser = await authService.login({ username, password });
+      localStorageSetter('auth', JSON.stringify(loggedInUser));
+      const auth = !!loggedInUser;
+      dispatch(userLogin(auth));
       setUsername('');
       setPassword('');
     } catch (e) {
