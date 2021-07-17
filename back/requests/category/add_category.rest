@@ -1,5 +1,6 @@
 POST http://localhost:8000/api/categories
 Content-Type: application/json
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InBodXhpdmF0b3JAdGYuZmkiLCJpZCI6MiwiaWF0IjoxNjI2NTE5MDUzfQ.VY8TIbEJQRLuQK0BxZ9KDSv2d6H_Y4gIwS_9i8inPXI
 
 { 
     "name": "Obligatoriska",
@@ -10,6 +11,7 @@ Content-Type: application/json
 
 POST http://localhost:8000/api/categories
 Content-Type: application/json
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InBodXhpdmF0b3JAdGYuZmkiLCJpZCI6MiwiaWF0IjoxNjI2NTE5MDUzfQ.VY8TIbEJQRLuQK0BxZ9KDSv2d6H_Y4gIwS_9i8inPXI
 
 { 
     "name": "Fest",

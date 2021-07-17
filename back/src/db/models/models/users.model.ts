@@ -35,7 +35,7 @@ class User extends Model<UserTypeCreation> {
   @Column({ allowNull: false})
   lastName: string;
 
-  @HasMany(() => DoneEvent)
+  @HasMany(() => DoneEvent,'id')
   events: DoneEvent[]
 }
 

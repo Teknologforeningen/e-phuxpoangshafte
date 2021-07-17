@@ -1,44 +1,36 @@
-import React, { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { BrowserRouter, Redirect, Route, Switch } from 'react-router-dom';
-import LoginForm from './views/LoginForm';
+import React, { useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { BrowserRouter, Route, Switch } from 'react-router-dom';
+import LoginForm from './views/LoginPage';
 import HelloPage from './views/HelloPage';
 import PrivateRoute from './components/routing/PrivateRoute';
-import * as AuthSelectors from './selectors/AuthSelectors';
+import { localStorageGetter } from './utils.ts/localStorage';
+import { authDetails } from './types';
+import { userLogin } from './actions/AuthActions';
 
 const App = () => {
-  /*const [errorMessage, setErrorMessage] = useState<string>('');
-
-  const notify = (message: string) => {
-    setErrorMessage(message);
-    setTimeout(() => {
-      setErrorMessage('');
-    }, 10000);
-  };
-  */
-
+  const [state, changeState] = useState(false) 
   const dispatch = useDispatch();
   useEffect(() => {
-    /*const loggedInUser = await authService.login({ username, password });
-    localStorageSetter('auth', JSON.stringify(loggedInUser));
-    dispatch(login(loggedInUser));*/
-  }, []);
-
-  const auth = useSelector(AuthSelectors.auth);
-
-  if (!auth) {
-    return <Redirect to={{ pathname: '/login' }} />;
-  }
+    const storedUser: authDetails | null = localStorageGetter('auth')
+    if(storedUser){
+      dispatch(userLogin(storedUser))
+    }
+    changeState(true)
+  }, [dispatch]);
 
   return (
     <div>
       <h1>Phuxpoäng</h1>
       <BrowserRouter>
         <Switch>
+          {state ?
+          <React.Fragment>
           <Route path="/login">
             <LoginForm />
           </Route>
-          <PrivateRoute component={HelloPage} path="/dashboard" exact />
+          <PrivateRoute component={HelloPage} path="/" exact /> </React.Fragment>
+          : <Route><HelloPage email={''}/></Route> }
         </Switch>
       </BrowserRouter>
     </div>

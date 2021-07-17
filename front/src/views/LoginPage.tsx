@@ -5,18 +5,17 @@ import authService from '../services/auth';
 import { localStorageSetter } from '../utils.ts/localStorage';
 
 const LoginForm = (props: any) => {
-  const [username, setUsername] = useState('');
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const dispatch = useDispatch();
 
   const submit = async (event: any) => {
     event.preventDefault();
     try {
-      const loggedInUser = await authService.login({ username, password });
+      const loggedInUser = await authService.login({ email, password });
       localStorageSetter('auth', JSON.stringify(loggedInUser));
-      const auth = !!loggedInUser;
-      dispatch(userLogin(auth));
-      setUsername('');
+      dispatch(userLogin(loggedInUser));
+      setEmail('');
       setPassword('');
     } catch (e) {
       console.log('Error loging in:', e);
@@ -27,10 +26,10 @@ const LoginForm = (props: any) => {
     <div>
       <form onSubmit={submit}>
         <div>
-          username{' '}
+          email{' '}
           <input
-            value={username}
-            onChange={({ target }) => setUsername(target.value)}
+            value={email}
+            onChange={({ target }) => setEmail(target.value)}
           />
         </div>
         <div>

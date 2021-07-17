@@ -96,7 +96,7 @@ userRouter.post('/:userid/done_events/:eventid', userExtractor, async (req, res)
     return res.status(401).json({error: 'You are not authorized for this page'})
   }
   const doneEvent: Omit<DoneEventType, 'id'> = {
-    status: EventStatus.Pending,
+    status: EventStatus.PENDING,
     timeOfSignup: new Date(),
     timeOfCompletion: null,
     userID: req.params.userid,

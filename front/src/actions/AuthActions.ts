@@ -1,13 +1,18 @@
+import { authDetails } from "../types"
+
 export type AuthActions = UserLogin;
+
 
 interface UserLogin {
   type: 'USER_LOGIN';
-  auth: boolean;
+  userIsAutharized: boolean;
+  userInfo: authDetails; 
 }
 
-export const userLogin = (auth: boolean): UserLogin => {
+export const userLogin = (userInfo: authDetails): UserLogin => {
   return {
     type: 'USER_LOGIN',
-    auth,
+    userIsAutharized: true,
+    userInfo
   };
 };

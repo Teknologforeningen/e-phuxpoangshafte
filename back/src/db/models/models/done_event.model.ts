@@ -24,10 +24,17 @@ class DoneEvents extends Model<DoneEventsTypeCreation> {
   timeOfCompletion: Date | null
 
   @ForeignKey(() => User)
-  userID: User
+  userID: number
 
   @ForeignKey(() => Event)
-  eventID: Event
+  eventID: number
+
+  @BelongsTo(() => User,'id')
+  user: User
+
+  @BelongsTo(() => Event,'id')
+  event: Event
+
 }
 
 export default DoneEvents;
