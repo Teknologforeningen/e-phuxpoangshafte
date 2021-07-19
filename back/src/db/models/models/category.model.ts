@@ -1,11 +1,16 @@
 'use strict';
 import { Optional } from 'sequelize/types';
 import { Category as CategoryType } from 'types';
-import { Table, Column, Model, CreatedAt, HasMany } from 'sequelize-typescript';
+import { Table, Column, Model, CreatedAt, HasMany, DefaultScope } from 'sequelize-typescript';
 import Event from './event.model'
 
 
 interface CategoryTypeCreation extends Optional<CategoryType, 'id'> {}
+
+
+@DefaultScope(() => ({
+  attributes: ['id', 'name', 'description', 'minPoints']
+}))
 
 @Table({
   timestamps: true,

@@ -2,7 +2,6 @@ import { authDetails } from "../types"
 
 export type AuthActions = UserLogin;
 
-
 interface UserLogin {
   type: 'USER_LOGIN';
   userIsAutharized: boolean;

@@ -14,3 +14,37 @@ Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InBodXhpd
 }
 
 ###
+
+POST http://localhost:8000/api/events
+Content-Type: application/json
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InBodXhpdmF0b3JAdGYuZmkiLCJpZCI6MiwiaWF0IjoxNjI2MTc2MjQ5fQ.RxdtSz5rVkH38aHU_ZKw7eQTFxwZ0TGzMFNeOLHkQVU
+
+{ 
+    "name": "Fest1",
+    "description": "Bästa festen (utom fö phuxk)",
+    "startTime": "01-01-2021",
+    "endTime": "02-01-2021",
+    "points": "100",
+    "userLimit": 50,
+    "categoryId": 2,
+    "mandatory": false
+}
+
+###
+
+POST http://localhost:8000/api/events
+Content-Type: application/json
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InBodXhpdmF0b3JAdGYuZmkiLCJpZCI6MiwiaWF0IjoxNjI2MTc2MjQ5fQ.RxdtSz5rVkH38aHU_ZKw7eQTFxwZ0TGzMFNeOLHkQVU
+
+{ 
+    "name": "Julphesten",
+    "description": "Människor e nog satins fulla här",
+    "startTime": "01-01-2021",
+    "endTime": "02-01-2021",
+    "points": "-10",
+    "userLimit": 150,
+    "categoryId": 2,
+    "mandatory": false
+}
+
+###

@@ -3,11 +3,12 @@ import bcrypt from 'bcrypt'
 const authRouter = require('express').Router()
 import User from '../db/models/models/users.model'
 import DoneEvents from '../db/models/models/done_event.model'
+import Event from '../db/models/models/event.model'
 
 authRouter.post('/', async (req,res) => {
   const body = req.body
 
-  const user = await User.findOne({where: { email: body.email }, include: {model: DoneEvents}})
+  const user = await User.scope('full').findOne({where: { email: body.email }, include: [DoneEvents] })
   const passwordCorrect: boolean | undefined = user === null ? false : await bcrypt.compare(body.password, user.password)
 
   if(!(user && passwordCorrect)){
@@ -16,18 +17,18 @@ authRouter.post('/', async (req,res) => {
     })
   }
 
-  const usersEvents = await DoneEvents.findAll({where: {userID: user.id}})
-  //const userWithEvents = {...user, usersEvents}
+  const userFields = user.get()
+  delete userFields.password;
 
   const userForToken = {
-    email: user.email,
-    id: user.id
+    email: userFields.email,
+    id: userFields.id
   }
   const token = jwt.sign(userForToken, process.env.SECRET)
 
   res
     .status(200)
-    .send({ token, ...user })
+    .send({ token, ...userFields})
 })
 
 export default authRouter

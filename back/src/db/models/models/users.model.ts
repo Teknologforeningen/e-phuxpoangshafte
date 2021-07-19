@@ -1,11 +1,21 @@
 'use strict';
 import { Optional } from 'sequelize';
-import { Table, Column, Model, CreatedAt, HasMany } from 'sequelize-typescript';
+import { Table, Column, Model, CreatedAt, HasMany,DefaultScope,Scopes } from 'sequelize-typescript';
 import { User as UserType, userRole } from '../../../types';
 
 import DoneEvent from './done_event.model'
 
 interface UserTypeCreation extends Optional<UserType, 'id'> {}
+
+@DefaultScope(() => ({
+  attributes: ['id', 'email', 'role', 'fieldOfStudy', 'capWithTF', 'firstName', 'lastName']
+}))
+
+@Scopes(() => ({
+  full: {
+    attributes: ['password','id', 'email', 'role', 'fieldOfStudy', 'capWithTF', 'firstName', 'lastName']
+  }
+}))
 
 @Table({
   timestamps: true,
@@ -35,7 +45,7 @@ class User extends Model<UserTypeCreation> {
   @Column({ allowNull: false})
   lastName: string;
 
-  @HasMany(() => DoneEvent,'id')
+  @HasMany(() => DoneEvent)
   events: DoneEvent[]
 }
 

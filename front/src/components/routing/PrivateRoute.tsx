@@ -2,8 +2,9 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 import { Redirect, Route, RouteProps } from 'react-router-dom';
 import * as AuthSelectors from '../../selectors/AuthSelectors';
+import { Routes } from '../../types';
 
-const PrivateRoute: React.FC<RouteProps> = ({
+/*const PrivateRoute: React.FC<RouteProps> = ({
   component: Component,
   render,
   ...rest
@@ -28,14 +29,15 @@ const PrivateRoute: React.FC<RouteProps> = ({
   );
 };
 
-export default PrivateRoute;
+export default PrivateRoute;*/
 
 /**
  * 
  * Exempel authRoute
  * 
- * const AuthRoute: React.FC<RouteProps> = ({ component: Component, render, ...rest }) => {
-	if (!auth.currentUser) {
+ */ const PrivateRoute: React.FC<RouteProps> = ({ component: Component, render, ...rest }) => {
+  const auth = useSelector(AuthSelectors.auth)
+	if (!auth.userIsAutharized) {
 		const loginRedirect = {
 			to: {
 				pathname: Routes.LOGIN,
@@ -52,5 +54,4 @@ export default PrivateRoute;
 	}
 };
 
-export default AuthRoute;
-*/
+export default PrivateRoute;

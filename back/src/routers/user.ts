@@ -9,7 +9,7 @@ import { userExtractor } from '../utils.ts/middleware';
 
 
 userRouter.get('/', async (req, res) => {
-  const users = await User.findAll();
+  const users = await User.findAll({include: [DoneEvents]});
   res.json(users)
 })
 

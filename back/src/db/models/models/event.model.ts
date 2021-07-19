@@ -1,11 +1,16 @@
 'use strict';
 import { Optional } from 'sequelize';
-import { Table, Column, Model, CreatedAt, ForeignKey, BelongsTo, HasMany } from 'sequelize-typescript';
+import { Table, Column, Model, CreatedAt, ForeignKey, BelongsTo, HasMany, DefaultScope } from 'sequelize-typescript';
 import { Event as EventType } from 'types';
 import Category from './category.model';
 import DoneEvent from './done_event.model';
 
 interface EventTypeCreation extends Optional<EventType, 'id'> {}
+
+
+@DefaultScope(() => ({
+  attributes: ['id', 'name', 'description', 'startTime', 'endTime', 'points','userLimit', 'mandatory', 'categoryId']
+}))
 
 @Table({
   timestamps: true,

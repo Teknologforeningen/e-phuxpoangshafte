@@ -1,0 +1,41 @@
+{
+    // Place your rentle-monorepo workspace snippets here. Each snippet is defined under a snippet name and has a scope, prefix, body and
+    // description. Add comma separated ids of the languages where the snippet is applicable in the scope field. If scope
+    // is left empty or omitted, the snippet gets applied to all languages. The prefix is what is
+    // used to trigger the snippet and the body will be expanded and inserted. Possible variables are:
+    // $1, $2 for tab stops, $0 for the final cursor position, and ${1:label}, ${2:another} for placeholders.
+    // Placeholders with the same ids are connected.
+    // Example:
+    "Material UI - useStyles": {
+        "scope": "typescriptreact",
+        "prefix": "useStyles",
+        "body": [
+            "import {makeStyles, createStyles, Theme} from '@material-ui/core/styles'",
+            "const useStyles = makeStyles((theme: Theme) => createStyles({}))"
+        ],
+        "description": "Generate useStyles boilerplate and imports"
+    },
+    "Material UI - React component with useStyles": {
+        "scope": "typescriptreact",
+        "prefix": "import React",
+        "body": [
+            "import React from 'react';",
+            "import {} from '@material-ui/core'",
+            "import {makeStyles, createStyles, Theme} from '@material-ui/core/styles'",
+            "",
+            "interface Props {",
+            "",
+            "}",
+            "const $1 = (props: Props) => {",
+            "    const classes = useStyles()",
+            "",
+            "    return null",
+            "}",
+            "",
+            "const useStyles = makeStyles((theme: Theme) => createStyles({}))",
+            "",
+            "export default $1"
+        ],
+        "description": "Generate base for React component with styles"
+    }
+}

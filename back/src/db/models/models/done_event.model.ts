@@ -1,11 +1,16 @@
 'use strict';
 import { Optional } from 'sequelize';
-import { Table, Column, Model, CreatedAt, BelongsToMany, BelongsTo, ForeignKey } from 'sequelize-typescript';
+import { Table, Column, Model, CreatedAt, BelongsToMany, BelongsTo, ForeignKey, DefaultScope } from 'sequelize-typescript';
 import { DoneEvents as DoneEventsType, EventStatus } from '../../../types';
 import Event from './event.model';
 import User from './users.model';
 
 interface DoneEventsTypeCreation extends Optional<DoneEventsType, 'id'> {}
+
+
+@DefaultScope(() => ({
+  attributes: ['userID', 'eventID','status', 'timeOfSignup', 'timeOfCompletion']
+}))
 
 @Table({
   timestamps: true,
@@ -24,15 +29,17 @@ class DoneEvents extends Model<DoneEventsTypeCreation> {
   timeOfCompletion: Date | null
 
   @ForeignKey(() => User)
+  @Column
   userID: number
 
   @ForeignKey(() => Event)
+  @Column
   eventID: number
 
-  @BelongsTo(() => User,'id')
+  @BelongsTo(() => User)
   user: User
 
-  @BelongsTo(() => Event,'id')
+  @BelongsTo(() => Event)
   event: Event
 
 }

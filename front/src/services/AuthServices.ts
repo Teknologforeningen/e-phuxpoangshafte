@@ -4,7 +4,6 @@ const baseUrl = '/api/auth'
 
 const login = async (credentials: any): Promise<authDetails> => {
   const response = await axios.post(baseUrl, credentials)
-  console.log(response.data)
   return response.data as authDetails
 }
 

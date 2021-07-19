@@ -1,15 +1,15 @@
 import express from 'express';
-import { Events } from 'pg';
 import { userExtractor } from '../utils.ts/middleware';
 
 const categoryRouter = require('express').Router()
 import Category from '../db/models/models/category.model';
 
 import { Category as CategoryType } from '../types'
+import Event from '../db/models/models/event.model';
 
 
 categoryRouter.get('/', async (req, res) => {
-  const categories = await Category.findAll();
+  const categories = await Category.findAll({include: [Event]});
   res.json(categories)
 })
 
