@@ -1,2 +1,7 @@
 POST http://localhost:8000/api/users/1/done_events/1
 Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImpvaG4uZG9lQGFhbHRvLmZpIiwiaWQiOjEsImlhdCI6MTYyNjE3NzAyOH0.yIcdg-BJAJPZsIvh7KKcnZqo7jG6MF3dldxNgQDxt_c
+
+###
+
+POST http://localhost:8000/api/users/1/done_events/2
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImpvaG4uZG9lQGFhbHRvLmZpIiwiaWQiOjEsImlhdCI6MTYyNjE3NzAyOH0.yIcdg-BJAJPZsIvh7KKcnZqo7jG6MF3dldxNgQDxt_c

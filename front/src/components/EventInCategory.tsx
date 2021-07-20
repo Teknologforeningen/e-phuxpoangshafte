@@ -5,7 +5,7 @@ import { Box } from '@material-ui/core';
 
 const EventInCategory = ({event}: {event: Event}) => {
   return(
-    <Box border= {1}>
+    <Box border={1}>
       <h3>{event.name}</h3>
       <i>{event.description}</i>
       

@@ -26,7 +26,7 @@ export interface authDetails {
   firstName: string;
   lastName: string;
   fieldOfStudy: string;
-  events: Array<Event['id']>;
+  events: Array<DoneEvents>;
   capWithTF: boolean;
 }
 
@@ -50,8 +50,25 @@ export interface Category {
   minPoints: number | null;
 }
 
+export enum EventStatus {
+  PENDING = 'PENDING',
+  CONFIRMED = 'CONFIRMED',
+  CANCELLED = 'CANCELLED',
+  COMPLETED = 'COMPLETED',
+}
+
+export interface DoneEvents {
+  id: number;
+  status: EventStatus;
+  timeOfSignup: Date;
+  timeOfCompletion: Date;
+  eventID: number;
+  userID: number;
+}
+
 export enum Routes {
   ROOT = '/',
   LOGIN = '/login',
+  SIGNUP = '/signup',
   SPECIFIC_CATEGORY = '/kategori/:category',
  }

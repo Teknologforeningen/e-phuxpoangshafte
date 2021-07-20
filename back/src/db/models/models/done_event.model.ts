@@ -9,7 +9,7 @@ interface DoneEventsTypeCreation extends Optional<DoneEventsType, 'id'> {}
 
 
 @DefaultScope(() => ({
-  attributes: ['userID', 'eventID','status', 'timeOfSignup', 'timeOfCompletion']
+  attributes: ['id','userID', 'eventID','status', 'timeOfSignup', 'timeOfCompletion']
 }))
 
 @Table({

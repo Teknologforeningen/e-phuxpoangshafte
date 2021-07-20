@@ -3,13 +3,14 @@ import bcrypt from 'bcrypt'
 const authRouter = require('express').Router()
 import User from '../db/models/models/users.model'
 import DoneEvents from '../db/models/models/done_event.model'
-import Event from '../db/models/models/event.model'
 
 authRouter.post('/', async (req,res) => {
   const body = req.body
 
   const user = await User.scope('full').findOne({where: { email: body.email }, include: [DoneEvents] })
   const passwordCorrect: boolean | undefined = user === null ? false : await bcrypt.compare(body.password, user.password)
+
+  
 
   if(!(user && passwordCorrect)){
     return res.status(401).json({

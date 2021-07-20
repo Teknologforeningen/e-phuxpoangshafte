@@ -14,6 +14,7 @@ import { initCategories, initEvents } from './actions';
 import * as CategoryServices from './services/CategoryServices';
 import * as EventServices from './services/EventServices';
 import CategoryPage from './views/CateogryPage';
+import SignupPage from './views/SignupPage';
 
 const App = () => {
   const [state, changeState] = useState(false) 
@@ -64,6 +65,9 @@ const App = () => {
           <React.Fragment>
           <Route path={Routes.LOGIN}>
             <LoginForm />
+          </Route>
+          <Route path={Routes.SIGNUP}>
+            <SignupPage />
           </Route>
           <Route path={'/kategori/obligatorisk'}>
             <CategoryPage categoryID={"1"}/>

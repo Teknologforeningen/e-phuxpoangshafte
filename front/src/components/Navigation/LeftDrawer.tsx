@@ -25,7 +25,7 @@ const LeftDrawer = () => {
       <ListItemText primary={cat.name} />
     </ListItem>
   /*</Link>*/)
-  : ""
+  : <React.Fragment></React.Fragment>
 
   return(
     <Box>

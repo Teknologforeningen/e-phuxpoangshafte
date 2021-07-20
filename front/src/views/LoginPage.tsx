@@ -5,11 +5,13 @@ import authService from '../services/AuthServices';
 import { localStorageSetter } from '../utils.ts/localStorage';
 import { Box, TextField, Button} from '@material-ui/core';
 import {makeStyles, createStyles, Theme} from '@material-ui/core/styles'
+import { useHistory } from 'react-router-dom';
 
 const LoginForm = (props: any) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const dispatch = useDispatch();
+  const history = useHistory();
   const classes = useStyles()
 
   const submit = async (event: any) => {
@@ -20,6 +22,7 @@ const LoginForm = (props: any) => {
       dispatch(userLogin(loggedInUser));
       setEmail('');
       setPassword('');
+      history.push('/')
     } catch (e) {
       console.log('Error loging in:', e);
     }
@@ -36,7 +39,7 @@ const LoginForm = (props: any) => {
           />
           <Box margin={0.5}/>
           <TextField 
-          variant={'outlined'}
+            variant={'outlined'}
             value={password}
             type={'password'}
             onChange={({ target }) => setPassword(target.value)}
