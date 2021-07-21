@@ -25,7 +25,7 @@ userRouter.post('/', async (req, res) => {
 
   const userToAdd: Omit<UserType, 'id' > = {
     role: body.role,
-    email: body.email,
+    email: body.email.toLowerCase(),
     password: passwordHash,
     firstName: body.firstName,
     lastName: body.lastName,

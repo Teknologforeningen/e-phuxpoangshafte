@@ -1,6 +1,6 @@
 import { Category } from "../types"
 
-export type CategoryActions = InitCategories;
+export type CategoryActions = InitCategories | AddCategory;
 
 interface InitCategories {
   type: 'INIT_CATEGORIES';
@@ -15,3 +15,15 @@ export const initCategories = (categories: Category[]): InitCategories => {
     categories,
   };
 };
+
+interface AddCategory {
+  type: 'ADD_CATEGORY';
+  category: Category
+}
+
+export const addCategory = (category: Category): AddCategory => {
+  return{
+    type: 'ADD_CATEGORY',
+    category
+  }
+}

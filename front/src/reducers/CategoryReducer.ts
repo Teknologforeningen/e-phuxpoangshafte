@@ -9,7 +9,15 @@ const INITIAL_STATE: CategoryState = {
 const categoryReducer = (state = INITIAL_STATE, action: CategoryActions) => {
   switch (action.type) {
     case 'INIT_CATEGORIES':
-      return {isFecthed: action.isFetched, categories: action.categories};
+      return { isFecthed: action.isFetched, categories: action.categories };
+    case 'ADD_CATEGORY':{
+      const newState: CategoryState = {
+        ...state,
+         categories: [
+           ...state.categories,
+           action.category]}
+      return newState
+    }
     default:
       return state;
   }

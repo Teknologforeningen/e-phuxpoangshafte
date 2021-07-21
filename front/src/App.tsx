@@ -15,6 +15,9 @@ import * as CategoryServices from './services/CategoryServices';
 import * as EventServices from './services/EventServices';
 import CategoryPage from './views/CateogryPage';
 import SignupPage from './views/SignupPage';
+import SuccessfulsignupPage from './views/SuccessfulsignupPage';
+import NewCatAndEventPage from './views/NewCatAndEventPage';
+import AdminPage from './views/AdminPage';
 
 const App = () => {
   const [state, changeState] = useState(false) 
@@ -63,19 +66,29 @@ const App = () => {
         <Switch>
           {state ?
           <React.Fragment>
-          <Route path={Routes.LOGIN}>
-            <LoginForm />
-          </Route>
-          <Route path={Routes.SIGNUP}>
-            <SignupPage />
-          </Route>
-          <Route path={'/kategori/obligatorisk'}>
-            <CategoryPage categoryID={"1"}/>
-          </Route>
-          <Route path={'/kategori/fest'}>
-            <CategoryPage categoryID={"2"}/>
-          </Route>
-          <PrivateRoute component={MemberDashboard} path={Routes.ROOT} exact /> </React.Fragment>
+            <Route path={Routes.LOGIN}>
+              <LoginForm />
+            </Route>
+            <Route path={Routes.SIGNUP}>
+              <SignupPage />
+            </Route>
+            <Route path={'/kategori/obligatorisk'}>
+              <CategoryPage categoryID={"1"}/>
+            </Route>
+            <Route path={'/kategori/fest'}>
+              <CategoryPage categoryID={"2"}/>
+            </Route>
+            <Route path={'/successfulsignup'}>
+              <SuccessfulsignupPage/>
+            </Route>
+            <Route path={'/admin'}>
+              <AdminPage/>
+            </Route>
+            <Route path={'/admin/addmore'}>
+              <NewCatAndEventPage/>
+            </Route>
+            <PrivateRoute component={MemberDashboard} path={Routes.ROOT} exact /> 
+          </React.Fragment>
           : <Route><CircularProgress color={"secondary"} /></Route> }
         </Switch>
       </BrowserRouter>

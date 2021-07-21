@@ -26,10 +26,18 @@ export interface authDetails {
   firstName: string;
   lastName: string;
   fieldOfStudy: string;
-  events: Array<DoneEvents>;
+  events: Array<DoneEvent>;
   capWithTF: boolean;
 }
 
+export interface NewUser {
+  email: string;
+  password: string;
+  firstName: string;
+  lastName: string;
+  fieldOfStudy: string;
+  capWithTF: boolean;
+}
 
 export interface Event {
   id: number;
@@ -48,6 +56,7 @@ export interface Category {
   name: string;
   description: string;
   minPoints: number | null;
+  events: Event[]
 }
 
 export enum EventStatus {
@@ -57,7 +66,7 @@ export enum EventStatus {
   COMPLETED = 'COMPLETED',
 }
 
-export interface DoneEvents {
+export interface DoneEvent {
   id: number;
   status: EventStatus;
   timeOfSignup: Date;

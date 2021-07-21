@@ -1,6 +1,8 @@
 import { Box, Button, Checkbox, createStyles, FormControlLabel, FormGroup, InputLabel, makeStyles, MenuItem, Select, TextField, Theme } from '@material-ui/core';
 import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useHistory } from 'react-router-dom';
+import * as UserService from '../services/UserServices'
+import { NewUser } from '../types';
 
 const SignupPage = () => {
   const [email, setEmail] = useState<string>('');
@@ -9,11 +11,29 @@ const SignupPage = () => {
   const [lastName, setLastName] = useState<string>('')
   const [fieldOfStudy, setFieldOfStudy] = useState('')
   const [capWithTF, setCapWithTF] = useState<boolean>(true)
-  const dispatch = useDispatch();
-  //const history = useHistory();
+  const history = useHistory();
   const classes = useStyles()
 
-  const submit = () => {}
+  const submit = async () => {
+    try{
+      console.log('Submit initiated')
+      const userInfo: NewUser = {email, password, firstName, lastName, fieldOfStudy, capWithTF}
+      const response = await UserService.addUser(userInfo)
+      setEmail('')
+      setPassword('')
+      setFirstName('')
+      setLastName('')
+      setFieldOfStudy('')
+      setCapWithTF(true)
+      history.push('/successfulsignup')
+      return response
+    }
+    catch(e){
+      console.error({message: 'Could not add new user', error: e})
+    }
+    
+  }
+
   return(
   <Box>
     <Box display={'flex'} flexDirection={'column'} className={classes.container}>
@@ -86,11 +106,10 @@ const SignupPage = () => {
           labelPlacement='start'
           />
         </FormGroup>
-
     </Box>
-        <Box>
+    <Box>
       <Button variant={'contained'} className = {classes.redLabel} onClick={submit}>login</Button>
-      </Box>
+    </Box>
   </Box>)
 }
 

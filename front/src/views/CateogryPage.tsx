@@ -4,8 +4,9 @@ import { useSelector } from 'react-redux';
 import * as CategorySelector from '../selectors/CategorySelectors'
 import * as EventSelector from '../selectors/EventSelectors'
 import * as AuthSelector from '../selectors/AuthSelectors'
-import { authDetails, AuthState, Category, DoneEvents, Event } from '../types';
-import EventInCategory from '../components/EventInCategory'
+import { authDetails, AuthState, Category, DoneEvent, Event, EventStatus } from '../types';
+import EventInCategory from '../components/UI/EventInCategory'
+import { ensure } from '../utils.ts/HelperFunctions';
 
 const CategoryPage = ({categoryID}: {categoryID: string}) => {
   const category: Category = useSelector(state =>  CategorySelector.categoryById(state, categoryID))
@@ -16,13 +17,14 @@ const CategoryPage = ({categoryID}: {categoryID: string}) => {
     return <React.Fragment></React.Fragment>
   }
   const eventsInCategory = events.filter( e => e.categoryId === Number(categoryID))
-  const userCompltedEventIDs = userInfo.events.map((event:DoneEvents) => event.eventID)
-  const completedEventsInCategory = eventsInCategory.filter((event: Event) => {
-    console.log("EventID:",event.id)
-    return userCompltedEventIDs.includes(event.id)})
-  const completedPointsInCategory = completedEventsInCategory.map((event: Event) => event.points).reduce((acc: number, cur: number|undefined) => cur ? acc + cur : acc, 0)
-  const ListOfEvents = eventsInCategory.map((event:Event) => <EventInCategory key={event.id} event={event}/>)
-  console.log(userCompltedEventIDs)
+  const userCompletedEvents = userInfo.events.filter((event:DoneEvent) => event.status === EventStatus.COMPLETED)
+  const completedEventsInCategory = userCompletedEvents.filter((event: DoneEvent) => {
+    return eventsInCategory.map((event: Event) => event.id).includes(event.id)})
+  const completedEventsInCategoryCastedToEvents = completedEventsInCategory.map((doneEvent: DoneEvent) => eventsInCategory.find((event: Event) => doneEvent.eventID === event.id))
+  const completedPointsInCategory: number = completedEventsInCategoryCastedToEvents
+    .map((event: Event |undefined) => event ? event.points : 0)
+    .reduce((acc: number, cur: number|undefined) => cur ? acc + cur : acc, 0)
+  const ListOfEvents = eventsInCategory.map((event:Event) => <EventInCategory key={event.id} event={event} complitionStatus={userCompletedEvents.find((doneEvent:DoneEvent) => doneEvent.eventID === event.id)?.status}/>)
   return (
     <Box>
       <h2>{category.name}</h2>
