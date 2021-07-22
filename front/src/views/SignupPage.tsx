@@ -1,4 +1,5 @@
-import { Box, Button, Checkbox, createStyles, FormControlLabel, FormGroup, InputLabel, makeStyles, MenuItem, Select, TextField, Theme } from '@material-ui/core';
+import { Box, Button, Checkbox, createStyles, FormControlLabel, FormGroup, InputLabel, MenuItem, Select, TextField, Theme } from '@material-ui/core';
+import { makeStyles } from '@material-ui/styles'
 import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import * as UserService from '../services/UserServices'
@@ -12,7 +13,6 @@ const SignupPage = () => {
   const [fieldOfStudy, setFieldOfStudy] = useState('')
   const [capWithTF, setCapWithTF] = useState<boolean>(true)
   const history = useHistory();
-  const classes = useStyles()
 
   const submit = async () => {
     try{
@@ -36,16 +36,13 @@ const SignupPage = () => {
 
   return(
   <Box>
-    <Box display={'flex'} flexDirection={'column'} className={classes.container}>
+    <Box display={'flex'} flexDirection={'column'}>
         <Box margin={0.5}/>
         <TextField 
           variant={'outlined'}
           value={email}
           onChange={({ target }) => setEmail(target.value)}
           label={'Email'}
-          InputLabelProps={{classes: {
-            root: classes.redLabel
-          }}}
         />
         <Box margin={0.5}/>
         <TextField 
@@ -54,9 +51,6 @@ const SignupPage = () => {
           type={'password'}
           onChange={({ target }) => setPassword(target.value)}
           label={'Password'}
-          InputLabelProps={{classes: {
-            root: classes.redLabel
-          }}}
         />
         <Box margin={0.5}/>
         <TextField 
@@ -64,9 +58,7 @@ const SignupPage = () => {
           value={firstName}
           onChange={({ target }) => setFirstName(target.value)}
           label={'Förnamn'}
-          InputLabelProps={{classes: {
-            root: classes.redLabel
-          }}}
+
         />
         <Box margin={0.5}/>
         <TextField 
@@ -74,9 +66,7 @@ const SignupPage = () => {
           value={lastName}
           onChange={({ target }) => setLastName(target.value)}
           label={'Efternamn'}
-          InputLabelProps={{classes: {
-            root: classes.redLabel
-          }}}
+
         />
         <Box margin={0.5}/>
         <InputLabel id='fieldOfStudy'>Studie inriktning</InputLabel>
@@ -108,18 +98,9 @@ const SignupPage = () => {
         </FormGroup>
     </Box>
     <Box>
-      <Button variant={'contained'} className = {classes.redLabel} onClick={submit}>login</Button>
+      <Button variant={'contained'} onClick={submit}>login</Button>
     </Box>
   </Box>)
 }
-
-const useStyles = makeStyles((theme: Theme) => createStyles({
-  container: {
-    maxWidth: 300,
-  },
-  redLabel: {
-    color: theme.palette.secondary.main
-  }
-}))
 
 export default SignupPage

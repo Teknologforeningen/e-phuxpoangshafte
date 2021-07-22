@@ -6,16 +6,18 @@ import * as Yup from 'yup';
 
 import * as CategorySelector from '../../selectors/CategorySelectors'
 import { Category } from '../../types';
-import { DatePicker } from '@material-ui/pickers';
+import { LocalizationProvider, DateTimePicker } from '@material-ui/lab';
+import AdapterLuxon from '@material-ui/lab/AdapterLuxon';
+import * as luxon from 'luxon'
 
 interface NewEventAttributes {
   name: string,
   description: string,
-  startTime: Date,
-  endTime: Date,
+  startTime: luxon.DateTime,
+  endTime: luxon.DateTime,
   points: number | null,
   userLimit: number | null,
-  categoryId: number,
+  categoryId?: number,
   mandatory: boolean,
 }
 
@@ -29,11 +31,10 @@ const NewEventForm = () => {
   const initial: NewEventAttributes = {
     name: '',
     description: '',
-    startTime: new Date(),
-    endTime: new Date(),
-    points: null,
+    startTime: luxon.DateTime.local(),
+    endTime: luxon.DateTime.local(),
+    points: 0,
     userLimit: 0,
-    categoryId: 0,
     mandatory: false,
   }
   const validation = Yup.object({})
@@ -70,22 +71,22 @@ const NewEventForm = () => {
           error={formik.touched.description && Boolean(formik.errors.description)}
           helperText={formik.touched.description && formik.errors.description}/>
         <Box margin={0.5}/>
-        <LocalizationProvider dateAdapter={AdapterMoment}>
-          <DatePicker
-            id={'startTime'}
-            name={'startTime'}
-            label='Start tid'
+        <LocalizationProvider dateAdapter={AdapterLuxon}>
+          <DateTimePicker
+            //id={'startTime'}
+            //name={'startTime'}
+            //label={'Start tid'}
             value={formik.values.startTime}
             onChange={formik.handleChange}
-            renderInput={(params) => <TextField {...params} />}
+            renderInput={(props) => <TextField {...props} />}
           />
-          <DatePicker
-            id={'endTime'}
-            name={'endTime'}
-            label='Slut tid'
+          <DateTimePicker
+            //id={'endTime'}
+            //name={'endTime'}
+            //label='Slut tid'
             value={formik.values.endTime}
             onChange={formik.handleChange}
-            renderInput={(params) => <TextField {...params} />}
+            renderInput={(props) => <TextField {...props} />}
           />
         </LocalizationProvider>
         <TextField

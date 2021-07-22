@@ -3,8 +3,8 @@ import { useDispatch } from 'react-redux';
 import { userLogin } from '../actions';
 import authService from '../services/AuthServices';
 import { localStorageSetter } from '../utils.ts/localStorage';
-import { Box, TextField, Button} from '@material-ui/core';
-import {makeStyles, createStyles, Theme} from '@material-ui/core/styles'
+import { Box, TextField, Button, Theme} from '@material-ui/core';
+import { makeStyles, createStyles} from '@material-ui/styles'
 import { useHistory } from 'react-router-dom';
 
 const LoginForm = (props: any) => {

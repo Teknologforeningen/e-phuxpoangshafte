@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import { Box, Button, createStyles, makeStyles, TextField, Theme } from "@material-ui/core";
+import { Box, Button, createStyles, TextField, Theme } from "@material-ui/core";
+import { makeStyles } from '@material-ui/styles'
 import * as CategoryService from "../../services/CategoryServices";
 import * as CategoryAction from '../../actions/CategoryActions'
 import * as AuthSelector from '../../selectors/AuthSelectors'
@@ -10,7 +11,6 @@ const NewCategoryForm = () => {
   const [name, setName] = useState<string>('');
   const [description, setDescription] = useState<string>('');
   const [minPoints, setMinPoints] = useState<number>(0)
-  const classes = useStyles()
   const dispatch = useDispatch()
   const token = useSelector(AuthSelector.token)
   const submit = async () => {
@@ -27,16 +27,14 @@ const NewCategoryForm = () => {
   }
   return(
     <Box>
-      <Box display={'flex'} flexDirection={'column'} className={classes.container}> 
+      <Box display={'flex'} flexDirection={'column'}> 
         <Box margin={0.5}/>
         <TextField 
           variant={'outlined'}
           value={name}
           onChange={({ target }) => setName(target.value)}
           label={'Namn'}
-          InputLabelProps={{classes: {
-            root: classes.redLabel
-          }}}
+
         />
         <Box margin={0.5}/>
         <TextField 
@@ -44,9 +42,6 @@ const NewCategoryForm = () => {
           value={description}
           onChange={({ target }) => setDescription(target.value)}
           label={'Beskrivning'}
-          InputLabelProps={{classes: {
-            root: classes.redLabel
-          }}}
         />
         <Box margin={0.5}/>
         <TextField 
@@ -56,25 +51,13 @@ const NewCategoryForm = () => {
           value={minPoints}
           onChange={({ target }) => setMinPoints(Number(target.value))}
           label={'Minimi poäng för kategorin'}
-          InputLabelProps={{classes: {
-            root: classes.redLabel
-          }}}
         />
         <Box>
-          <Button variant={'contained'} className = {classes.redLabel} onClick={submit}>login</Button>
+          <Button variant={'contained'} onClick={submit}>login</Button>
         </Box>
       </Box>
     </Box>
   )
 }
-
-const useStyles = makeStyles((theme: Theme) => createStyles({
-  container: {
-    maxWidth: 300,
-  },
-  redLabel: {
-    color: theme.palette.secondary.main
-  }
-}))
 
 export default NewCategoryForm
