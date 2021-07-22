@@ -16,7 +16,7 @@ import * as EventServices from './services/EventServices';
 import CategoryPage from './views/CateogryPage';
 import SignupPage from './views/SignupPage';
 import SuccessfulsignupPage from './views/SuccessfulsignupPage';
-import NewCatAndEventPage from './views/NewCatAndEventPage';
+import NewCatAndEventPage from './views/NewCategoryAndEventPage';
 import AdminPage from './views/AdminPage';
 
 const App = () => {

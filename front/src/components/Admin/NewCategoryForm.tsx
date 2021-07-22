@@ -6,7 +6,7 @@ import * as AuthSelector from '../../selectors/AuthSelectors'
 import { useDispatch, useSelector } from "react-redux";
 
 
-const NewCatForm = () => {
+const NewCategoryForm = () => {
   const [name, setName] = useState<string>('');
   const [description, setDescription] = useState<string>('');
   const [minPoints, setMinPoints] = useState<number>(0)
@@ -77,4 +77,4 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
   }
 }))
 
-export default NewCatForm
+export default NewCategoryForm
