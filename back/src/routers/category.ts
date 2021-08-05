@@ -24,8 +24,8 @@ categoryRouter.post('/', userExtractor, async (req, res) => {
     description: body.description,
     minPoints: body.minPoints,
   }
-  const user: Category = await Category.create(categoryToAdd)
-  res.json(user)
+  const category: Category = await Category.create(categoryToAdd)
+  res.json(category)
 })
 
 categoryRouter.put('/:id', userExtractor, async (req, res) => {

@@ -16,7 +16,7 @@ const LeftDrawer = () => {
   const anchor = 'left'
 
   const ListOfCategories = categoriesState.categories !== undefined ?
-  categoriesState.categories.filter(cat => cat.events.length > 0).map( cat => 
+  categoriesState.categories.filter(cat => cat.events && cat.events.length > 0).map( cat => 
   /*<Link 
     component={CategoryPage}
     to={Routes.SPECIFIC_CATEGORY}

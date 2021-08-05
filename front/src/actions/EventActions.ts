@@ -1,11 +1,16 @@
 import { Event } from "../types"
 
-export type EventActions = InitEvents;
+export type EventActions = InitEvents | AddEvent;
 
 interface InitEvents {
   type: 'INIT_EVENTS';
   isFetched: boolean;
   events: Event[]
+}
+
+interface AddEvent {
+  type: 'ADD_EVENT';
+  event: Event;
 }
 
 export const initEvents = (events: Event[]): InitEvents => {
@@ -15,3 +20,10 @@ export const initEvents = (events: Event[]): InitEvents => {
     events,
   };
 };
+
+export const addEvent = (event: Event): AddEvent => {
+  return ({
+    type: 'ADD_EVENT',
+    event
+  })
+}

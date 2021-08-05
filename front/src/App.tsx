@@ -47,7 +47,7 @@ const App = () => {
     // Get events from backend
     useEffect(() => {
       const getAndSetEvents = async () => {
-        const response = await EventServices.getAllCEvents()
+        const response = await EventServices.getAllEvents()
         dispatch(initEvents(response))
       }
       try{

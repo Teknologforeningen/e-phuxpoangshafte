@@ -43,13 +43,15 @@ export interface Event {
   id: number;
   name: string;
   description: string;
-  startTime: Date;
-  endTime: Date;
+  startTime: luxon.DateTime;
+  endTime: luxon.DateTime;
   points?: number;
   userLimit?: number;
   categoryId: number;
   mandatory: boolean;
 }
+
+export type NewEvent = Omit<Event, 'id'>
 
 export interface Category {
   id: number;

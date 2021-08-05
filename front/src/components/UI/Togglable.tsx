@@ -1,5 +1,5 @@
 import React, { useState, useImperativeHandle  } from 'react'
-import { Button } from '@material-ui/core'
+import { Box, Button } from '@material-ui/core'
 
 interface TogglableProps {
   buttonLabelOpen: string
@@ -25,12 +25,12 @@ const Togglable = React.forwardRef((props: TogglableProps ,ref) => {
   return (
     <div>
       <div style={hideWhenVisible}>
-        <Button className='toggleButtonOn' onClick={toggleVisibility} >{props.buttonLabelOpen}</Button>
+        <Button variant={"contained"} className='toggleButtonOn' onClick={toggleVisibility} >{props.buttonLabelOpen}</Button>
       </div>
       <div style={showWhenVisible}>
         {props.children}
         <br/>
-        <Button className='toggleButtonOff' onClick={toggleVisibility}>{props.buttonLabelClose}</Button>
+        <Button variant={"contained"} className='toggleButtonOff' onClick={toggleVisibility}>{props.buttonLabelClose}</Button>
       </div>
     </div>
   )

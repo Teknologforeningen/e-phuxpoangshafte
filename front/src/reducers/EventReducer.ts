@@ -10,6 +10,11 @@ const eventReducer = (state = INITIAL_STATE, action: EventActions) => {
   switch (action.type) {
     case 'INIT_EVENTS':
       return {isFecthed: action.isFetched, events: action.events};
+    case 'ADD_EVENT':{
+      return {
+        ...state,
+        events: [...state.events, action.event]}
+    }
     default:
       return state;
   }
