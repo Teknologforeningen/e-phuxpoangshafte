@@ -1,6 +1,14 @@
 import axios from 'axios'
-import { NewUser, userRole } from '../types'
+import { authDetails, NewUser, userRole } from '../types'
 const baseUrl = '/api/users'
+
+export const getAllUsers = async (token: string): Promise<authDetails[]> => {
+  const headers = {
+    'Authorization': `Bearer ${token}` 
+  }
+  const response = await axios.get(baseUrl, {headers: {...headers}})
+  return response.data as authDetails[]
+}
 
 export const addUser = async (userInfo: NewUser) => {
   const userToAdd = {

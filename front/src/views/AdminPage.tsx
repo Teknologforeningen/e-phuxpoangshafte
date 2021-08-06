@@ -1,8 +1,9 @@
 import React from "react";
+import UserTable from "../components/Admin/UserTable";
 
 const AdminPage = () => {
   return(
-    <p></p>
+    <UserTable></UserTable>
   )
 }
 
