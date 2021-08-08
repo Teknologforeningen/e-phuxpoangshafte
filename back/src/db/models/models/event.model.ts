@@ -3,7 +3,7 @@ import { Optional } from 'sequelize';
 import { Table, Column, Model, CreatedAt, ForeignKey, BelongsTo, HasMany, DefaultScope } from 'sequelize-typescript';
 import { Event as EventType } from 'types';
 import Category from './category.model';
-import DoneEvent from './done_event.model';
+import DoneEvent from './doneEvent.model';
 
 interface EventTypeCreation extends Optional<EventType, 'id'> {}
 

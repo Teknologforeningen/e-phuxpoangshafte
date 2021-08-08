@@ -1,4 +1,4 @@
-import { authDetails, DoneEvent, Event } from "../types";
+import { User, DoneEvent, Event } from "../types";
 
 /**
  * 
@@ -16,7 +16,7 @@ export function ensure<T>(argument: T | undefined | null, message: string = 'Wro
 /**
  * Takes a user and a array of events and returns a array of the events ids that user has completed.
  */
-export const mapUserCompletedEvents = (user: authDetails, events: Event[]): number[] | undefined => {
+export const mapUserCompletedEvents = (user: User, events: Event[]): number[] | undefined => {
   if(user !== undefined && user.events !== undefined) {
     const eventIDs = events.map( (e: Event) => e.id)
     return user.events.filter( (dv: DoneEvent) => eventIDs.includes(dv.eventID)).map((dv: DoneEvent) => dv.eventID)

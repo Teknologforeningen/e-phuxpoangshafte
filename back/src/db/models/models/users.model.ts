@@ -3,7 +3,7 @@ import { Optional } from 'sequelize';
 import { Table, Column, Model, CreatedAt, HasMany,DefaultScope,Scopes } from 'sequelize-typescript';
 import { User as UserType, userRole } from '../../../types';
 
-import DoneEvent from './done_event.model'
+import DoneEvent from './doneEvent.model'
 
 interface UserTypeCreation extends Optional<UserType, 'id'> {}
 

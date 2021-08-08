@@ -11,10 +11,14 @@ export const tokenExtractor = (req, res, next) => {
 
 export const userExtractor = async (req, res, next) => {
   const token = req.token
-  const decodedToken = jwt.verify(token, process.env.SECRET)
-  if(!token || !decodedToken.id){
+  if(!token){
     req.user = null
-    return res.status(401).json({ error: 'token missing or invalid' })
+    return res.status(401).json({ error: 'Token missing' })
+  }
+  const decodedToken = jwt.verify(token, process.env.SECRET)
+  if(!decodedToken.id){
+    req.user = null
+    return res.status(401).json({ error: 'Token invalid' })
   }
   req.user = await User.findByPk(decodedToken.id)
   next()

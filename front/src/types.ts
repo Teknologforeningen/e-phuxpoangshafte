@@ -1,6 +1,6 @@
 export interface AuthState {
   userIsAutharized: boolean;
-  userInfo?: authDetails
+  userInfo?: User
 }
 
 export interface CategoryState {
@@ -18,7 +18,7 @@ export enum userRole {
   ADMIN = 'ADMIN',
 }
 
-export interface authDetails {
+export interface User {
   token: string;
   id?: number;
   role: userRole;

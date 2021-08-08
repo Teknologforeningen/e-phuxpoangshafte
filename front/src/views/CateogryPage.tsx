@@ -4,14 +4,14 @@ import { useSelector } from 'react-redux';
 import * as CategorySelector from '../selectors/CategorySelectors'
 import * as EventSelector from '../selectors/EventSelectors'
 import * as AuthSelector from '../selectors/AuthSelectors'
-import { authDetails, AuthState, Category, DoneEvent, Event, EventStatus } from '../types';
+import { User, AuthState, Category, DoneEvent, Event, EventStatus } from '../types';
 import EventInCategory from '../components/UI/EventInCategory'
 import { ensure } from '../utils.ts/HelperFunctions';
 
 const CategoryPage = ({categoryID}: {categoryID: string}) => {
   const category: Category = useSelector(state =>  CategorySelector.categoryById(state, categoryID))
   const events: Event[] = useSelector(EventSelector.allEvents).events
-  const userInfo: authDetails = useSelector(AuthSelector.auth).userInfo!
+  const userInfo: User = useSelector(AuthSelector.auth).userInfo!
 
   if(!category || !events){
     return <React.Fragment></React.Fragment>

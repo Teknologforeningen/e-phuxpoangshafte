@@ -2,7 +2,7 @@ import jwt from 'jsonwebtoken'
 import bcrypt from 'bcrypt'
 const authRouter = require('express').Router()
 import User from '../db/models/models/users.model'
-import DoneEvents from '../db/models/models/done_event.model'
+import DoneEvents from '../db/models/models/doneEvent.model'
 
 authRouter.post('/', async (req,res) => {
   const body = req.body

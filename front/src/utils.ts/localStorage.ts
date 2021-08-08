@@ -1,4 +1,4 @@
-import { authDetails } from "../types"
+import { User } from "../types"
 
 export const localStorageSetter  = (name: string, value: any): boolean => {
   if (typeof localStorage !== 'undefined') {
@@ -16,7 +16,7 @@ export const localStorageSetter  = (name: string, value: any): boolean => {
   }
 }
 
-export const localStorageGetter = (name: string): authDetails | null => {
+export const localStorageGetter = (name: string): User | null => {
   if (typeof localStorage !== 'undefined') {
     try {
       const data = localStorage.getItem(name)
