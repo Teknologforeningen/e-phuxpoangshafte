@@ -1,6 +1,6 @@
-import React from "react";
-import { Route, RouteComponentProps } from "react-router-dom";
-import CategoryPage from "../../views/CateogryPage";
+import React from 'react';
+import { Route, RouteComponentProps } from 'react-router-dom';
+import CategoryPage from '../../views/CategoryPage';
 
 /*const CategoryRoute =({ component: Component, ...rest }) => {
   return (

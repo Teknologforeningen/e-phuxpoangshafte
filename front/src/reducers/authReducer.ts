@@ -1,5 +1,5 @@
 import { AuthActions } from '../actions';
-import { AuthState, DoneEvent } from '../types';
+import { AuthState } from '../types';
 
 const INITIAL_STATE: AuthState = {
   userIsAutharized: false,
@@ -8,22 +8,23 @@ const INITIAL_STATE: AuthState = {
 const authReducer = (state = INITIAL_STATE, action: AuthActions) => {
   switch (action.type) {
     case 'USER_LOGIN':
-      return { ...state, userIsAutharized: action.userIsAutharized, userInfo: {...action.userInfo}};
-    case 'ADD_USER_EVENT':{
-      if(!state.userInfo){
-        return state
+      return {
+        ...state,
+        userIsAutharized: action.userIsAutharized,
+        userInfo: { ...action.userInfo },
+      };
+    case 'ADD_USER_EVENT': {
+      if (!state.userInfo) {
+        return state;
       }
-      const newEventState = [
-        ...state.userInfo.events,
-        action.event
-      ]
+      const newEventState = [...state.userInfo.events, action.event];
       return {
         ...state,
         userInfo: {
           ...state.userInfo,
-          events: newEventState
-        }
-      }
+          events: newEventState,
+        },
+      };
     }
     default:
       return state;

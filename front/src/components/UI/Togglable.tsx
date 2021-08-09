@@ -1,40 +1,51 @@
-import React, { useState, useImperativeHandle  } from 'react'
-import { Box, Button } from '@material-ui/core'
+import React, { useState, useImperativeHandle } from 'react';
+import { Button } from '@material-ui/core';
 
 interface TogglableProps {
-  buttonLabelOpen: string
-  buttonLabelClose: string
-  children: React.ReactNode
+  buttonLabelOpen: string;
+  buttonLabelClose: string;
+  children: React.ReactNode;
 }
 
-const Togglable = React.forwardRef((props: TogglableProps ,ref) => {
-  const [visible, setVisible] = useState<boolean>(false)
+const Togglable = React.forwardRef((props: TogglableProps, ref) => {
+  const [visible, setVisible] = useState<boolean>(false);
 
-  const hideWhenVisible = { display: visible ? 'none' : '' }
-  const showWhenVisible = { display: visible ? '' : 'none' }
+  const hideWhenVisible = { display: visible ? 'none' : '' };
+  const showWhenVisible = { display: visible ? '' : 'none' };
   const toggleVisibility = () => {
-    setVisible(!visible)
-  }
+    setVisible(!visible);
+  };
 
   useImperativeHandle(ref, () => {
     return {
-      toggleVisibility
-    }
-  })
+      toggleVisibility,
+    };
+  });
 
   return (
     <div>
       <div style={hideWhenVisible}>
-        <Button variant={"contained"} className='toggleButtonOn' onClick={toggleVisibility} >{props.buttonLabelOpen}</Button>
+        <Button
+          variant={'contained'}
+          className="toggleButtonOn"
+          onClick={toggleVisibility}
+        >
+          {props.buttonLabelOpen}
+        </Button>
       </div>
       <div style={showWhenVisible}>
         {props.children}
-        <br/>
-        <Button variant={"contained"} className='toggleButtonOff' onClick={toggleVisibility}>{props.buttonLabelClose}</Button>
+        <br />
+        <Button
+          variant={'contained'}
+          className="toggleButtonOff"
+          onClick={toggleVisibility}
+        >
+          {props.buttonLabelClose}
+        </Button>
       </div>
     </div>
-  )
-})
+  );
+});
 
-
-export default Togglable
+export default Togglable;
