@@ -1,20 +1,16 @@
 import { createTheme } from '@material-ui/core/styles';
 
-//import MontserratLight from './fonts/Montserrat-Light.ttf'
-
-/*const montserratLight ={
-
-}*/
-
-
 export const theme = createTheme({
+  typography: {
+    fontFamily: ['"Montserrat"', 'sans-serif'].join(','),
+  },
   palette: {
     primary: {
       main: '#fff',
       contrastText: '#000',
     },
     secondary: {
-      main: '#B20738'
+      main: '#B20738',
     },
   },
 });
