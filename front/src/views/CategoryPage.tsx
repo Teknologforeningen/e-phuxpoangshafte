@@ -13,17 +13,18 @@ interface RouteType {
 }
 
 const CategoryPage = () => {
-  const match = useRouteMatch('/category/:categoryId');
+  const match = useRouteMatch('/kategori/:categoryId');
   const categoryID = match ? (match.params as RouteType).categoryId : '1';
   const category: Category = useSelector(state =>
     CategorySelector.categoryById(state, categoryID),
   );
   const events: Event[] = useSelector(EventSelector.allEvents).events;
-  const userInfo: User = useSelector(AuthSelector.auth).userInfo!;
+  const userInfo: User | undefined = useSelector(AuthSelector.auth).userInfo;
 
-  if (!category || !events) {
+  if (!category || !events || !userInfo) {
     return <React.Fragment></React.Fragment>;
   }
+
   const eventsInCategory = events.filter(
     e => e.categoryId === Number(categoryID),
   );
@@ -41,12 +42,13 @@ const CategoryPage = () => {
     (doneEvent: DoneEvent) =>
       eventsInCategory.find((event: Event) => doneEvent.eventID === event.id),
   );
-  const completedPointsInCategory: number = completedEventsInCategoryCastedToEvents
-    .map((event: Event | undefined) => (event ? event.points : 0))
-    .reduce(
-      (acc: number, cur: number | undefined) => (cur ? acc + cur : acc),
-      0,
-    );
+  const completedPointsInCategory: number =
+    completedEventsInCategoryCastedToEvents
+      .map((event: Event | undefined) => (event ? event.points : 0))
+      .reduce(
+        (acc: number, cur: number | undefined) => (cur ? acc + cur : acc),
+        0,
+      );
   const ListOfEvents = eventsInCategory.map((event: Event) => (
     <EventInCategory
       key={event.id}

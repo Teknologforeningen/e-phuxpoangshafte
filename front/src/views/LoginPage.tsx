@@ -19,7 +19,8 @@ const LoginForm = (props: any) => {
     event.preventDefault();
     try {
       const loggedInUser = await AuthServices.login({ email, password });
-      localStorageSetter('auth', JSON.stringify(loggedInUser));
+      localStorageSetter('token', JSON.stringify(loggedInUser.token));
+      localStorageSetter('userId', JSON.stringify(loggedInUser.id));
       dispatch(userLogin(loggedInUser));
       axios.defaults.headers.common['authorization'] =  `Bearer ${loggedInUser.token}`
       setEmail('');

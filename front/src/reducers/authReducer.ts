@@ -2,10 +2,10 @@ import { AuthActions } from '../actions';
 import { AuthState } from '../types';
 
 const INITIAL_STATE: AuthState = {
-  userIsAutharized: false,
+  userIsAutharized: null,
 };
 
-const authReducer = (state = INITIAL_STATE, action: AuthActions) => {
+const userReducer = (state = INITIAL_STATE, action: AuthActions) => {
   switch (action.type) {
     case 'USER_LOGIN':
       return {
@@ -13,6 +13,12 @@ const authReducer = (state = INITIAL_STATE, action: AuthActions) => {
         userIsAutharized: action.userIsAutharized,
         userInfo: { ...action.userInfo },
       };
+    case 'CHANGE_AUTHARIZED_STATUS': {
+      return{ 
+        ...state,
+        userIsAutharized: action.status
+      }
+    }
     case 'ADD_USER_EVENT': {
       if (!state.userInfo) {
         return state;
@@ -26,9 +32,12 @@ const authReducer = (state = INITIAL_STATE, action: AuthActions) => {
         },
       };
     }
+    case 'USER_LOGOUT': {
+      return {userIsAutharized: false};
+    }
     default:
       return state;
   }
 };
 
-export default authReducer;
+export default userReducer;

@@ -1,107 +1,139 @@
 import React, { useState } from 'react';
 
-import { AppBar, Box, Divider, IconButton, Link, List, ListItem, ListItemText, SwipeableDrawer, Toolbar, Typography} from '@material-ui/core';
+import {
+  AppBar,
+  Box,
+  Divider,
+  IconButton,
+  Link,
+  List,
+  ListItem,
+  ListItemText,
+  SwipeableDrawer,
+  Toolbar,
+  Typography,
+} from '@material-ui/core';
 import MenuIcon from '@material-ui/icons/Menu';
+import { Theme } from '@material-ui/core/styles';
+import { createStyles, makeStyles } from '@material-ui/styles';
 import { useSelector } from 'react-redux';
 
-import * as CategorySelector from '../../selectors/CategorySelectors'
-import * as AuthSelector from '../../selectors/AuthSelectors'
-import { RouteComponentProps } from 'react-router-dom';
+import * as CategorySelector from '../../selectors/CategorySelectors';
+import * as AuthSelector from '../../selectors/AuthSelectors';
 import { Routes, userRole } from '../../types';
-import CategoryPage from '../../views/CategoryPage';
-import LoginPage from '../../views/LoginPage';
-import SignupPage from '../../views/SignupPage';
+
+import LogOutButton from '../routing/LogoutButton';
 
 const NotLoggedInList = () => (
   <List>
-    <Link to={Routes.LOGIN} component={LoginPage}>
+    <Link key={'login'} href={Routes.LOGIN}>
       <ListItem key={'login'}>
         <ListItemText primary={'Logga in'} />
       </ListItem>
     </Link>
-    <Link to={Routes.SIGNUP} component={SignupPage}>
+    <Link key={'signup'} href={Routes.SIGNUP}>
       <ListItem key={'signup'}>
         <ListItemText primary={'Registrera dig'} />
       </ListItem>
     </Link>
   </List>
-  )
+);
 
-  const AdminList = () => (
-    <List>
-
-    </List>
-  )
+const AdminList = () => <List></List>;
 
 const NavBar = () => {
-  const categoriesState = useSelector(CategorySelector.allCategories)
-  const auth = useSelector(AuthSelector.auth)
-  const [drawerOpen, toggleDrawer] = useState<boolean>(false)
-  const anchor = 'left'
+  const classes = useStyles();
+  const categoriesState = useSelector(CategorySelector.allCategories);
+  const auth = useSelector(AuthSelector.auth);
+  const [drawerOpen, toggleDrawer] = useState<boolean>(false);
+  const anchor = 'left';
 
-  const ListOfCategories = categoriesState.categories !== undefined ?
-  categoriesState.categories.filter(cat => cat.events && cat.events.length > 0).map( cat => 
-  /*<Link 
-   component={CategoryPage}
-    to={Routes.SPECIFIC_CATEGORY}
-    render={(RouteProps: RouteComponentProps<{category: string;}>, => {const {category} = routeProps.match.params;}>*/
-    <ListItem key={cat.id}>
-      <ListItemText primary={cat.name} />
-    </ListItem>
-  /*</Link>*/)
-  : <></>
+  const ListOfCategories: JSX.Element[] = !!categoriesState.categories.length
+    ? categoriesState.categories
+        .filter(cat => cat.events && cat.events.length > 0)
+        .map(cat => (
+          <Link
+            key={cat.id}
+            href={Routes.CATEGORY + `/${cat.id}`}
+            variant={'inherit'}
+          >
+            <ListItem key={cat.id}>
+              <ListItemText primary={cat.name} />
+            </ListItem>
+          </Link>
+        ))
+    : [<></>];
 
-
-  
-  return(
-  <Box>
-    <AppBar position="static">
-      <Toolbar>
-        <IconButton edge="start" color="inherit" aria-label="menu" onClick={() => {toggleDrawer(!drawerOpen)}}>
-          <MenuIcon />
-        </IconButton>
-        <Typography variant="h6">
-          Phuxpoängs häfte
-        </Typography>
-      </Toolbar>
-    </AppBar>
-    <SwipeableDrawer
+  return (
+    <>
+      <AppBar position="static">
+        <Toolbar>
+          <IconButton
+            edge="start"
+            color="inherit"
+            aria-label="menu"
+            onClick={() => {
+              toggleDrawer(!drawerOpen);
+            }}
+          >
+            <MenuIcon />
+          </IconButton>
+          <Typography variant="h6">Phuxpoängs häfte</Typography>
+        </Toolbar>
+      </AppBar>
+      <SwipeableDrawer
         anchor={anchor}
         open={drawerOpen}
         onClose={() => toggleDrawer(false)}
         onOpen={() => toggleDrawer(true)}
       >
-      {auth.userIsAutharized
-        ?
-        <Box>
-          <ListItem key={'root'}>
-            <ListItemText primary={auth.userInfo?.firstName + " " + auth.userInfo?.lastName} />
-          </ListItem>
-          <Divider/>
-          <Box textAlign = 'center'>Kategorier:</Box>
+        <Box className={classes.sideBar}>
+          {auth.userIsAutharized ? (
+            <Box>
+              <ListItem key={'root'}>
+                <ListItemText
+                  primary={
+                    auth.userInfo?.firstName + ' ' + auth.userInfo?.lastName
+                  }
+                />
+              </ListItem>
+              <Divider />
+              <Box textAlign="center">Kategorier:</Box>
+              <List>{ListOfCategories}</List>
+            </Box>
+          ) : (
+            <NotLoggedInList />
+          )}
+          {auth.userInfo && auth.userInfo.role === userRole.ADMIN ? (
+            <>
+              <Divider />
+              <AdminList />
+            </>
+          ) : (
+            <></>
+          )}
+          {auth.userIsAutharized &&
           <List>
-            {ListOfCategories}
+            <ListItem key={'logout'}>
+              <LogOutButton handleClose={() => toggleDrawer(false)}/>
+            </ListItem>
           </List>
+          }
         </Box>
-      : <NotLoggedInList/>}
-      {auth.userInfo && auth.userInfo.role === userRole.ADMIN 
-        ? <>
-          <Divider/> 
-          <AdminList/>
-          </>
-        : <></>}
       </SwipeableDrawer>
-  </Box>
-  )
-} 
+    </>
+  );
+};
 
-/*const useStyles = makeStyles((theme: Theme) => createStyles({
-  container: {
-    maxWidth: 300,
-  },
-  redLabel: {
-    color: theme.palette.secondary.main
-  }
-}))*/
+const useStyles = makeStyles((theme: Theme) =>
+  createStyles({
+    sideBar: {
+      height: '100%',
+      display: 'flex',
+      flexDirection: 'column',
+      justifyContent: 'space-between',
+    },
+  }),
+);
 
-export default NavBar
+export default NavBar;

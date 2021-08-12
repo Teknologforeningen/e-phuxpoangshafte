@@ -1,6 +1,6 @@
 export interface AuthState {
-  userIsAutharized: boolean;
-  userInfo?: User
+  userIsAutharized: boolean | null;
+  userInfo?: User;
 }
 
 export interface CategoryState {
@@ -81,5 +81,7 @@ export enum Routes {
   ROOT = '/',
   LOGIN = '/login',
   SIGNUP = '/signup',
-  SPECIFIC_CATEGORY = '/kategori/:category',
+  CATEGORY = '/kategori',
+  SPECIFIC_CATEGORY = '/kategori/:categoryId',
+  ADMIN = '/admin'
  }

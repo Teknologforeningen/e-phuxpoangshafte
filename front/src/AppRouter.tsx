@@ -1,38 +1,37 @@
-import { CircularProgress } from '@material-ui/core';
-import { RequestPage } from '@material-ui/icons';
 import React from 'react';
-import { BrowserRouter, Route, Switch } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import { BrowserRouter, Route, Switch,Redirect } from 'react-router-dom';
 import PrivateRoute from './components/routing/PrivateRoute';
 import { Routes } from './types';
 import AdminPage from './views/Admin';
 import CategoryPage from './views/CategoryPage';
 import LoginForm from './views/LoginPage';
 import MemberDashboard from './views/MemberDashboard';
-import NewCatAndEventPage from './views/Admin/NewCategoryAndEventPage';
 import SignupPage from './views/SignupPage';
 import SuccessfulsignupPage from './views/SuccessfulsignupPage';
+import * as AuthSelector from './selectors/AuthSelectors';
+import { CircularProgress } from '@material-ui/core';
 
-const AppRouter = ({ state }: { state: Boolean }) => {
+
+const AppRouter = () => {
+  const auth = useSelector(AuthSelector.auth)
+
   return (
     <BrowserRouter>
       <Switch>
-        {state ? (
+        <Route path={Routes.LOGIN}>
+          <LoginForm />
+        </Route>
+        {auth.userIsAutharized ? (
           <React.Fragment>
-            <Route path={Routes.LOGIN}>
-              <LoginForm />
-            </Route>
             <Route path={Routes.SIGNUP}>
               <SignupPage />
             </Route>
-            <Route path={'/kategori/:categoryId'}>
-              <CategoryPage />
-            </Route>
-            <Route path={'/admin/addmore'}>
-              <NewCatAndEventPage />
-            </Route>
-            <Route path={'/admin/requests'}>
-              <RequestPage />
-            </Route>
+            <PrivateRoute
+              component={CategoryPage}
+              path={Routes.SPECIFIC_CATEGORY}
+              exact
+            />
             <Route path={'/admin'}>
               <AdminPage />
             </Route>
@@ -45,10 +44,8 @@ const AppRouter = ({ state }: { state: Boolean }) => {
               exact
             />
           </React.Fragment>
-        ) : (
-          <Route>
-            <CircularProgress color={'secondary'} />
-          </Route>
+        ) : auth.userIsAutharized === null ? <CircularProgress color={'secondary'}/> : (
+          <Redirect to={Routes.LOGIN} push={true} />
         )}
       </Switch>
     </BrowserRouter>

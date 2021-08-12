@@ -23,7 +23,7 @@ const MemberDashboard = (props: Props) => {
   const eventState: EventState = useSelector(EventSelectors.allEvents);
   const ListOfCategories =
     categoriesState.categories !== undefined
-      ? categoriesState.categories.map(cat => <p>{cat.name}</p>)
+      ? categoriesState.categories.map(cat => <p key={cat.id}>{cat.name}</p>)
       : '';
   const ListOfDoneEvents = auth.userInfo?.events
     .map((event: DoneEvent) => event.eventID)

@@ -1,5 +1,3 @@
-import { User } from "../types"
-
 export const localStorageSetter  = (name: string, value: any): boolean => {
   if (typeof localStorage !== 'undefined') {
     try {
@@ -16,12 +14,12 @@ export const localStorageSetter  = (name: string, value: any): boolean => {
   }
 }
 
-export const localStorageGetter = (name: string): User | null => {
+export const localStorageGetter = (name: string): string | null => {
   if (typeof localStorage !== 'undefined') {
     try {
       const data = localStorage.getItem(name)
       if(data !== null){
-        return JSON.parse(data) //Checka de här...
+        return data //Checka de här...
       } else return null
     } catch (e) {
       console.error('Local storage is not available,', name, 'could not be fetched.')

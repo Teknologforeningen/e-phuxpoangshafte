@@ -1,30 +1,35 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 
 import { localStorageGetter } from './utils.ts/localStorage';
-import { User } from './types';
 import { Box } from '@material-ui/core';
 import NavBar from './components/Navigation/NavBar';
-import { initCategories, initEvents, userLogin } from './actions';
+import { initCategories, initEvents, userLogin,changeAutharizedStatus } from './actions';
 import * as CategoryServices from './services/CategoryServices';
 import * as EventServices from './services/EventServices';
-
-import RouterComp from './AppRouter';
+import * as UserServices from './services/UserServices';
+import { User } from './types';
+import AppRouter from './AppRouter';
 import axios from 'axios';
 
 const App = () => {
-  const [state, changeState] = useState(false);
   const dispatch = useDispatch();
   useEffect(() => {
     //check local storage for user info
-    const storedUser: User | null = localStorageGetter('auth');
-    if (storedUser) {
-      dispatch(userLogin(storedUser));
-      axios.defaults.headers.common[
-        'authorization'
-      ] = `Bearer ${storedUser.token}`;
+    const storedToken: string | null = localStorageGetter('token');
+    const storedUserId: string | null = localStorageGetter('userId');
+    if (storedToken && storedUserId) {
+      
+      const parsedUserId: number = Number(JSON.parse(storedUserId));
+      const parsedToken: string = JSON.parse(storedToken);
+      axios.defaults.headers.common['authorization'] = `Bearer ${parsedToken}`;
+      UserServices.getSingleUserInfo(parsedUserId).then((fecthedUser: User) => {
+        dispatch(userLogin(fecthedUser));
+      });
+    } else {
+      dispatch(changeAutharizedStatus(false))
     }
-    changeState(true);
+
   }, [dispatch]);
 
   // Get categories from backend
@@ -56,7 +61,7 @@ const App = () => {
   return (
     <Box>
       <NavBar />
-      <RouterComp state={state} />
+      <AppRouter/>
     </Box>
   );
 };
