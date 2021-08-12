@@ -12,7 +12,7 @@ import NewCatAndEventPage from './views/Admin/NewCategoryAndEventPage';
 import SignupPage from './views/SignupPage';
 import SuccessfulsignupPage from './views/SuccessfulsignupPage';
 
-const RouterComp = ({ state }: { state: Boolean }) => {
+const AppRouter = ({ state }: { state: Boolean }) => {
   return (
     <BrowserRouter>
       <Switch>
@@ -24,11 +24,8 @@ const RouterComp = ({ state }: { state: Boolean }) => {
             <Route path={Routes.SIGNUP}>
               <SignupPage />
             </Route>
-            <Route path={'/kategori/obligatorisk'}>
-              <CategoryPage categoryID={'1'} />
-            </Route>
-            <Route path={'/kategori/fest'}>
-              <CategoryPage categoryID={'2'} />
+            <Route path={'/kategori/:categoryId'}>
+              <CategoryPage />
             </Route>
             <Route path={'/admin/addmore'}>
               <NewCatAndEventPage />
@@ -58,4 +55,4 @@ const RouterComp = ({ state }: { state: Boolean }) => {
   );
 };
 
-export default RouterComp;
+export default AppRouter;

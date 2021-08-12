@@ -1,13 +1,20 @@
 import { Box } from '@material-ui/core';
 import React from 'react';
 import { useSelector } from 'react-redux';
+import { useRouteMatch } from 'react-router-dom';
 import * as CategorySelector from '../selectors/CategorySelectors';
 import * as EventSelector from '../selectors/EventSelectors';
 import * as AuthSelector from '../selectors/AuthSelectors';
 import { User, Category, DoneEvent, Event, EventStatus } from '../types';
 import EventInCategory from '../components/UI/EventInCategory';
 
-const CategoryPage = ({ categoryID }: { categoryID: string }) => {
+interface RouteType {
+  categoryId: string;
+}
+
+const CategoryPage = () => {
+  const match = useRouteMatch('/category/:categoryId');
+  const categoryID = match ? (match.params as RouteType).categoryId : '1';
   const category: Category = useSelector(state =>
     CategorySelector.categoryById(state, categoryID),
   );

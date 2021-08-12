@@ -13,9 +13,6 @@ export const addEvent = async (
   eventInfo: NewEventAttributes,
   token: string,
 ): Promise<Event> => {
-  /*const headers = {
-    'Authorization': `Bearer ${token}` 
-  }*/
   const newEvent: NewEvent = {
     name: eventInfo.name,
     description: eventInfo.description,
@@ -34,7 +31,3 @@ export const addEvent = async (
   return response.data as Event;
 };
 
-// eslint-disable-next-line import/no-anonymous-default-export
-export default {
-  getAllEvents,
-};

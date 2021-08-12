@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { userLogin } from '../actions';
-import authService from '../services/AuthServices';
+import * as AuthServices from '../services/AuthServices';
 import { localStorageSetter } from '../utils.ts/localStorage';
-import { Box, TextField, Button, Theme} from '@material-ui/core';
-import { makeStyles, createStyles} from '@material-ui/styles'
+import { Box, TextField, Button, Theme } from '@material-ui/core';
+import { makeStyles, createStyles } from '@material-ui/styles';
 import { useHistory } from 'react-router-dom';
 import axios from 'axios';
 
@@ -13,18 +13,18 @@ const LoginForm = (props: any) => {
   const [password, setPassword] = useState('');
   const dispatch = useDispatch();
   const history = useHistory();
-  const classes = useStyles()
+  const classes = useStyles();
 
   const submit = async (event: any) => {
     event.preventDefault();
     try {
-      const loggedInUser = await authService.login({ email, password });
+      const loggedInUser = await AuthServices.login({ email, password });
       localStorageSetter('auth', JSON.stringify(loggedInUser));
       dispatch(userLogin(loggedInUser));
       axios.defaults.headers.common['authorization'] =  `Bearer ${loggedInUser.token}`
       setEmail('');
       setPassword('');
-      history.push('/')
+      history.push('/');
     } catch (e) {
       console.log('Error loging in:', e);
     }
@@ -32,39 +32,53 @@ const LoginForm = (props: any) => {
 
   return (
     <Box>
-      <Box display={'flex'} flexDirection={'column'} className={classes.container}>
-          <TextField 
-            variant={'outlined'}
-            value={email}
-            onChange={({ target }) => setEmail(target.value)}
-            label={'Email'}
-          />
-          <Box margin={0.5}/>
-          <TextField 
-            variant={'outlined'}
-            value={password}
-            type={'password'}
-            onChange={({ target }) => setPassword(target.value)}
-            label={'Password'}
-            InputLabelProps={{classes: {
-              root: classes.redLabel
-            }}}
-          />
+      <Box
+        display={'flex'}
+        flexDirection={'column'}
+        className={classes.container}
+      >
+        <TextField
+          variant={'outlined'}
+          value={email}
+          onChange={({ target }) => setEmail(target.value)}
+          label={'Email'}
+        />
+        <Box margin={0.5} />
+        <TextField
+          variant={'outlined'}
+          value={password}
+          type={'password'}
+          onChange={({ target }) => setPassword(target.value)}
+          label={'Password'}
+          InputLabelProps={{
+            classes: {
+              root: classes.redLabel,
+            },
+          }}
+        />
       </Box>
-          <Box>
-        <Button variant={'contained'} className = {classes.redLabel} onClick={submit}>login</Button>
-        </Box>
+      <Box>
+        <Button
+          variant={'contained'}
+          className={classes.redLabel}
+          onClick={submit}
+        >
+          login
+        </Button>
+      </Box>
     </Box>
   );
 };
 
-const useStyles = makeStyles((theme: Theme) => createStyles({
-  container: {
-    maxWidth: 300,
-  },
-  redLabel: {
-    color: theme.palette.secondary.main
-  }
-}))
+const useStyles = makeStyles((theme: Theme) =>
+  createStyles({
+    container: {
+      maxWidth: 300,
+    },
+    redLabel: {
+      color: theme.palette.secondary.main,
+    },
+  }),
+);
 
 export default LoginForm;

@@ -9,7 +9,7 @@ import { initCategories, initEvents, userLogin } from './actions';
 import * as CategoryServices from './services/CategoryServices';
 import * as EventServices from './services/EventServices';
 
-import RouterComp from './RouterComp';
+import RouterComp from './AppRouter';
 import axios from 'axios';
 
 const App = () => {
