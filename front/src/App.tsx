@@ -9,7 +9,7 @@ import { initCategories, initEvents, userLogin } from './actions';
 import * as CategoryServices from './services/CategoryServices';
 import * as EventServices from './services/EventServices';
 
-import RouterComp from './RouterComp';
+import RouterComp from './AppRouter';
 
 const App = () => {
   const [state, changeState] = useState(false);
