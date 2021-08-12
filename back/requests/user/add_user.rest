@@ -2,7 +2,7 @@ POST http://localhost:8000/api/users
 Content-Type: application/json
 
 { 
-    "role": "basic",
+    "role": "BASIC",
     "email": "john.doe@aalto.fi",
     "password": "hunter2",
     "firstName": "John",
@@ -17,7 +17,7 @@ POST http://localhost:8000/api/users
 Content-Type: application/json
 
 { 
-    "role": "admin",
+    "role": "ADMIN",
     "email": "phuxivator@tf.fi",
     "password": "naritet4ever",
     "firstName": "Phux",
@@ -25,4 +25,19 @@ Content-Type: application/json
     "fieldOfStudy": "TF",
     "events": [],
     "capWithTF": false
+}
+
+###
+POST http://localhost:8000/api/users
+Content-Type: application/json
+
+{ 
+    "role": "BASIC",
+    "email": "jane.doe@aalto.fi",
+    "password": "hunter2",
+    "firstName": "Jane",
+    "lastName": "Doe",
+    "fieldOfStudy": "Raksa",
+    "events": [],
+    "capWithTF": true
 }

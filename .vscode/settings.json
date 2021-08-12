@@ -8,5 +8,8 @@
     ],
     "files.watcherExclude": {
         "**/target": true
-    }
+    },
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.formatOnSave": true,
+    "editor.formatOnPaste": false
 }

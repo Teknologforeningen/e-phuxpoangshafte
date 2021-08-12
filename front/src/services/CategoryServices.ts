@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { NewCategoryAttributes } from '../components/Admin/NewCategoryForm'
+import { NewCategoryAttributes } from '../views/Admin/components/NewCategoryForm'
 import { Category } from "../types"
 const baseUrl = '/api/categories'
 
@@ -9,15 +9,15 @@ export const getAllCategories = async (): Promise<Category[]> => {
 }
 
 export const addCategory = async (categoryInfo: NewCategoryAttributes, token: string): Promise<Category> => {
-  const headers = {
+  /*const headers = {
       'Authorization': `Bearer ${token}` 
-  }
+  }*/
   const newCategory = {
     name: categoryInfo.name,
     description: categoryInfo.description,
     minPoints: categoryInfo.minPoints !== 0 ? categoryInfo.minPoints : null
   }
-  const response = await axios.post(baseUrl, newCategory, {headers: {...headers}})
+  const response = await axios.post(baseUrl, newCategory/*, {headers: {...headers}}*/)
   return response.data as Category
 }
 

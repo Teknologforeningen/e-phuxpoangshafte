@@ -10,6 +10,7 @@ import * as CategoryServices from './services/CategoryServices';
 import * as EventServices from './services/EventServices';
 
 import RouterComp from './RouterComp';
+import axios from 'axios';
 
 const App = () => {
   const [state, changeState] = useState(false);
@@ -19,6 +20,9 @@ const App = () => {
     const storedUser: User | null = localStorageGetter('auth');
     if (storedUser) {
       dispatch(userLogin(storedUser));
+      axios.defaults.headers.common[
+        'authorization'
+      ] = `Bearer ${storedUser.token}`;
     }
     changeState(true);
   }, [dispatch]);

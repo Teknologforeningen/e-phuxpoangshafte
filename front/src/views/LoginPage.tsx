@@ -6,6 +6,7 @@ import { localStorageSetter } from '../utils.ts/localStorage';
 import { Box, TextField, Button, Theme} from '@material-ui/core';
 import { makeStyles, createStyles} from '@material-ui/styles'
 import { useHistory } from 'react-router-dom';
+import axios from 'axios';
 
 const LoginForm = (props: any) => {
   const [email, setEmail] = useState('');
@@ -20,6 +21,7 @@ const LoginForm = (props: any) => {
       const loggedInUser = await authService.login({ email, password });
       localStorageSetter('auth', JSON.stringify(loggedInUser));
       dispatch(userLogin(loggedInUser));
+      axios.defaults.headers.common['authorization'] =  `Bearer ${loggedInUser.token}`
       setEmail('');
       setPassword('');
       history.push('/')

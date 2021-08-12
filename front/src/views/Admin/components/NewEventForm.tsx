@@ -14,11 +14,11 @@ import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import * as Yup from 'yup';
 
-import * as CategorySelector from '../../selectors/CategorySelectors';
-import * as EventServices from '../../services/EventServices';
-import * as EventActions from '../../actions/EventActions';
-import * as AuthSelector from '../../selectors/AuthSelectors';
-import { Category } from '../../types';
+import * as CategorySelector from '../../../selectors/CategorySelectors';
+import * as EventServices from '../../../services/EventServices';
+import * as EventActions from '../../../actions/EventActions';
+import * as AuthSelector from '../../../selectors/AuthSelectors';
+import { Category } from '../../../types';
 import { LocalizationProvider, DateTimePicker } from '@material-ui/lab';
 import AdapterLuxon from '@material-ui/lab/AdapterLuxon';
 import * as luxon from 'luxon';

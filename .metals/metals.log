@@ -9,3 +9,4 @@
 [0m2021.08.08 12:33:50 WARN  no build tool detected in workspace 'D:\Users\Christian Segercrant\Documents\GitHub\e-phuxpoangshafte'. The most common cause for this problem is that the editor was opened in the wrong working directory, for example if you use sbt then the workspace directory should contain build.sbt. [0m
 Aug 08, 2021 5:15:15 PM org.eclipse.lsp4j.jsonrpc.services.GenericEndpoint notify
 INFO: Unsupported notification method: $/setTrace
+[0m2021.08.08 17:34:38 INFO  shutting down Metals[0m

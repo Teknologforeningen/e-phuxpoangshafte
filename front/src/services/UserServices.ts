@@ -3,10 +3,10 @@ import { User, EventStatus, NewUser, userRole } from '../types';
 const baseUrl = '/api/users';
 
 export const getAllUsers = async (token: string): Promise<User[]> => {
-  const headers = {
+  /*const headers = {
     Authorization: `Bearer ${token}`,
-  };
-  const response = await axios.get(baseUrl, { headers: { ...headers } });
+  };*/
+  const response = await axios.get(baseUrl, /*{ headers: { ...headers } }*/);
   return response.data as User[];
 };
 
@@ -14,10 +14,10 @@ export const getSingleUserInfo = async (
   userID: number | undefined,
   token: string | undefined,
 ): Promise<User> => {
-  const headers = {
+  /*const headers = {
     Authorization: `Bearer ${token}`,
-  };
-  const response = await axios.get(baseUrl, { headers: { ...headers } });
+  };*/
+  const response = await axios.get(baseUrl/*, { headers: { ...headers } }*/);
   return response.data as User;
 };
 
@@ -40,11 +40,11 @@ export const addDoneEvent = async (
   eventID: number,
   token: string,
 ) => {
-  const headers = {
+  /*const headers = {
     Authorization: `Bearer ${token}`,
-  };
+  };*/
   const url = `${baseUrl}/${userID}/done_events/${eventID}`;
-  const response = await axios.post(url, null, { headers: { ...headers } });
+  const response = await axios.post(url, null/*, { headers: { ...headers } }*/);
   return response.data;
 };
 
@@ -53,11 +53,11 @@ export const updateUserEventStatus = async (
   eventID: number,
   newStatus: EventStatus,
 ) => {
-  const headers = {
+  /*const headers = {
     Authorization: `Bearer ${user.token}`,
-  };
+  };*/
   const url = `${baseUrl}/${user.id}/done_events/${eventID}`;
   const status = { status: newStatus };
-  const response = await axios.put(url, status, { headers: { ...headers } });
+  const response = await axios.put(url, status/*, { headers: { ...headers } }*/);
   return response.data;
 };

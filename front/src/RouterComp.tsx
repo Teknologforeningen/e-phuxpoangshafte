@@ -4,11 +4,11 @@ import React from 'react';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import PrivateRoute from './components/routing/PrivateRoute';
 import { Routes } from './types';
-import AdminPage from './views/AdminPage';
+import AdminPage from './views/Admin';
 import CategoryPage from './views/CategoryPage';
 import LoginForm from './views/LoginPage';
 import MemberDashboard from './views/MemberDashboard';
-import NewCatAndEventPage from './views/NewCategoryAndEventPage';
+import NewCatAndEventPage from './views/Admin/NewCategoryAndEventPage';
 import SignupPage from './views/SignupPage';
 import SuccessfulsignupPage from './views/SuccessfulsignupPage';
 

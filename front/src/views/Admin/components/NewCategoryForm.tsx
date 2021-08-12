@@ -1,8 +1,8 @@
 import React from 'react';
 import { Box, Button, TextField } from '@material-ui/core';
-import * as CategoryService from '../../services/CategoryServices';
-import * as CategoryAction from '../../actions/CategoryActions';
-import * as AuthSelector from '../../selectors/AuthSelectors';
+import * as CategoryService from '../../../services/CategoryServices';
+import * as CategoryAction from '../../../actions/CategoryActions';
+import * as AuthSelector from '../../../selectors/AuthSelectors';
 import * as Yup from 'yup';
 import { useDispatch, useSelector } from 'react-redux';
 import { useFormik } from 'formik';
