@@ -6,11 +6,9 @@ import DoneEvents from '../db/models/models/doneEvent.model'
 
 authRouter.post('/', async (req,res) => {
   const body = req.body
-
-  const user = await User.scope('full').findOne({where: { email: body.email }, include: [DoneEvents] })
+  const email = req.body.email.toLowerCase()
+  const user = await User.scope('full').findOne({where: { email }, include: [DoneEvents] })
   const passwordCorrect: boolean | undefined = user === null ? false : await bcrypt.compare(body.password, user.password)
-
-  
 
   if(!(user && passwordCorrect)){
     return res.status(401).json({
