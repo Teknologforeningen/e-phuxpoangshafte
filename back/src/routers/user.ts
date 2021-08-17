@@ -25,13 +25,13 @@ userRouter.get('/', userExtractor, async (req, res) => {
 
 userRouter.get('/:userID', userExtractor, async (req, res) => {
   const authUser = req.user;
-  const userID = req.params.userID;
-  if (authUser.id !== userID || authUser.role !== userRole.ADMIN) {
+  const userID: number = Number(req.params.userID);
+  if (authUser.id !== userID && authUser.role !== userRole.ADMIN) {
+
     return res
       .status(401)
       .json({ error: 'You are not authorized for this page' });
   }
-
   const users = await User.findByPk(userID, { include: [DoneEvents] });
   res.json(users);
 });
