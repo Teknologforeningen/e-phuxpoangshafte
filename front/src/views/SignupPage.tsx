@@ -1,3 +1,4 @@
+import React from 'react';
 import {
   Box,
   Button,
@@ -9,38 +10,30 @@ import {
   Select,
   TextField,
 } from '@material-ui/core';
-import React, { useState } from 'react';
+import { useFormik } from 'formik';
 import { useHistory } from 'react-router-dom';
 import * as UserService from '../services/UserServices';
-import { NewUser } from '../types';
+import { FieldOfStudy, NewUser } from '../types';
+import * as Yup from 'yup';
+
+export interface UserFormAttributes extends NewUser {
+  confirmPassword: string;
+}
 
 const SignupPage = () => {
-  const [email, setEmail] = useState<string>('');
-  const [password, setPassword] = useState<string>('');
-  const [firstName, setFirstName] = useState<string>('');
-  const [lastName, setLastName] = useState<string>('');
-  const [fieldOfStudy, setFieldOfStudy] = useState('');
-  const [capWithTF, setCapWithTF] = useState<boolean>(true);
   const history = useHistory();
 
-  const submit = async () => {
+  const FieldOfStudyValues = Object.values(FieldOfStudy);
+  const FieldOfStudyMenuItems = FieldOfStudyValues.map((item: FieldOfStudy) => (
+    <MenuItem key={item} value={item}>
+      {item}
+    </MenuItem>
+  ));
+
+  const handleSubmit = async (values: NewUser) => {
     try {
       console.log('Submit initiated');
-      const userInfo: NewUser = {
-        email,
-        password,
-        firstName,
-        lastName,
-        fieldOfStudy,
-        capWithTF,
-      };
-      const response = await UserService.addUser(userInfo);
-      setEmail('');
-      setPassword('');
-      setFirstName('');
-      setLastName('');
-      setFieldOfStudy('');
-      setCapWithTF(true);
+      const response = await UserService.addUser(values);
       history.push('/successfulsignup');
       return response;
     } catch (e) {
@@ -48,65 +41,135 @@ const SignupPage = () => {
     }
   };
 
+  const initial: UserFormAttributes = {
+    email: '',
+    password: '',
+    confirmPassword: '',
+    firstName: '',
+    lastName: '',
+    fieldOfStudy: '',
+    capWithTF: true,
+  };
+
+  const validation = Yup.object({
+    email: Yup.string()
+      .email('Måste vara av formen exempel@domain.com')
+      .required('Obligatorisk'),
+    password: Yup.string()
+      .required('Obligatorisk')
+      .min(5, 'Lösen ordet måste vara mist 5 tecken långt')
+      .oneOf(
+        [Yup.ref('confirmPassword'), null],
+        'Lösenorden är inte identiska!',
+      ),
+    confirmPassword: Yup.string()
+      .required('Lösenorden är inte identiska!')
+      .oneOf([Yup.ref('password'), null], "Passwords don't match!"),
+    firstName: Yup.string().required('Obligatorisk'),
+    lastName: Yup.string().required('Obligatorisk'),
+    fieldOfStudy: Yup.string().required('Obligatorisk'),
+  });
+
+  const formik = useFormik({
+    initialValues: initial,
+    validationSchema: validation,
+    onSubmit: handleSubmit,
+  });
+
   return (
-    <Box>
+    <form onSubmit={formik.handleSubmit}>
       <Box display={'flex'} flexDirection={'column'}>
         <Box margin={0.5} />
         <TextField
-          variant={'outlined'}
-          value={email}
-          onChange={({ target }) => setEmail(target.value)}
+          id={'email'}
+          name={'email'}
           label={'Email'}
+          aria-label={'Email'}
+          placeholder={'exempel@aalto.fi'}
+          value={formik.values.email}
+          onChange={formik.handleChange}
+          error={formik.touched.email && Boolean(formik.errors.email)}
+          helperText={formik.touched.email && formik.errors.email}
         />
         <Box margin={0.5} />
         <TextField
-          variant={'outlined'}
-          value={password}
+          id={'password'}
           type={'password'}
-          onChange={({ target }) => setPassword(target.value)}
-          label={'Password'}
+          name={'password'}
+          label={'Lösenord'}
+          aria-label={'Lösenord'}
+          placeholder={''}
+          value={formik.values.password}
+          onChange={formik.handleChange}
+          error={formik.touched.password && Boolean(formik.errors.password)}
+        />
+        <TextField
+          id={'confirmPassword'}
+          type={'password'}
+          name={'confirmPassword'}
+          label={'Bekräfta lösenord'}
+          aria-label={'Bekräfta lösenord'}
+          placeholder={''}
+          value={formik.values.confirmPassword}
+          onChange={formik.handleChange}
+          error={formik.touched.password && Boolean(formik.errors.password)}
+          helperText={formik.touched.password && formik.errors.password}
         />
         <Box margin={0.5} />
         <TextField
-          variant={'outlined'}
-          value={firstName}
-          onChange={({ target }) => setFirstName(target.value)}
+          id={'firstName'}
+          name={'firstName'}
           label={'Förnamn'}
+          aria-label={'Förnamn'}
+          placeholder={'Sam'}
+          value={formik.values.firstName}
+          onChange={formik.handleChange}
+          error={formik.touched.firstName && Boolean(formik.errors.firstName)}
+          helperText={formik.touched.firstName && formik.errors.firstName}
         />
         <Box margin={0.5} />
         <TextField
-          variant={'outlined'}
-          value={lastName}
-          onChange={({ target }) => setLastName(target.value)}
+          id={'lastName'}
+          name={'lastName'}
           label={'Efternamn'}
+          aria-label={'Efternamn'}
+          placeholder={'Aalto'}
+          value={formik.values.lastName}
+          onChange={formik.handleChange}
+          error={formik.touched.lastName && Boolean(formik.errors.lastName)}
+          helperText={formik.touched.lastName && formik.errors.lastName}
         />
         <Box margin={0.5} />
-        <InputLabel id="fieldOfStudy">Studie inriktning</InputLabel>
+        <Box margin={0.5} />
+        <InputLabel id={'fieldOfStudy'}>Studieinrikting</InputLabel>
         <Select
-          variant={'outlined'}
-          value={fieldOfStudy}
-          onChange={({ target }) => setFieldOfStudy(target.value as string)}
-          label={'Efternamn'}
-          labelId={fieldOfStudy}
-          defaultValue={'Studie inriktning'}
+          id={'fieldOfStudy'}
+          name={'fieldOfStudy'}
+          label={'Studieinriktning'}
+          aria-label={'Studieinrikting'}
+          placeholder={'Välj studieinriktning'}
+          value={formik.values.fieldOfStudy}
+          onChange={formik.handleChange('fieldOfStudy')}
+          error={
+            formik.touched.fieldOfStudy && Boolean(formik.errors.fieldOfStudy)
+          }
         >
-          <MenuItem value={'Teknisk fysik och matematik'}>
-            Teknisk fysik och matematik
-          </MenuItem>
-          <MenuItem value={'Informations nätverk'}>
-            Informations nätverk
-          </MenuItem>
-          <MenuItem value={'Maskin och byggnadsteknik'}>
-            Maskin och byggnadsteknik
-          </MenuItem>
+          {[
+            <MenuItem selected disabled value={''} key={'initial'}>
+              Välj studieinriktning
+            </MenuItem>,
+            ...FieldOfStudyMenuItems,
+          ]}
         </Select>
         <Box margin={0.5} />
         <FormGroup row>
           <FormControlLabel
             control={
               <Checkbox
-                checked={capWithTF}
-                onChange={({ target }) => setCapWithTF(target.checked)}
+                id={'capWithTF'}
+                name={'capWithTF'}
+                checked={formik.values.capWithTF}
+                onChange={formik.handleChange}
                 color="secondary"
                 inputProps={{ 'aria-label': 'primary checkbox' }}
               />
@@ -115,13 +178,13 @@ const SignupPage = () => {
             labelPlacement="start"
           />
         </FormGroup>
+        <Box display={'flex'} flexDirection={'row'}>
+          <Button variant={'contained'} type={'submit'}>
+            Registera dig
+          </Button>
+        </Box>
       </Box>
-      <Box>
-        <Button variant={'contained'} onClick={submit}>
-          login
-        </Button>
-      </Box>
-    </Box>
+    </form>
   );
 };
 

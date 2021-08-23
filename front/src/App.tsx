@@ -4,13 +4,21 @@ import { useDispatch } from 'react-redux';
 import { localStorageGetter } from './utils.ts/localStorage';
 import { Box } from '@material-ui/core';
 import NavBar from './components/Navigation/NavBar';
-import { initCategories, initEvents, userLogin,changeAutharizedStatus } from './actions';
+import {
+  initCategories,
+  initEvents,
+  userLogin,
+  changeAutharizedStatus,
+} from './actions';
 import * as CategoryServices from './services/CategoryServices';
 import * as EventServices from './services/EventServices';
 import * as UserServices from './services/UserServices';
 import { User } from './types';
 import AppRouter from './AppRouter';
 import axios from 'axios';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import { ErrorNotification } from './components/Notifications';
 
 const App = () => {
   const dispatch = useDispatch();
@@ -19,7 +27,6 @@ const App = () => {
     const storedToken: string | null = localStorageGetter('token');
     const storedUserId: string | null = localStorageGetter('userId');
     if (storedToken && storedUserId) {
-      
       const parsedUserId: number = Number(JSON.parse(storedUserId));
       const parsedToken: string = JSON.parse(storedToken);
       axios.defaults.headers.common['authorization'] = `Bearer ${parsedToken}`;
@@ -27,9 +34,8 @@ const App = () => {
         dispatch(userLogin(fecthedUser));
       });
     } else {
-      dispatch(changeAutharizedStatus(false))
+      dispatch(changeAutharizedStatus(false));
     }
-
   }, [dispatch]);
 
   // Get categories from backend
@@ -42,6 +48,7 @@ const App = () => {
       getAndSetCategories();
     } catch (e) {
       console.error({ error: 'Failed to fetch categories from back end:', e });
+      ErrorNotification('Ett problem uppstod då kategorierna hämtades.')
     }
   }, [dispatch]);
 
@@ -55,13 +62,17 @@ const App = () => {
       getAndSetEvents();
     } catch (e) {
       console.error({ error: 'Failed to fetch events from back end:', e });
+      ErrorNotification('Ett problem uppstod då poängen hämtades.')
     }
   }, [dispatch]);
+
+  toast.configure();
 
   return (
     <Box>
       <NavBar />
-      <AppRouter/>
+      <AppRouter />
+      <ToastContainer />
     </Box>
   );
 };

@@ -19,7 +19,7 @@ export const localStorageGetter = (name: string): string | null => {
     try {
       const data = localStorage.getItem(name)
       if(data !== null){
-        return data //Checka de här...
+        return data
       } else return null
     } catch (e) {
       console.error('Local storage is not available,', name, 'could not be fetched.')
@@ -28,4 +28,17 @@ export const localStorageGetter = (name: string): string | null => {
   }
   console.error('Local storage is not available,', name, 'could not be fetched.')
   return null
+}
+
+export const localStorageDeleter = (name: string): void => {
+  if (typeof localStorage !== 'undefined') {
+    try {
+      localStorage.removeItem(name)
+      return
+    } catch (e) {
+      console.error('Local storage is not available,', name, 'could not be deleted.')
+      return
+    }
+  }
+  console.error('Local storage is not available,', name, 'could not be deleted.')
 }

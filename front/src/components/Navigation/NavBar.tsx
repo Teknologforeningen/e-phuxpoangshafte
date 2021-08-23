@@ -23,6 +23,7 @@ import * as AuthSelector from '../../selectors/AuthSelectors';
 import { Routes, userRole } from '../../types';
 
 import LogOutButton from '../routing/LogoutButton';
+import SettingsIcon from '@material-ui/icons/Settings';
 
 const NotLoggedInList = () => (
   <List>
@@ -112,13 +113,22 @@ const NavBar = () => {
           ) : (
             <></>
           )}
-          {auth.userIsAutharized &&
-          <List>
-            <ListItem key={'logout'}>
-              <LogOutButton handleClose={() => toggleDrawer(false)}/>
-            </ListItem>
-          </List>
-          }
+          {auth.userIsAutharized && (
+            <List>
+              <ListItem key={'logout'}>
+                <LogOutButton handleClose={() => toggleDrawer(false)} />
+              </ListItem>
+              <ListItem key={'settings'}>
+                <Link
+                  key={'settings'}
+                  href={Routes.USER_SETTINGS}
+                  variant={'inherit'}
+                >
+                  <SettingsIcon />
+                </Link>
+              </ListItem>
+            </List>
+          )}
         </Box>
       </SwipeableDrawer>
     </>

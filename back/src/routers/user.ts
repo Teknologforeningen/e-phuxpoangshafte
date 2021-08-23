@@ -27,7 +27,6 @@ userRouter.get('/:userID', userExtractor, async (req, res) => {
   const authUser = req.user;
   const userID: number = Number(req.params.userID);
   if (authUser.id !== userID && authUser.role !== userRole.ADMIN) {
-
     return res
       .status(401)
       .json({ error: 'You are not authorized for this page' });
@@ -63,7 +62,7 @@ userRouter.put('/:userID', userExtractor, async (req, res) => {
   const authUser = req.user;
   const body = req.body;
   const userID = req.params.userID;
-  if (authUser.id !== userID || authUser.role !== userRole.ADMIN) {
+  if (authUser.id !== userID && authUser.role !== userRole.ADMIN) {
     return res
       .status(401)
       .json({ error: 'You are not authorized for this page' });
@@ -120,9 +119,9 @@ userRouter.post(
   userExtractor,
   async (req, res) => {
     const authUser = req.user as User;
-    const userID = Number(req.params.userid);
-    const eventID = Number(req.params.eventid);
-    if (authUser.id !== userID && authUser.role !== userRole.ADMIN) {
+    const userId = Number(req.params.userid);
+    const eventId = Number(req.params.eventid);
+    if (authUser.id !== userId && authUser.role !== userRole.ADMIN) {
       return res
         .status(401)
         .json({ error: 'You are not authorized for this page' });
@@ -131,9 +130,10 @@ userRouter.post(
       status: EventStatus.PENDING,
       timeOfSignup: new Date(),
       timeOfCompletion: null,
-      userID,
-      eventID,
+      userID: userId,
+      eventID: eventId,
     };
+    console.log(doneEvent)
     const addedDoneEvent = await DoneEvents.create(doneEvent);
     res.status(200).json(addedDoneEvent);
   },
@@ -145,17 +145,21 @@ userRouter.put(
   async (req, res) => {
     const authUser = req.user as User;
     const newStatus = req.body.status;
-    const userID: number = Number(req.params.userID);
-    const eventID: number = Number(req.params.eventID);
-    const event = await DoneEvents.findOne({ where: { userID, eventID } });
+    const userId: number = Number(req.params.userID);
+    const eventId: number = Number(req.params.eventID);
+    const event = await DoneEvents.findOne({
+      where: { userID: userId, eventID: eventId },
+    });
 
+    console.log('UserID:', userId);
+    console.log('EventID:', eventId);
     if (!event) {
       res.status(404).send({ error: "Couldn't find the event for this user" });
     }
 
     switch (newStatus) {
       case EventStatus.CANCELLED: {
-        if (authUser.role !== userRole.ADMIN && authUser.id !== userID) {
+        if (authUser.role !== userRole.ADMIN && authUser.id !== userId) {
           console.log(
             'User does not have permission to updated the event of this user to cancelled',
           );

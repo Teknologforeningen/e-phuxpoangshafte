@@ -12,7 +12,6 @@ export const tokenExtractor = (req, _res, next) => {
 
 export const userExtractor = async (req, res, next) => {
   const token = req.token;
-  console.log(token);
   if (!token) {
     req.user = null;
     return res.status(401).json({ error: 'Token missing' });

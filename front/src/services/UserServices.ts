@@ -27,19 +27,28 @@ export const addUser = async (userInfo: NewUser) => {
   return response.data;
 };
 
+export const updateUser = async (userInfo: NewUser, userID: number) => {
+  const userToUpdate = {
+    role: userRole.BASIC,
+    password: userInfo.password,
+    email: userInfo.email,
+    firstName: userInfo.firstName,
+    lastName: userInfo.lastName,
+    fieldOfStudy: userInfo.fieldOfStudy,
+    capWithTF: userInfo.capWithTF,
+  };
+  const url = `${baseUrl}/${userID}`;
+  const response = await axios.put(url, userToUpdate);
+  return response.data;
+};
+
 export const addDoneEvent = async (
   userID: number,
   eventID: number,
   token: string,
 ) => {
-  /*const headers = {
-    Authorization: `Bearer ${token}`,
-  };*/
   const url = `${baseUrl}/${userID}/done_events/${eventID}`;
-  const response = await axios.post(
-    url,
-    null /*, { headers: { ...headers } }*/,
-  );
+  const response = await axios.post(url, null);
   return response.data;
 };
 
@@ -48,14 +57,8 @@ export const updateUserEventStatus = async (
   eventID: number,
   newStatus: EventStatus,
 ) => {
-  /*const headers = {
-    Authorization: `Bearer ${user.token}`,
-  };*/
   const url = `${baseUrl}/${user.id}/done_events/${eventID}`;
   const status = { status: newStatus };
-  const response = await axios.put(
-    url,
-    status /*, { headers: { ...headers } }*/,
-  );
+  const response = await axios.put(url, status);
   return response.data;
 };
