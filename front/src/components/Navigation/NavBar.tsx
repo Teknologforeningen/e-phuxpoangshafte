@@ -67,7 +67,7 @@ const NavBar = () => {
 
   return (
     <>
-      <AppBar position="static">
+      <AppBar position="static" className={classes.navbar}>
         <Toolbar>
           <IconButton
             edge="start"
@@ -87,10 +87,11 @@ const NavBar = () => {
         open={drawerOpen}
         onClose={() => toggleDrawer(false)}
         onOpen={() => toggleDrawer(true)}
+        className={classes.sideBar}
       >
-        <Box className={classes.sideBar}>
+        <Box className={classes.sideBarSpacer}>
           {auth.userIsAutharized ? (
-            <Box>
+            <Box textAlign="center">
               <ListItem key={'root'}>
                 <ListItemText
                   primary={
@@ -99,7 +100,9 @@ const NavBar = () => {
                 />
               </ListItem>
               <Divider />
-              <Box textAlign="center">Kategorier:</Box>
+              <Box>
+                <Typography>Kategorier:</Typography>
+              </Box>
               <List>{ListOfCategories}</List>
             </Box>
           ) : (
@@ -138,10 +141,17 @@ const NavBar = () => {
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     sideBar: {
+      color: theme.palette.primary.contrastText,
+    },
+    sideBarSpacer: {
       height: '100%',
       display: 'flex',
       flexDirection: 'column',
       justifyContent: 'space-between',
+    },
+    navbar: {
+      backgroundColor: theme.palette.secondary.main,
+      color: theme.palette.primary.main,
     },
   }),
 );
