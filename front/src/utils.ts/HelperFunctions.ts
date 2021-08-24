@@ -1,4 +1,6 @@
+import { useSelector } from "react-redux";
 import { User, DoneEvent, Event } from "../types";
+import * as EventSelector from '../selectors/EventSelectors'
 
 /**
  * 
@@ -16,7 +18,7 @@ export function ensure<T>(argument: T | undefined | null, message: string = 'Wro
 /**
  * Takes a user and a array of events and returns a array of the events ids that user has completed.
  */
-export const mapUserCompletedEvents = (user: User, events: Event[]): number[] | undefined => {
+export const mapUserAndEventsToDoneEvents = (user: User, events: Event[]): number[] | undefined => {
   if(user !== undefined && user.events !== undefined) {
     const eventIDs = events.map( (e: Event) => e.id)
     return user.events.filter( (dv: DoneEvent) => eventIDs.includes(dv.eventID)).map((dv: DoneEvent) => dv.eventID)
@@ -24,6 +26,12 @@ export const mapUserCompletedEvents = (user: User, events: Event[]): number[] | 
   else{
     return undefined
   }
+}
+
+export const mapUserDoneEventsToEvents = (doneEvents: DoneEvent[], allEvents: Event[]): Event[]=> {
+  const eventIds = doneEvents.map((doneEvent: DoneEvent) => doneEvent.eventID)
+  return allEvents.filter((event: Event)=> eventIds.includes(event.id))
+
 }
 /*export const mapUserCompletedEventsCustomObj = (user: authDetails, events: Event[], fieldsOfUser: string[], fieldsOfEvents: string[]): number[] | undefined => {
   const eventIDs = mapUserCompletedEvents(user,events)
