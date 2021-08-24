@@ -29,7 +29,6 @@ export const addUser = async (userInfo: NewUser) => {
 
 export const updateUser = async (userInfo: NewUser, userID: number) => {
   const userToUpdate = {
-    role: userRole.BASIC,
     password: userInfo.password,
     email: userInfo.email,
     firstName: userInfo.firstName,

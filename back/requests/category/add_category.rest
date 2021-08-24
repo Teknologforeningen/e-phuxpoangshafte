@@ -1,6 +1,6 @@
 POST http://localhost:8000/api/categories
 Content-Type: application/json
-Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InBodXhpdmF0b3JAdGYuZmkiLCJpZCI6MiwiaWF0IjoxNjI2NTE5MDUzfQ.VY8TIbEJQRLuQK0BxZ9KDSv2d6H_Y4gIwS_9i8inPXI
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InBodXhpdmF0b3JAdGYuZmkiLCJpZCI6NSwiaWF0IjoxNjI5ODAyMTE5fQ.s2uyZeFTMpvA6YOjtud0FLWLVX4hy0Bmh_KSjpfMc80
 
 { 
     "name": "Obligatoriska",
@@ -11,7 +11,7 @@ Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InBodXhpd
 
 POST http://localhost:8000/api/categories
 Content-Type: application/json
-Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InBodXhpdmF0b3JAdGYuZmkiLCJpZCI6MiwiaWF0IjoxNjI2NTE5MDUzfQ.VY8TIbEJQRLuQK0BxZ9KDSv2d6H_Y4gIwS_9i8inPXI
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InBodXhpdmF0b3JAdGYuZmkiLCJpZCI6NSwiaWF0IjoxNjI5ODAyMTE5fQ.s2uyZeFTMpvA6YOjtud0FLWLVX4hy0Bmh_KSjpfMc80
 
 { 
     "name": "Fest",

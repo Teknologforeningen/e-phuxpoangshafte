@@ -31,6 +31,7 @@ const CategoryPage = () => {
   const userCompletedEvents = userInfo.events.filter(
     (event: DoneEvent) => event.status === EventStatus.COMPLETED,
   );
+
   const completedEventsInCategory = userCompletedEvents.filter(
     (event: DoneEvent) => {
       return eventsInCategory

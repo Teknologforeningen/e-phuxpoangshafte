@@ -1,22 +1,23 @@
 import express from 'express';
 
-const eventRouter = require('express').Router()
+const eventRouter = require('express').Router();
 import Event from '../db/models/models/event.model';
 import { userExtractor } from '../utils.ts/middleware';
-import { Event as EventType } from '../types'
-
+import { Event as EventType, userRole } from '../types';
 
 eventRouter.get('/', async (req, res) => {
   const events = await Event.findAll();
-  res.json(events)
-})
+  res.json(events);
+});
 
 eventRouter.post('/', userExtractor, async (req, res) => {
-  const authUser = req.user
-  if(authUser.role !== "admin"){
-    return res.status(401).json({error: 'You are not authorized for this page'})
+  const authUser = req.user;
+  if (authUser.role !== userRole.ADMIN) {
+    return res
+      .status(401)
+      .json({ error: 'You are not authorized for this page' });
   }
-  const body = req.body
+  const body = req.body;
   const eventToAdd: Omit<EventType, 'id'> = {
     name: body.name,
     description: body.description,
@@ -26,9 +27,9 @@ eventRouter.post('/', userExtractor, async (req, res) => {
     userLimit: body.userLimit,
     categoryId: body.categoryId,
     mandatory: body.mandatory,
-  }
+  };
   const event: Event = await Event.create(eventToAdd);
-  res.json(event)
-})
+  res.json(event);
+});
 
-export default eventRouter
+export default eventRouter;

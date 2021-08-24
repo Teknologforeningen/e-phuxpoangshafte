@@ -50,11 +50,11 @@ class DoneEvents extends Model<DoneEventsTypeCreation> {
   @Column
   eventID: number;
 
-  @BelongsTo(() => User)
-  user: User;
+  //@BelongsTo(() => User)
+  //user: User;
 
-  @BelongsTo(() => Event)
-  event: Event;
+  //@BelongsTo(() => Event)
+  //event: Event;
 }
 
 export default DoneEvents;

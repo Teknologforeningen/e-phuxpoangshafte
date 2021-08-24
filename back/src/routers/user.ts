@@ -75,15 +75,12 @@ userRouter.put('/:userID', userExtractor, async (req, res) => {
   const saltRounds = 10;
   const passwordHash = await bcrypt.hash(body.password, saltRounds);
 
-  const updatedUser: UserType = {
-    id: user.id,
-    role: body.role,
+  const updatedUser: Omit<UserType, 'role' | 'id' | 'events'> = {
     email: body.email,
     password: passwordHash,
     firstName: body.firstName,
     lastName: body.lastName,
     fieldOfStudy: body.fieldOfStudy,
-    events: body.events,
     capWithTF: body.capWithTF,
   };
   user.update(updatedUser);
@@ -133,7 +130,7 @@ userRouter.post(
       userID: userId,
       eventID: eventId,
     };
-    console.log(doneEvent)
+    console.log(doneEvent);
     const addedDoneEvent = await DoneEvents.create(doneEvent);
     res.status(200).json(addedDoneEvent);
   },
