@@ -78,10 +78,12 @@ const LoginForm = () => {
   return (
     <>
       <NonAuthNavBar />
-      <Box className={classes.loginSpread}>
-        <Typography className={classes.title}>Logga in </Typography>
-        <form onSubmit={formik.handleSubmit}>
-          <Box className={classes.textFieldBoxes}>
+      <form onSubmit={formik.handleSubmit}>
+        <Box className={classes.loginSpread}>
+          <Typography textAlign="center" variant={'h4'}>
+            Logga in{' '}
+          </Typography>
+          <Box>
             <Box className={classes.centerAlign}>
               <TextField
                 id={'email'}
@@ -94,6 +96,12 @@ const LoginForm = () => {
                 error={formik.touched.email && Boolean(formik.errors.email)}
                 helperText={formik.touched.email && formik.errors.email}
                 className={classes.fields}
+                variant="filled"
+                InputLabelProps={{
+                  classes: {
+                    focused: classes.labelFocused,
+                  },
+                }}
               />
             </Box>
             <Box margin={0.5} className={classes.centerAlign}>
@@ -111,8 +119,16 @@ const LoginForm = () => {
                 }
                 helperText={formik.touched.password && formik.errors.password}
                 className={classes.fields}
+                variant="filled"
+                InputLabelProps={{
+                  classes: {
+                    focused: classes.labelFocused,
+                  },
+                }}
               />
             </Box>
+          </Box>
+          <Box>
             <Box className={classes.centerAlignRow}>
               <Button
                 variant={'contained'}
@@ -122,10 +138,8 @@ const LoginForm = () => {
               >
                 Logga in
               </Button>
-            </Box>
-            <Box className={classes.helpTextBox}>
-              <Typography className={classes.helpText}>
-                Inte registerad ännu? Börja med att
+              <Typography className={classes.helpText} variant={'body2'}>
+                Inte registerad ännu? Registera dig
                 <Link
                   href={Routes.SIGNUP}
                   variant={'inherit'}
@@ -134,14 +148,14 @@ const LoginForm = () => {
                   m={0.5}
                   noWrap
                 >
-                  trycka här
+                  här
                 </Link>
-                för att skapa en användare
+                .
               </Typography>
             </Box>
           </Box>
-        </form>
-      </Box>
+        </Box>
+      </form>
     </>
   );
 };
@@ -151,8 +165,8 @@ const useStyles = makeStyles((theme: Theme) =>
     loginSpread: {
       display: 'flex',
       flexDirection: 'column',
-      height: 'calc(100vh - 60px)',
-      justifyContent: 'center',
+      height: 'calc(100vh - 72px)',
+      justifyContent: 'space-evenly',
     },
     centerAlign: {
       display: 'flex',
@@ -162,33 +176,31 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     centerAlignRow: {
       display: 'flex',
-      flexDirection: 'row',
+      flexDirection: 'column',
       justifyContent: 'center',
       marginTop: 10,
     },
-    title: {
-      textAlign: 'center',
-      fontSize: '200%',
-      margin: '60px 0 40px 0',
-    },
-    helpTextBox: {
-      margin: 10,
-    },
     helpText: {
       textAlign: 'center',
-      fontSize: '110%',
+      maxWidth: '290px',
       color: theme.palette.primary.contrastText,
+      margin: '10px auto 0 auto',
     },
     fields: {
-      maxWidth: '80vw',
+      width: '100%',
+      maxWidth: '290px',
     },
     submitButton: {
       backgroundColor: theme.palette.secondary.main,
       color: theme.palette.primary.main,
-      minWidth: '200px',
+      width: '100%',
+      maxWidth: '290px',
+      padding: theme.spacing(2, 0),
+      margin: '0 auto',
+      borderRadius: 0,
     },
-    textFieldBoxes: {
-      margin: '16px 0',
+    labelFocused: {
+      color: `${theme.palette.common.black} !important`,
     },
   }),
 );

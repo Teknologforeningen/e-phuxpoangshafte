@@ -5,23 +5,26 @@ import {
   Checkbox,
   FormControlLabel,
   FormGroup,
-  InputLabel,
+  Link,
   MenuItem,
-  Select,
   TextField,
+  Theme,
+  Typography,
 } from '@material-ui/core';
 import { useFormik } from 'formik';
 import { useHistory } from 'react-router-dom';
 import * as UserService from '../services/UserServices';
-import { FieldOfStudy, NewUser } from '../types';
+import { FieldOfStudy, NewUser, Routes } from '../types';
 import * as Yup from 'yup';
 import NonAuthNavBar from '../components/Navigation/NonAuthNavBar';
+import { makeStyles, createStyles } from '@material-ui/styles';
 
 export interface UserFormAttributes extends NewUser {
   confirmPassword: string;
 }
 
 const SignupPage = () => {
+  const classes = useStyles();
   const history = useHistory();
 
   const FieldOfStudyValues = Object.values(FieldOfStudy);
@@ -55,9 +58,9 @@ const SignupPage = () => {
   const validation = Yup.object({
     email: Yup.string()
       .email('Måste vara av formen exempel@domain.com')
-      .required('Obligatorisk'),
+      .required('Obligatoriskt'),
     password: Yup.string()
-      .required('Obligatorisk')
+      .required('Obligatoriskt')
       .min(5, 'Lösen ordet måste vara mist 5 tecken långt')
       .oneOf(
         [Yup.ref('confirmPassword'), null],
@@ -66,9 +69,9 @@ const SignupPage = () => {
     confirmPassword: Yup.string()
       .required('Lösenorden är inte identiska!')
       .oneOf([Yup.ref('password'), null], "Passwords don't match!"),
-    firstName: Yup.string().required('Obligatorisk'),
-    lastName: Yup.string().required('Obligatorisk'),
-    fieldOfStudy: Yup.string().required('Obligatorisk'),
+    firstName: Yup.string().required('Obligatoriskt'),
+    lastName: Yup.string().required('Obligatoriskt'),
+    fieldOfStudy: Yup.string().required('Obligatoriskt'),
   });
 
   const formik = useFormik({
@@ -81,90 +84,131 @@ const SignupPage = () => {
     <>
       <NonAuthNavBar />
       <form onSubmit={formik.handleSubmit}>
-        <Box display={'flex'} flexDirection={'column'}>
-          <Box margin={0.5} />
-          <TextField
-            id={'email'}
-            name={'email'}
-            label={'Email'}
-            aria-label={'Email'}
-            placeholder={'exempel@aalto.fi'}
-            value={formik.values.email}
-            onChange={formik.handleChange}
-            error={formik.touched.email && Boolean(formik.errors.email)}
-            helperText={formik.touched.email && formik.errors.email}
-          />
-          <Box margin={0.5} />
-          <TextField
-            id={'password'}
-            type={'password'}
-            name={'password'}
-            label={'Lösenord'}
-            aria-label={'Lösenord'}
-            placeholder={''}
-            value={formik.values.password}
-            onChange={formik.handleChange}
-            error={formik.touched.password && Boolean(formik.errors.password)}
-          />
-          <TextField
-            id={'confirmPassword'}
-            type={'password'}
-            name={'confirmPassword'}
-            label={'Bekräfta lösenord'}
-            aria-label={'Bekräfta lösenord'}
-            placeholder={''}
-            value={formik.values.confirmPassword}
-            onChange={formik.handleChange}
-            error={formik.touched.password && Boolean(formik.errors.password)}
-            helperText={formik.touched.password && formik.errors.password}
-          />
-          <Box margin={0.5} />
-          <TextField
-            id={'firstName'}
-            name={'firstName'}
-            label={'Förnamn'}
-            aria-label={'Förnamn'}
-            placeholder={'Sam'}
-            value={formik.values.firstName}
-            onChange={formik.handleChange}
-            error={formik.touched.firstName && Boolean(formik.errors.firstName)}
-            helperText={formik.touched.firstName && formik.errors.firstName}
-          />
-          <Box margin={0.5} />
-          <TextField
-            id={'lastName'}
-            name={'lastName'}
-            label={'Efternamn'}
-            aria-label={'Efternamn'}
-            placeholder={'Aalto'}
-            value={formik.values.lastName}
-            onChange={formik.handleChange}
-            error={formik.touched.lastName && Boolean(formik.errors.lastName)}
-            helperText={formik.touched.lastName && formik.errors.lastName}
-          />
-          <Box margin={0.5} />
-          <Box margin={0.5} />
-          <InputLabel id={'fieldOfStudy'}>Studieinrikting</InputLabel>
-          <Select
-            id={'fieldOfStudy'}
-            name={'fieldOfStudy'}
-            label={'Studieinriktning'}
-            aria-label={'Studieinrikting'}
-            placeholder={'Välj studieinriktning'}
-            value={formik.values.fieldOfStudy}
-            onChange={formik.handleChange('fieldOfStudy')}
-            error={
-              formik.touched.fieldOfStudy && Boolean(formik.errors.fieldOfStudy)
-            }
-          >
-            {[
-              <MenuItem selected disabled value={''} key={'initial'}>
-                Välj studieinriktning
-              </MenuItem>,
-              ...FieldOfStudyMenuItems,
-            ]}
-          </Select>
-          <Box margin={0.5} />
+        <Box className={classes.loginSpread}>
+          <Typography textAlign="center" variant={'h4'}>
+            Skapa ditt konto
+          </Typography>
+          <Box display={'flex'} flexDirection={'column'}>
+            <TextField
+              variant={'filled'}
+              id={'email'}
+              name={'email'}
+              label={'Email'}
+              aria-label={'Email'}
+              value={formik.values.email}
+              onChange={formik.handleChange}
+              error={formik.touched.email && Boolean(formik.errors.email)}
+              helperText={formik.touched.email && formik.errors.email}
+              className={classes.fields}
+              InputLabelProps={{
+                classes: {
+                  focused: classes.labelFocused,
+                },
+              }}
+            />
+            <TextField
+              variant={'filled'}
+              id={'password'}
+              type={'password'}
+              name={'password'}
+              label={'Lösenord'}
+              aria-label={'Lösenord'}
+              value={formik.values.password}
+              onChange={formik.handleChange}
+              error={formik.touched.password && Boolean(formik.errors.password)}
+              className={classes.fields}
+              InputLabelProps={{
+                classes: {
+                  focused: classes.labelFocused,
+                },
+              }}
+            />
+            <TextField
+              variant={'filled'}
+              id={'confirmPassword'}
+              type={'password'}
+              name={'confirmPassword'}
+              label={'Bekräfta lösenord'}
+              aria-label={'Bekräfta lösenord'}
+              value={formik.values.confirmPassword}
+              onChange={formik.handleChange}
+              error={formik.touched.password && Boolean(formik.errors.password)}
+              helperText={formik.touched.password && formik.errors.password}
+              className={classes.fields}
+              InputLabelProps={{
+                classes: {
+                  focused: classes.labelFocused,
+                },
+              }}
+            />
+            <TextField
+              variant={'filled'}
+              id={'firstName'}
+              name={'firstName'}
+              label={'Förnamn'}
+              aria-label={'Förnamn'}
+              value={formik.values.firstName}
+              onChange={formik.handleChange}
+              error={
+                formik.touched.firstName && Boolean(formik.errors.firstName)
+              }
+              helperText={formik.touched.firstName && formik.errors.firstName}
+              className={classes.fields}
+              InputLabelProps={{
+                classes: {
+                  focused: classes.labelFocused,
+                },
+              }}
+            />
+            <TextField
+              variant={'filled'}
+              id={'lastName'}
+              name={'lastName'}
+              label={'Efternamn'}
+              aria-label={'Efternamn'}
+              value={formik.values.lastName}
+              onChange={formik.handleChange}
+              error={formik.touched.lastName && Boolean(formik.errors.lastName)}
+              helperText={formik.touched.lastName && formik.errors.lastName}
+              className={classes.fields}
+              InputLabelProps={{
+                classes: {
+                  focused: classes.labelFocused,
+                },
+              }}
+            />
+            <TextField
+              select
+              variant={'filled'}
+              id={'fieldOfStudy'}
+              name={'fieldOfStudy'}
+              label={'Studieinriktning'}
+              aria-label={'Studieinrikting'}
+              placeholder={'Välj studieinriktning'}
+              value={formik.values.fieldOfStudy}
+              onChange={formik.handleChange('fieldOfStudy')}
+              error={
+                formik.touched.fieldOfStudy &&
+                Boolean(formik.errors.fieldOfStudy)
+              }
+              helperText={
+                formik.touched.fieldOfStudy && formik.errors.fieldOfStudy
+              }
+              className={classes.fields}
+              InputLabelProps={{
+                classes: {
+                  focused: classes.labelFocused,
+                },
+              }}
+            >
+              {[
+                <MenuItem selected disabled value={''} key={'initial'}>
+                  Välj studieinriktning
+                </MenuItem>,
+                ...FieldOfStudyMenuItems,
+              ]}
+            </TextField>
+            {/*
           <FormGroup row>
             <FormControlLabel
               control={
@@ -181,15 +225,81 @@ const SignupPage = () => {
               labelPlacement="start"
             />
           </FormGroup>
-          <Box display={'flex'} flexDirection={'row'}>
-            <Button variant={'contained'} type={'submit'}>
+            */}
+          </Box>
+          <Box display={'flex'} flexDirection={'column'}>
+            <Button
+              variant={'contained'}
+              type={'submit'}
+              className={classes.submitButton}
+            >
               Registera dig
             </Button>
+            <Typography className={classes.helpText} variant={'body2'}>
+              Har du redan ett konto? Logga in
+              <Link
+                href={Routes.LOGIN}
+                variant={'inherit'}
+                color={'secondary'}
+                underline={'hover'}
+                m={0.5}
+                noWrap
+              >
+                här
+              </Link>
+              .
+            </Typography>
           </Box>
         </Box>
       </form>
     </>
   );
 };
+
+const useStyles = makeStyles((theme: Theme) =>
+  createStyles({
+    loginSpread: {
+      display: 'flex',
+      flexDirection: 'column',
+      height: 'calc(100vh - 72px)',
+      justifyContent: 'space-evenly',
+    },
+    centerAlign: {
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      marginBottom: 16,
+    },
+    centerAlignRow: {
+      display: 'flex',
+      flexDirection: 'column',
+      justifyContent: 'center',
+      marginTop: 10,
+    },
+    helpText: {
+      textAlign: 'center',
+      maxWidth: '290px',
+      color: theme.palette.primary.contrastText,
+      margin: '10px auto 0 auto',
+    },
+    fields: {
+      width: '100%',
+      maxWidth: '290px',
+      margin: '0 auto',
+    },
+    submitButton: {
+      backgroundColor: theme.palette.secondary.main,
+      color: theme.palette.primary.main,
+      width: '100%',
+      maxWidth: '290px',
+      padding: theme.spacing(2, 0),
+      margin: '0 auto',
+      borderRadius: 0,
+    },
+    labelFocused: {
+      color: `${theme.palette.common.black} !important`,
+    },
+  }),
+);
 
 export default SignupPage;

@@ -9,12 +9,22 @@ const StartPage = () => {
   return (
     <Box className={classes.container}>
       <TFlogoSVG className={classes.logo} />
-      <Typography className={classes.title}>
+      <Typography textAlign={'center'} variant={'h4'}>
         Teknologföreningens phuxpoängskort
       </Typography>
-      <Typography className={classes.subtitle}>Phux 2021</Typography>
+      <Typography textAlign={'center'} variant={'h6'}>
+        Phux 2021
+      </Typography>
       <Box className={classes.buttonWrapper}>
-        {/* TODO: Remove links/make nicer looking */}
+        <Link href={Routes.SIGNUP} variant={'inherit'} underline={'none'}>
+          <Button
+            variant={'outlined'}
+            size={'large'}
+            className={classes.outLinedButton}
+          >
+            Registera
+          </Button>
+        </Link>
         <Link href={Routes.LOGIN} variant={'inherit'} underline={'none'}>
           <Button
             variant={'contained'}
@@ -22,15 +32,6 @@ const StartPage = () => {
             className={classes.buttons}
           >
             Logga in
-          </Button>
-        </Link>
-        <Link href={Routes.SIGNUP} variant={'inherit'} underline={'none'}>
-          <Button
-            variant={'contained'}
-            size={'large'}
-            className={classes.buttons}
-          >
-            Registera dig
           </Button>
         </Link>
       </Box>
@@ -41,32 +42,40 @@ const StartPage = () => {
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     container: {
-      height: '85vh',
+      height: '100vh',
       display: 'flex',
       flexDirection: 'column',
       justifyContent: 'space-evenly',
     },
-    title: {
-      textAlign: 'center',
-      fontSize: '200%',
-    },
-    subtitle: {
-      textAlign: 'center',
-      fontSize: '150%',
-    },
     buttonWrapper: {
+      marginTop: theme.spacing(2),
       width: '100%',
       display: 'flex',
       flexDirection: 'row',
       justifyContent: 'space-evenly',
     },
     buttons: {
-      fontSize: 'large',
       color: theme.palette.primary.main,
       backgroundColor: theme.palette.secondary.main,
+      width: '100%',
+      maxWidth: '200px',
+      padding: theme.spacing(2, 5),
+      borderRadius: 0,
+    },
+    outLinedButton: {
+      color: theme.palette.secondary.main,
+      border: `1px solid ${theme.palette.secondary.main}`,
+      width: '100%',
+      maxWidth: '200px',
+      padding: theme.spacing(2, 5),
+      borderRadius: 0,
     },
     logo: {
       fill: theme.palette.secondary.main,
+      width: '60%',
+      maxWidth: 400,
+      maxHeight: 400,
+      margin: '0 auto',
     },
   }),
 );
