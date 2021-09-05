@@ -113,32 +113,32 @@ const LoginForm = () => {
                 className={classes.fields}
               />
             </Box>
-            <Box className={classes.centerAlignRow}>
-              <Button
-                variant={'contained'}
-                className={classes.submitButton}
-                type={'submit'}
-                size={'large'}
+          </Box>
+          <Box className={classes.centerAlignRow}>
+            <Button
+              variant={'contained'}
+              className={classes.submitButton}
+              type={'submit'}
+              size={'large'}
+            >
+              Logga in
+            </Button>
+          </Box>
+          <Box className={classes.helpTextBox}>
+            <Typography className={classes.helpText}>
+              Inte registerad ännu? Börja med att
+              <Link
+                href={Routes.SIGNUP}
+                variant={'inherit'}
+                color={'secondary'}
+                underline={'hover'}
+                m={0.5}
+                noWrap
               >
-                Logga in
-              </Button>
-            </Box>
-            <Box className={classes.helpTextBox}>
-              <Typography className={classes.helpText}>
-                Inte registerad ännu? Börja med att
-                <Link
-                  href={Routes.SIGNUP}
-                  variant={'inherit'}
-                  color={'secondary'}
-                  underline={'hover'}
-                  m={0.5}
-                  noWrap
-                >
-                  trycka här
-                </Link>
-                för att skapa en användare
-              </Typography>
-            </Box>
+                trycka här
+              </Link>
+              för att skapa en användare
+            </Typography>
           </Box>
         </form>
       </Box>
@@ -151,7 +151,7 @@ const useStyles = makeStyles((theme: Theme) =>
     loginSpread: {
       display: 'flex',
       flexDirection: 'column',
-      height: 'calc(100vh - 60px)',
+      height: 'calc(100vh - 72px)',
       justifyContent: 'center',
     },
     centerAlign: {

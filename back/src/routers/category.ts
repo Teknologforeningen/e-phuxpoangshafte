@@ -30,6 +30,7 @@ categoryRouter.post('/', userExtractor, async (req, res) => {
 });
 
 categoryRouter.put('/:id', userExtractor, async (req, res) => {
+  console.log('Updating category...');
   const authUser = req.user;
   if (authUser.role !== userRole.ADMIN) {
     return res
@@ -39,12 +40,12 @@ categoryRouter.put('/:id', userExtractor, async (req, res) => {
   const categoryId = req.params.id;
   const body = req.body;
   const categoryToUpdate = await Category.findByPk(categoryId);
-  const categoryUpdated = {
-    id: categoryToUpdate.id,
-    name: body.name,
-    description: body.description,
-    minPoints: body.minPoints,
-  };
+  categoryToUpdate.name = body.name;
+  categoryToUpdate.description = body.description;
+  categoryToUpdate.minPoints = body.minPoints;
+  const categoryUpdated = await categoryToUpdate.save();
+  console.log(categoryUpdated);
+  return categoryUpdated;
 });
 
 export default categoryRouter;
