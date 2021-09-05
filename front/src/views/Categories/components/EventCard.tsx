@@ -8,10 +8,8 @@ import {
   Box,
   Button,
   Card,
-  CardActionArea,
   CardContent,
   CardHeader,
-  Collapse,
   Theme,
   Typography,
 } from '@material-ui/core';
@@ -21,6 +19,7 @@ import {
   InfoNotification,
 } from '../../../components/Notifications';
 import { createStyles, makeStyles } from '@material-ui/styles';
+import classNames from 'classnames';
 
 const EventCardTitle = ({
   event,
@@ -35,7 +34,9 @@ const EventCardTitle = ({
       <Box className={classes.titleText}>
         <Typography variant={'h6'} color={'secondary'}>
           {event.name}
+          {event.mandatory && ' *'}
         </Typography>
+
         {event.points ? (
           <Typography variant={'body2'} className={classes.titleText}>
             {event.points} poäng{' '}
@@ -52,17 +53,17 @@ const EventCardTitle = ({
 const EventCard = ({
   event,
   complitionStatus,
+  selectCardId,
+  setSelectCardId,
 }: {
   event: Event;
   complitionStatus: EventStatus | undefined;
+  selectCardId: number;
+  setSelectCardId: (id: number) => void;
 }) => {
   const classes = useStyles();
-  const [expanded, setExpanded] = React.useState(false);
   const dispatch = useDispatch();
   const auth = useSelector(AuthSelector.auth);
-  const handleExpandClick = () => {
-    setExpanded(!expanded);
-  };
 
   if (!auth.userInfo) {
     return <React.Fragment></React.Fragment>;
@@ -86,6 +87,10 @@ const EventCard = ({
     }
   };
 
+  const eventStatus = auth.userInfo.events.find(
+    (dv: DoneEvent) => dv.eventID === event.id,
+  )?.status;
+
   const unattendedEvent = !auth.userInfo.events.find(
     (dv: DoneEvent) => dv.eventID === event.id,
   );
@@ -100,14 +105,19 @@ const EventCard = ({
       <Close className={classes.incompleteIcon} />
     );
 
+  const selectedCard = event.id === selectCardId;
+
   return (
-    <Card className={classes.card}>
-      <CardActionArea onClick={handleExpandClick}>
-        <CardHeader
-          title={<EventCardTitle event={event} icon={statusIcon} />}
-        />
-        <Collapse in={expanded} timeout="auto" unmountOnExit>
-          <CardContent>
+    <Card
+      className={classNames(classes.card, {
+        [classes.selectedCard]: selectedCard,
+      })}
+      onClick={() => setSelectCardId(event.id)}
+    >
+      <CardHeader title={<EventCardTitle event={event} icon={statusIcon} />} />
+      {selectedCard && (
+        <CardContent className={classes.cardContent}>
+          <Box className={classes.information}>
             <Typography variant={'body2'}>
               <i>{event.description}</i>
             </Typography>
@@ -116,20 +126,22 @@ const EventCard = ({
                 ? 'Högst ' + event.userLimit + ' kan anmäla sig'
                 : ''}
             </Typography>
-            {auth.userIsAutharized && unattendedEvent && expanded ? (
-              <Button
-                variant={'contained'}
-                onClick={requestPoint}
-                className={classes.actionButton}
-              >
-                Be om undeskrift
-              </Button>
-            ) : (
-              <React.Fragment></React.Fragment>
-            )}
-          </CardContent>
-        </Collapse>
-      </CardActionArea>
+          </Box>
+          {auth.userIsAutharized && unattendedEvent ? (
+            <Button
+              variant={'contained'}
+              onClick={requestPoint}
+              className={classes.actionButton}
+            >
+              Anmäl dig
+            </Button>
+          ) : eventStatus === 'PENDING' ? (
+            <Typography variant="caption" fontStyle={'italic'}>
+              Väntar på underskrift
+            </Typography>
+          ) : undefined}
+        </CardContent>
+      )}
     </Card>
   );
 };
@@ -151,11 +163,28 @@ const useStyles = makeStyles((theme: Theme) =>
       borderRadius: 24,
     },
     actionButton: {
-      zIndex: 1301,
+      flex: '0 1 0',
+      marginLeft: theme.spacing(1),
+      minWidth: 120,
+      color: theme.palette.primary.main,
+      backgroundColor: theme.palette.secondary.main,
+      padding: theme.spacing(2, 2),
     },
-    card:{
-      margin: '24px 0px'
-    }
+    card: {
+      margin: '24px 0px',
+    },
+    cardContent: {
+      display: 'flex',
+      justifyContent: 'space-between',
+      alignItems: 'center',
+      padding: theme.spacing(0, 2, 2, 2),
+    },
+    information: {
+      flex: '1 1 0',
+    },
+    selectedCard: {
+      border: `2px solid ${theme.palette.secondary.main}`,
+    },
   }),
 );
 

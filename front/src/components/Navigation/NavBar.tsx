@@ -92,7 +92,7 @@ const getNavbarTitle = (
 ): string => {
   if (userIsAutharized) {
     if (location === Routes.ROOT) {
-      return 'Home';
+      return 'Hem';
     }
     if (location.includes('kategori')) {
       const locationSplits = location.split('/');
@@ -180,6 +180,17 @@ const NavBar = () => {
         <Box className={classes.sideBarSpacer}>
           {auth.userIsAutharized ? (
             <Box textAlign="center">
+              <List>
+                <ListItem key="home">
+                  <Link key={'home'} href={Routes.ROOT}>
+                    <ListItemText
+                      primary={'Hem'}
+                      className={classes.categoryLinks}
+                    />
+                  </Link>
+                </ListItem>
+              </List>
+              <Divider />
               <List>{ListOfCategories}</List>
               {auth.userInfo && auth.userInfo.role === userRole.ADMIN ? (
                 <>
