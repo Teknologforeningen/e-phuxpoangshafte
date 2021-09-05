@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import * as AuthSelectors from '../../selectors/AuthSelectors';
 import * as CategorySelectors from '../../selectors/CategorySelectors';
@@ -9,57 +9,141 @@ import {
   DoneEvent,
   EventState,
   Event,
+  EventStatus,
+  Category,
 } from '../../types';
 import CategoryProgress from './components/CategoryProgress';
 import _ from 'lodash';
-import { Typography } from '@material-ui/core';
+import {
+  Box,
+  Card,
+  CardActionArea,
+  CardContent,
+  Collapse,
+  List,
+  ListItem,
+  Typography,
+} from '@material-ui/core';
+import { mapUserDoneEventsToEvents } from '../../utils.ts/HelperFunctions';
 
-interface Props {
-  email: string;
-}
-
-const MemberDashboard = (props: Props) => {
+const MemberDashboard = () => {
+  const [expanded, setExpanded] = useState(false);
   const auth: AuthState = useSelector(AuthSelectors.auth);
   const categoriesState: CategoryState = useSelector(
     CategorySelectors.allCategories,
   );
-  const categories = categoriesState.categories;
+  const nonEmptyCategories = categoriesState.categories.filter(
+    (category: Category) => category.events.length > 0,
+  );
   const eventState: EventState = useSelector(EventSelectors.allEvents);
   const events = eventState.events;
-  if (!auth || !categories || !events) {
+  if (!auth || !auth.userInfo || !nonEmptyCategories || !events) {
     return <></>;
   }
-  const ListOfCategoryProgress: JSX.Element[] =
-    categoriesState.categories !== undefined
-      ? categoriesState.categories.map(cat => (
-          <CategoryProgress category={cat} progress={50} />
-        ))
-      : [<></>];
-  const ListOfDoneEvents = auth.userInfo?.events
-    .map((event: DoneEvent) => event.eventID)
-    .map((eventID: Number) =>
-      eventState.events.find((e: Event) => eventID === e.id),
-    );
 
-  const EventsGroupedByCategoryId = _.groupBy(events, 'categoryId');
-  const pointsPerCategori = _.mapValues(EventsGroupedByCategoryId, eventArray =>
+  const eventsGroupedByCategoryId = _.groupBy(events, 'categoryId');
+  const pointsPerCategori = _.mapValues(eventsGroupedByCategoryId, eventArray =>
     eventArray.reduce(
       (totalPoints, event) => totalPoints + (event.points ? event.points : 0),
       0,
     ),
   );
 
-  console.log(ListOfDoneEvents);
+  const listOfCompletedEvents = auth.userInfo.events.filter(
+    (event: DoneEvent) => event.status === EventStatus.COMPLETED,
+  );
+
+  const listOfCompletedAndMappedEvents = listOfCompletedEvents
+    .map((event: DoneEvent) => event.eventID)
+    .map((eventID: Number) =>
+      eventState.events.find((e: Event) => eventID === e.id),
+    );
+
+  const completedEventsGroupedByCategoryId = _.groupBy(
+    listOfCompletedAndMappedEvents,
+    'categoryId',
+  );
+
+  const completedPointsPerCategori = _.mapValues(
+    completedEventsGroupedByCategoryId,
+    eventArray =>
+      eventArray.reduce(
+        (totalPoints, event) =>
+          totalPoints + (event ? (event.points ? event.points : 0) : 0),
+        0,
+      ),
+  );
+
+  const completionAmountPerCategori: { [categoryId: number]: number } =
+    Object.entries(pointsPerCategori).reduce(
+      (prev, [categoryId, categoryPoints]) => {
+        const newReturn = {
+          ...prev,
+          [categoryId]:
+            categoryPoints > 0
+              ? completedPointsPerCategori[categoryId]
+                ? Math.min(
+                    completedPointsPerCategori[categoryId] / categoryPoints,
+                    1,
+                  ) * 100
+                : 0
+              : 0,
+        };
+        return newReturn;
+      },
+      {},
+    );
+
+  const ListOfCategoryProgress: JSX.Element[] = nonEmptyCategories
+    ? nonEmptyCategories.map(category => (
+        <CategoryProgress
+          key={category.id}
+          category={category}
+          progress={completionAmountPerCategori[category.id]}
+          currentAmount={
+            completedPointsPerCategori[category.id]
+              ? completedPointsPerCategori[category.id]
+              : 0
+          }
+          requiredAmount={category.minPoints ? category.minPoints : 0}
+        />
+      ))
+    : [<></>];
+
+  const pendingEvents = auth.userInfo.events.filter(
+    (doneEvent: DoneEvent) => doneEvent.status === EventStatus.PENDING,
+  );
+  const pendingAmount = pendingEvents.length;
+
+  const handleExpandClick = () => {
+    setExpanded(!expanded);
+  };
+
+  const listOfPendingEvents = mapUserDoneEventsToEvents(
+    pendingEvents,
+    events,
+  ).map((event: Event) => <ListItem key={event.id}>{event.name}</ListItem>);
 
   return (
-    <div>
-      <Typography variant={'h4'}>
-        Hello {auth.userInfo?.firstName} {auth.userInfo?.lastName}
-      </Typography>
-
-      <Typography variant={'h5'}>Kategorier:</Typography>
+    <Box>
+      {pendingAmount > 0 ? (
+        <Card variant={'outlined'}>
+          <CardActionArea onClick={handleExpandClick}>
+            <CardContent>
+              <Typography>
+                Du har {pendingAmount} poäng som väntar på godkännande
+              </Typography>
+              <Collapse in={expanded} timeout="auto" unmountOnExit>
+                <List>{listOfPendingEvents}</List>
+              </Collapse>
+            </CardContent>
+          </CardActionArea>
+        </Card>
+      ) : (
+        <></>
+      )}
       {ListOfCategoryProgress}
-    </div>
+    </Box>
   );
 };
 

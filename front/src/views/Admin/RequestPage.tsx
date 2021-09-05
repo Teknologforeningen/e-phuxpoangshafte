@@ -105,12 +105,12 @@ const UserRequests = ({
         token={token}
       />
     ) : (
-      <React.Fragment></React.Fragment>
+      <></>
     ),
   );
   return (
     <Box>
-      <Typography variant="h4">
+      <Typography variant="h6">
         {user.firstName + ' ' + user.lastName}
       </Typography>
       <Box>
@@ -129,7 +129,6 @@ const RequestPage = () => {
   const token = useSelector(AuthSelector.token);
   const [users, setUsers] = useState<User[] | undefined>();
   const [events, setEvents] = useState<Event[] | undefined>();
-  console.table(users);
   useEffect(() => {
     const getEvents = async () => {
       const response = await EventService.getAllEvents();
@@ -141,7 +140,7 @@ const RequestPage = () => {
     };
     getEvents();
     getUsers();
-  }, [token]);
+  }, [token, users]);
 
   if (!users || !events) {
     return <React.Fragment></React.Fragment>;
@@ -168,7 +167,7 @@ const RequestPage = () => {
 
   return (
     <Box>
-      <Typography variant="h3">Ansökta underskrifter</Typography>
+      <Typography variant="h5">Ansökta underskrifter</Typography>
       {userRequests}
     </Box>
   );

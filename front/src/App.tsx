@@ -48,7 +48,7 @@ const App = () => {
       getAndSetCategories();
     } catch (e) {
       console.error({ error: 'Failed to fetch categories from back end:', e });
-      ErrorNotification('Ett problem uppstod då kategorierna hämtades.')
+      ErrorNotification('Ett problem uppstod då kategorierna hämtades.');
     }
   }, [dispatch]);
 
@@ -62,7 +62,7 @@ const App = () => {
       getAndSetEvents();
     } catch (e) {
       console.error({ error: 'Failed to fetch events from back end:', e });
-      ErrorNotification('Ett problem uppstod då poängen hämtades.')
+      ErrorNotification('Ett problem uppstod då poängen hämtades.');
     }
   }, [dispatch]);
 

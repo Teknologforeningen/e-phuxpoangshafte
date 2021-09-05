@@ -6,6 +6,7 @@ import * as AuthSelector from '../../../selectors/AuthSelectors';
 import * as Yup from 'yup';
 import { useDispatch, useSelector } from 'react-redux';
 import { useFormik } from 'formik';
+import { ErrorNotification, SuccessNotification } from '../../../components/Notifications';
 
 export interface NewCategoryAttributes {
   name: string;
@@ -38,9 +39,11 @@ const NewCategoryForm = () => {
     try {
       const addedCategory = await CategoryService.addCategory(values, token);
       dispatch(CategoryAction.addCategory(addedCategory));
+      SuccessNotification(`${addedCategory.name} har lagts till!`)
       resetForm({});
     } catch (e) {
       console.error({ error: e, message: 'Could not add new category' });
+      ErrorNotification(`${values.name} kunde inte läggas till!`)
     }
   };
 

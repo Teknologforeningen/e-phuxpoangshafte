@@ -11,14 +11,10 @@ const AdminPage = () => {
     <Switch>
       <AdminRoute
         component={NewCatAndEventPage}
-        path={`${Routes.ADMIN}/addmore`}
+        path={Routes.ADMIN_ADDMORE}
         exact
       />
-      <AdminRoute
-        component={RequestPage}
-        path={`${Routes.ADMIN}/requests`}
-        exact
-      />
+      <AdminRoute component={RequestPage} path={Routes.ADMIN_REQUESTS} exact />
       <AdminRoute component={UserTable} path={Routes.ADMIN} exact />
     </Switch>
   );

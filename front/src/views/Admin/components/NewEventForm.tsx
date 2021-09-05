@@ -22,6 +22,10 @@ import { Category } from '../../../types';
 import { LocalizationProvider, DateTimePicker } from '@material-ui/lab';
 import AdapterLuxon from '@material-ui/lab/AdapterLuxon';
 import * as luxon from 'luxon';
+import {
+  ErrorNotification,
+  SuccessNotification,
+} from '../../../components/Notifications';
 
 export interface NewEventAttributes {
   name: string;
@@ -58,21 +62,18 @@ const NewEventForm = () => {
     mandatory: false,
     categoryId: '',
   };
+
   const validation = Yup.object({
     name: Yup.string().required('Obligatorisk'),
     description: Yup.string().required('Obligatorisk'),
-    startTime: Yup.date()
-      .required('Obligatorisk')
-      .min(luxon.DateTime.local(), 'Datumet måst vara i framtiden'),
-    endTime: Yup.date()
-      .required('Obligatorisk')
-      .min(luxon.DateTime.local(), 'Datumet måst vara i framtiden'),
+    startTime: Yup.date().required('Obligatorisk'),
+    //.min(luxon.DateTime.local(), 'Datumet måst vara i framtiden'),
+    endTime: Yup.date().required('Obligatorisk'),
+    //.min(luxon.DateTime.local(), 'Datumet måst vara i framtiden'),
     points: Yup.number()
-      .required('Obligatorisk')
       .moreThan(-1, 'Måste vara 0 eller större')
       .integer('Måste vara ett heltal'),
     userLimit: Yup.number()
-      .required('Obligatorisk')
       .moreThan(-1, 'Måste vara 0 eller större')
       .integer('Måste vara ett heltal'),
     categoryId: Yup.number()
@@ -88,9 +89,11 @@ const NewEventForm = () => {
     try {
       const addedEvent = await EventServices.addEvent(values, token);
       dispatch(EventActions.addEvent(addedEvent));
+      SuccessNotification(`${addedEvent.name} har lagts till!`);
       resetForm();
     } catch (e) {
       console.error({ error: e, message: 'Could not add new event' });
+      ErrorNotification(`${values.name} kunde inte läggas till!`);
     }
   };
 
@@ -136,7 +139,15 @@ const NewEventForm = () => {
             ampm={false}
             value={formik.values.startTime}
             onChange={newValue => formik.setFieldValue('startTime', newValue)}
-            renderInput={props => <TextField {...props} />}
+            renderInput={props => (
+              <TextField
+                {...props}
+                error={
+                  formik.touched.startTime && Boolean(formik.errors.startTime)
+                }
+                helperText={formik.touched.startTime && formik.errors.startTime}
+              />
+            )}
           />
           <Box margin={0.5} />
           <DateTimePicker
@@ -144,7 +155,13 @@ const NewEventForm = () => {
             ampm={false}
             value={formik.values.endTime}
             onChange={newValue => formik.setFieldValue('endTime', newValue)}
-            renderInput={props => <TextField {...props} />}
+            renderInput={props => (
+              <TextField
+                {...props}
+                error={formik.touched.endTime && Boolean(formik.errors.endTime)}
+                helperText={formik.touched.endTime && formik.errors.endTime}
+              />
+            )}
           />
         </LocalizationProvider>
         <Box margin={0.5} />
@@ -216,7 +233,3 @@ const NewEventForm = () => {
 };
 
 export default NewEventForm;
-
-/*
-
-        */

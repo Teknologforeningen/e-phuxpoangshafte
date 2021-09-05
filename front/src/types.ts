@@ -79,11 +79,14 @@ export interface DoneEvent {
 
 export enum Routes {
   ROOT = '/',
+  START= '/start',
   LOGIN = '/login',
   SIGNUP = '/signup',
   CATEGORY = '/kategori',
   SPECIFIC_CATEGORY = '/kategori/:categoryId',
   ADMIN = '/admin',
+  ADMIN_REQUESTS = '/admin/requests',
+  ADMIN_ADDMORE = '/admin/addmore',
   USER_SETTINGS = '/settings',
 }
 

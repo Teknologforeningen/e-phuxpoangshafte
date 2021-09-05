@@ -1,6 +1,10 @@
-import { DoneEvent, User } from '../types';
+import { DoneEvent, EventStatus, User } from '../types';
 
-export type AuthActions = UserLogin | AddUserEvent | UserLogout | ChangeAutherizedStatus;
+export type AuthActions =
+  | UserLogin
+  | AddUserEvent
+  | UserLogout
+  | ChangeAutherizedStatus;
 
 interface UserLogin {
   type: 'USER_LOGIN';

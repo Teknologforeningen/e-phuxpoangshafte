@@ -3,13 +3,24 @@ import { useDispatch } from 'react-redux';
 import { userLogin } from '../actions';
 import * as AuthServices from '../services/AuthServices';
 import { localStorageSetter } from '../utils.ts/localStorage';
-import { Box, TextField, Button, Theme } from '@material-ui/core';
+import {
+  Box,
+  TextField,
+  Button,
+  Theme,
+  Typography,
+  Link,
+} from '@material-ui/core';
 import { makeStyles, createStyles } from '@material-ui/styles';
 import { useHistory } from 'react-router-dom';
 import axios from 'axios';
 import * as Yup from 'yup';
 import { useFormik } from 'formik';
-import { ErrorNotification, SuccessNotification } from '../components/Notifications';
+import {
+  ErrorNotification,
+  SuccessNotification,
+} from '../components/Notifications';
+import { Routes } from '../types';
 
 interface LoginCredentials {
   email: string;
@@ -47,11 +58,12 @@ const LoginForm = () => {
         'authorization'
       ] = `Bearer ${loggedInUser.token}`;
       resetForm();
-      SuccessNotification('Din inloggning lyckades!')
+      SuccessNotification('Din inloggning lyckades!');
       history.push('/');
     } catch (e) {
+      // TODO: error handling om du ger fel credentials, meddela om de
       console.log('Error loging in:', e);
-      ErrorNotification('Inloggning misslyckades')
+      ErrorNotification('Inloggning misslyckades');
     }
   };
 
@@ -62,100 +74,105 @@ const LoginForm = () => {
   });
 
   return (
-    <form onSubmit={formik.handleSubmit}>
-      <Box>
-        <Box
-          display={'flex'}
-          flexDirection={'column'}
-          className={classes.container}
-        >
-          <TextField
-            id={'email'}
-            name={'email'}
-            label={'Email'}
-            aria-label={'Email'}
-            placeholder={'exempel@aalto.fi'}
-            value={formik.values.email}
-            onChange={formik.handleChange}
-            error={formik.touched.email && Boolean(formik.errors.email)}
-            helperText={formik.touched.email && formik.errors.email}
-          />
-          <Box margin={0.5} />
-          <TextField
-            id={'password'}
-            type={'password'}
-            name={'password'}
-            label={'Lösenord'}
-            aria-label={'Lösenord'}
-            placeholder={'Lösenord'}
-            value={formik.values.password}
-            onChange={formik.handleChange}
-            error={formik.touched.password && Boolean(formik.errors.password)}
-            helperText={formik.touched.password && formik.errors.password}
-          />
-        </Box>
+    <>
+      <Typography className={classes.title}>Logga in </Typography>
+      <form onSubmit={formik.handleSubmit}>
         <Box>
-          <Button
-            variant={'contained'}
-            className={classes.redLabel}
-            type={'submit'}
-          >
-            Logga in
-          </Button>
+          <Box className={classes.centerAlign}>
+            <TextField
+              id={'email'}
+              name={'email'}
+              label={'Email'}
+              aria-label={'Email'}
+              placeholder={'exempel@aalto.fi'}
+              value={formik.values.email}
+              onChange={formik.handleChange}
+              error={formik.touched.email && Boolean(formik.errors.email)}
+              helperText={formik.touched.email && formik.errors.email}
+              className={classes.fields}
+            />
+          </Box>
+          <Box margin={0.5} className={classes.centerAlign}>
+            <TextField
+              id={'password'}
+              type={'password'}
+              name={'password'}
+              label={'Lösenord'}
+              aria-label={'Lösenord'}
+              placeholder={'Lösenord'}
+              value={formik.values.password}
+              onChange={formik.handleChange}
+              error={formik.touched.password && Boolean(formik.errors.password)}
+              helperText={formik.touched.password && formik.errors.password}
+              className={classes.fields}
+            />
+          </Box>
+          <Box className={classes.centerAlignRow}>
+            <Button
+              variant={'contained'}
+              className={classes.submitButton}
+              type={'submit'}
+              size={'large'}
+            >
+              Logga in
+            </Button>
+          </Box>
         </Box>
+      </form>
+      <Box className={classes.helpTextBox}>
+        <Typography className={classes.helpText}>
+          Inte registerad ännu? Börja med att
+          <Link
+            href={Routes.SIGNUP}
+            variant={'inherit'}
+            color={'secondary'}
+            underline={'hover'}
+            m={0.5}
+            noWrap
+          >
+            trycka här
+          </Link>
+          för att skapa en användare
+        </Typography>
       </Box>
-    </form>
+    </>
   );
 };
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
-    container: {
-      maxWidth: 300,
+    centerAlign: {
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
     },
-    redLabel: {
-      color: theme.palette.secondary.main,
+    centerAlignRow: {
+      display: 'flex',
+      flexDirection: 'row',
+      justifyContent: 'center',
+    },
+    title: {
+      textAlign: 'center',
+      fontSize: '200%',
+      marginTop: '10vh',
+    },
+    helpTextBox: {
+      margin: 10,
+    },
+    helpText: {
+      textAlign: 'center',
+      fontSize: '110%',
+      color: theme.palette.primary.contrastText,
+    },
+    fields: {
+      maxWidth: '80vw',
+    },
+    submitButton: {
+      marginTop: 10,
+      backgroundColor: theme.palette.secondary.main,
+      color: theme.palette.primary.main,
     },
   }),
 );
 
 export default LoginForm;
-
-/*return (
-    <Box>
-      <Box
-        display={'flex'}
-        flexDirection={'column'}
-        className={classes.container}
-      >
-        <TextField
-          variant={'outlined'}
-          value={email}
-          onChange={({ target }) => setEmail(target.value)}
-          label={'Email'}
-        />
-        <Box margin={0.5} />
-        <TextField
-          variant={'outlined'}
-          value={password}
-          type={'password'}
-          onChange={({ target }) => setPassword(target.value)}
-          label={'Password'}
-          InputLabelProps={{
-            classes: {
-              root: classes.redLabel,
-            },
-          }}
-        />
-      </Box>
-      <Box>
-        <Button
-          variant={'contained'}
-          className={classes.redLabel}
-          onClick={submit}
-        >
-          login
-        </Button>
-      </Box>
-    </Box>
-  );*/
