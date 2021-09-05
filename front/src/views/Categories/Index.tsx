@@ -50,17 +50,19 @@ const CategoryPage = () => {
         (acc: number, cur: number | undefined) => (cur ? acc + cur : acc),
         0,
       );
-  const ListOfEvents = eventsInCategory.map((event: Event) => (
-    <EventCard
-      key={event.id}
-      event={event}
-      complitionStatus={
-        userCompletedEvents.find(
-          (doneEvent: DoneEvent) => doneEvent.eventID === event.id,
-        )?.status
-      }
-    />
-  ));
+
+  const ListOfEvents = eventsInCategory.map((event: Event) => {
+    const complitionStatus = userInfo.events.find(
+      (doneEvent: DoneEvent) => doneEvent.eventID === event.id,
+    )?.status;
+    return (
+      <EventCard
+        key={event.id}
+        event={event}
+        complitionStatus={complitionStatus}
+      />
+    );
+  });
   return (
     <Box>
       <h2>{category.name}</h2>

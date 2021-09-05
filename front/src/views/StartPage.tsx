@@ -7,8 +7,8 @@ import { Routes } from '../types';
 const StartPage = () => {
   const classes = useStyles();
   return (
-    <Box className={classes.root}>
-      <TFlogoSVG color={'secondary'} />
+    <Box className={classes.container}>
+      <TFlogoSVG className={classes.logo} />
       <Typography className={classes.title}>
         Teknologföreningens phuxpoängskort
       </Typography>
@@ -40,7 +40,7 @@ const StartPage = () => {
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
-    root: {
+    container: {
       height: '85vh',
       display: 'flex',
       flexDirection: 'column',
@@ -64,6 +64,9 @@ const useStyles = makeStyles((theme: Theme) =>
       fontSize: 'large',
       color: theme.palette.primary.main,
       backgroundColor: theme.palette.secondary.main,
+    },
+    logo: {
+      fill: theme.palette.secondary.main,
     },
   }),
 );

@@ -116,7 +116,7 @@ const NavBar = () => {
     : [<></>];
 
   return (
-    <Box className={classes.root}>
+    <Box className={classes.flex}>
       <AppBar position="fixed" className={classes.navbar}>
         <Toolbar>
           <IconButton
@@ -135,14 +135,16 @@ const NavBar = () => {
             marginTop={'46.6px'}
             marginBottom={'46.6px'}
           >
-            <Typography
+            {/*<Typography
               variant="h6"
               marginTop={'46.6px'}
               marginBottom={'46.6px'}
             >
-              Phuxpoängshäfte
-            </Typography>
-            <TFLogoSVG fill={'white'} width={42} />
+            Phuxpoängshäfte
+            </Typography>*/}
+            <Link key={'root'} href={Routes.ROOT} variant={'inherit'}>
+              <TFLogoSVG className={classes.logo} />
+            </Link>
           </Box>
         </Toolbar>
       </AppBar>
@@ -209,7 +211,7 @@ export const drawerWidth = 200;
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
-    root: {
+    flex: {
       display: 'flex',
     },
     sideBar: {
@@ -238,6 +240,10 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     topPadding: {
       paddingTop: navBarHeight + 5,
+    },
+    logo: {
+      fill: 'white',
+      width: 42,
     },
   }),
 );

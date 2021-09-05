@@ -10,18 +10,18 @@ import MemberDashboard from './views/MemberDashboard';
 import SignupPage from './views/SignupPage';
 import SuccessfulsignupPage from './views/SuccessfulsignupPage';
 import * as AuthSelector from './selectors/AuthSelectors';
-import { Box, CircularProgress, Theme, useMediaQuery } from '@material-ui/core';
+import { Box, CircularProgress, Theme } from '@material-ui/core';
 import UserSettings from './views/UserSettings';
 import { makeStyles, createStyles } from '@material-ui/styles';
 import StartPage from './views/StartPage';
-import { drawerWidth, navBarHeight } from './components/Navigation/NavBar';
+import NavBar, { navBarHeight } from './components/Navigation/NavBar';
 
 const AppRouter = () => {
   const classes = useStyles();
   const auth = useSelector(AuthSelector.auth);
 
   return (
-    <Box className={classes.content}>
+    <Box>
       <BrowserRouter>
         <Switch>
           <Route path={Routes.LOGIN}>
@@ -34,7 +34,8 @@ const AppRouter = () => {
             <StartPage />
           </Route>
           {auth.userIsAutharized ? (
-            <React.Fragment>
+            <Box className={classes.content}>
+              <NavBar />
               <PrivateRoute
                 component={UserSettings}
                 path={Routes.USER_SETTINGS}
@@ -56,7 +57,7 @@ const AppRouter = () => {
                 path={Routes.ROOT}
                 exact
               />
-            </React.Fragment>
+            </Box>
           ) : auth.userIsAutharized === null ? (
             <Box className={classes.centerBox}>
               <CircularProgress color={'secondary'} />

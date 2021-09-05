@@ -21,6 +21,8 @@ import {
   SuccessNotification,
 } from '../components/Notifications';
 import { Routes } from '../types';
+import TFLogoSVG from '../styles/img/TFlogo';
+import NonAuthNavBar from '../components/Navigation/NonAuthNavBar';
 
 interface LoginCredentials {
   email: string;
@@ -75,65 +77,70 @@ const LoginForm = () => {
 
   return (
     <>
-      <Typography className={classes.title}>Logga in </Typography>
-      <form onSubmit={formik.handleSubmit}>
-        <Box>
-          <Box className={classes.centerAlign}>
-            <TextField
-              id={'email'}
-              name={'email'}
-              label={'Email'}
-              aria-label={'Email'}
-              placeholder={'exempel@aalto.fi'}
-              value={formik.values.email}
-              onChange={formik.handleChange}
-              error={formik.touched.email && Boolean(formik.errors.email)}
-              helperText={formik.touched.email && formik.errors.email}
-              className={classes.fields}
-            />
+      <NonAuthNavBar />
+      <Box className={classes.loginSpread}>
+        <Typography className={classes.title}>Logga in </Typography>
+        <form onSubmit={formik.handleSubmit}>
+          <Box className={classes.textFieldBoxes}>
+            <Box className={classes.centerAlign}>
+              <TextField
+                id={'email'}
+                name={'email'}
+                label={'Email'}
+                aria-label={'Email'}
+                placeholder={'exempel@aalto.fi'}
+                value={formik.values.email}
+                onChange={formik.handleChange}
+                error={formik.touched.email && Boolean(formik.errors.email)}
+                helperText={formik.touched.email && formik.errors.email}
+                className={classes.fields}
+              />
+            </Box>
+            <Box margin={0.5} className={classes.centerAlign}>
+              <TextField
+                id={'password'}
+                type={'password'}
+                name={'password'}
+                label={'Lösenord'}
+                aria-label={'Lösenord'}
+                placeholder={'Lösenord'}
+                value={formik.values.password}
+                onChange={formik.handleChange}
+                error={
+                  formik.touched.password && Boolean(formik.errors.password)
+                }
+                helperText={formik.touched.password && formik.errors.password}
+                className={classes.fields}
+              />
+            </Box>
+            <Box className={classes.centerAlignRow}>
+              <Button
+                variant={'contained'}
+                className={classes.submitButton}
+                type={'submit'}
+                size={'large'}
+              >
+                Logga in
+              </Button>
+            </Box>
+            <Box className={classes.helpTextBox}>
+              <Typography className={classes.helpText}>
+                Inte registerad ännu? Börja med att
+                <Link
+                  href={Routes.SIGNUP}
+                  variant={'inherit'}
+                  color={'secondary'}
+                  underline={'hover'}
+                  m={0.5}
+                  noWrap
+                >
+                  trycka här
+                </Link>
+                för att skapa en användare
+              </Typography>
+            </Box>
           </Box>
-          <Box margin={0.5} className={classes.centerAlign}>
-            <TextField
-              id={'password'}
-              type={'password'}
-              name={'password'}
-              label={'Lösenord'}
-              aria-label={'Lösenord'}
-              placeholder={'Lösenord'}
-              value={formik.values.password}
-              onChange={formik.handleChange}
-              error={formik.touched.password && Boolean(formik.errors.password)}
-              helperText={formik.touched.password && formik.errors.password}
-              className={classes.fields}
-            />
-          </Box>
-          <Box className={classes.centerAlignRow}>
-            <Button
-              variant={'contained'}
-              className={classes.submitButton}
-              type={'submit'}
-              size={'large'}
-            >
-              Logga in
-            </Button>
-          </Box>
-        </Box>
-      </form>
-      <Box className={classes.helpTextBox}>
-        <Typography className={classes.helpText}>
-          Inte registerad ännu? Börja med att
-          <Link
-            href={Routes.SIGNUP}
-            variant={'inherit'}
-            color={'secondary'}
-            underline={'hover'}
-            m={0.5}
-            noWrap
-          >
-            trycka här
-          </Link>
-          för att skapa en användare
-        </Typography>
+        </form>
       </Box>
     </>
   );
@@ -141,20 +148,28 @@ const LoginForm = () => {
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
+    loginSpread: {
+      display: 'flex',
+      flexDirection: 'column',
+      height: 'calc(100vh - 60px)',
+      justifyContent: 'center',
+    },
     centerAlign: {
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
+      marginBottom: 16,
     },
     centerAlignRow: {
       display: 'flex',
       flexDirection: 'row',
       justifyContent: 'center',
+      marginTop: 10,
     },
     title: {
       textAlign: 'center',
       fontSize: '200%',
-      marginTop: '10vh',
+      margin: '60px 0 40px 0',
     },
     helpTextBox: {
       margin: 10,
@@ -168,9 +183,12 @@ const useStyles = makeStyles((theme: Theme) =>
       maxWidth: '80vw',
     },
     submitButton: {
-      marginTop: 10,
       backgroundColor: theme.palette.secondary.main,
       color: theme.palette.primary.main,
+      minWidth: '200px',
+    },
+    textFieldBoxes: {
+      margin: '16px 0',
     },
   }),
 );

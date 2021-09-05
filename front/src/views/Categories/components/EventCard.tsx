@@ -5,22 +5,49 @@ import * as AuthSelector from '../../../selectors/AuthSelectors';
 import * as UserService from '../../../services/UserServices';
 import * as AuthActions from '../../../actions/AuthActions';
 import {
+  Box,
   Button,
   Card,
   CardActionArea,
+  CardContent,
   CardHeader,
   Collapse,
+  Theme,
   Typography,
 } from '@material-ui/core';
-import {
-  CheckBoxOutlineBlank,
-  CheckBox,
-  IndeterminateCheckBox,
-} from '@material-ui/icons';
+import { Done, DoneAll, Close } from '@material-ui/icons';
 import {
   ErrorNotification,
   InfoNotification,
 } from '../../../components/Notifications';
+import { createStyles, makeStyles } from '@material-ui/styles';
+
+const EventCardTitle = ({
+  event,
+  icon,
+}: {
+  event: Event;
+  icon: JSX.Element;
+}) => {
+  const classes = useStyles();
+  return (
+    <Box className={classes.horizontalSpacer}>
+      <Box className={classes.titleText}>
+        <Typography variant={'h6'} color={'secondary'}>
+          {event.name}
+        </Typography>
+        {event.points ? (
+          <Typography variant={'body2'} className={classes.titleText}>
+            {event.points} poäng{' '}
+          </Typography>
+        ) : (
+          ''
+        )}
+      </Box>
+      <Box className={classes.titleIcon}>{icon}</Box>
+    </Box>
+  );
+};
 
 const EventCard = ({
   event,
@@ -29,6 +56,7 @@ const EventCard = ({
   event: Event;
   complitionStatus: EventStatus | undefined;
 }) => {
+  const classes = useStyles();
   const [expanded, setExpanded] = React.useState(false);
   const dispatch = useDispatch();
   const auth = useSelector(AuthSelector.auth);
@@ -44,8 +72,6 @@ const EventCard = ({
     try {
       if (auth.userInfo && auth.userInfo.id) {
         //For type guard, the button isn't rendered in case no user is autherized
-        console.log('UserID:', auth.userInfo.id);
-        console.log('EventID:', event.id);
         const addedDoneEvent = (await UserService.addDoneEvent(
           auth.userInfo.id,
           event.id,
@@ -66,41 +92,71 @@ const EventCard = ({
 
   const statusIcon =
     complitionStatus && complitionStatus === EventStatus.COMPLETED ? (
-      <CheckBox />
+      <DoneAll color={'success'} />
     ) : complitionStatus === EventStatus.PENDING ||
       complitionStatus === EventStatus.CONFIRMED ? (
-      <IndeterminateCheckBox />
+      <Done color={'warning'} />
     ) : (
-      <CheckBoxOutlineBlank />
+      <Close className={classes.incompleteIcon} />
     );
 
   return (
-    <Card>
+    <Card className={classes.card}>
       <CardActionArea onClick={handleExpandClick}>
-        <CardHeader title={event.name} avatar={statusIcon} />
+        <CardHeader
+          title={<EventCardTitle event={event} icon={statusIcon} />}
+        />
         <Collapse in={expanded} timeout="auto" unmountOnExit>
-          <Typography paragraph>
-            <i>{event.description}</i>
-          </Typography>
-          <Typography paragraph>
-            {event.points ? 'Poäng: ' + event.points : ''}
-          </Typography>
-          <Typography paragraph>
-            {event.userLimit
-              ? 'Högst ' + event.userLimit + ' kan anmäla sig'
-              : ''}
-          </Typography>
+          <CardContent>
+            <Typography variant={'body2'}>
+              <i>{event.description}</i>
+            </Typography>
+            <Typography variant={'body2'}>
+              {event.userLimit
+                ? 'Högst ' + event.userLimit + ' kan anmäla sig'
+                : ''}
+            </Typography>
+            {auth.userIsAutharized && unattendedEvent && expanded ? (
+              <Button
+                variant={'contained'}
+                onClick={requestPoint}
+                className={classes.actionButton}
+              >
+                Be om undeskrift
+              </Button>
+            ) : (
+              <React.Fragment></React.Fragment>
+            )}
+          </CardContent>
         </Collapse>
       </CardActionArea>
-      {auth.userIsAutharized && unattendedEvent && expanded ? (
-        <Button variant={'contained'} onClick={requestPoint}>
-          Be om undeskrift
-        </Button>
-      ) : (
-        <React.Fragment></React.Fragment>
-      )}
     </Card>
   );
 };
+
+const useStyles = makeStyles((theme: Theme) =>
+  createStyles({
+    horizontalSpacer: {
+      width: '100%',
+      display: 'flex',
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+    },
+    titleText: {
+      fontWeight: 800,
+    },
+    titleIcon: {},
+    incompleteIcon: {
+      border: `2px solid black`,
+      borderRadius: 24,
+    },
+    actionButton: {
+      zIndex: 1301,
+    },
+    card:{
+      margin: '24px 0px'
+    }
+  }),
+);
 
 export default EventCard;

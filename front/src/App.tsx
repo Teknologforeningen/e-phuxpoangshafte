@@ -3,7 +3,6 @@ import { useDispatch } from 'react-redux';
 
 import { localStorageGetter } from './utils.ts/localStorage';
 import { Box } from '@material-ui/core';
-import NavBar from './components/Navigation/NavBar';
 import {
   initCategories,
   initEvents,
@@ -70,11 +69,12 @@ const App = () => {
 
   return (
     <Box>
-      <NavBar />
       <AppRouter />
       <ToastContainer />
     </Box>
   );
 };
+
+
 
 export default App;
