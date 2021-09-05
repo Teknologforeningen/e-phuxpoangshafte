@@ -71,6 +71,7 @@ const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     content: {
       marginTop: navBarHeight + 5,
+      padding: theme.spacing(0, 2),
     },
     centerBox: {
       display: 'flex',
