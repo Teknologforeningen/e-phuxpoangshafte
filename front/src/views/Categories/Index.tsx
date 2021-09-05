@@ -1,5 +1,5 @@
 import { Box } from '@material-ui/core';
-import React from 'react';
+import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useRouteMatch } from 'react-router-dom';
 import * as CategorySelector from '../../selectors/CategorySelectors';
@@ -20,6 +20,7 @@ const CategoryPage = () => {
   );
   const events: Event[] = useSelector(EventSelector.allEvents).events;
   const userInfo: User | undefined = useSelector(AuthSelector.auth).userInfo;
+  const [selectedCardId, setSelectedCardId] = useState<number>(1);
 
   if (!category || !events || !userInfo) {
     return <React.Fragment></React.Fragment>;
@@ -44,13 +45,12 @@ const CategoryPage = () => {
     (doneEvent: DoneEvent) =>
       eventsInCategory.find((event: Event) => doneEvent.eventID === event.id),
   );
-  const completedPointsInCategory: number =
-    completedEventsInCategoryCastedToEvents
-      .map((event: Event | undefined) => (event ? event.points : 0))
-      .reduce(
-        (acc: number, cur: number | undefined) => (cur ? acc + cur : acc),
-        0,
-      );
+  const completedPointsInCategory: number = completedEventsInCategoryCastedToEvents
+    .map((event: Event | undefined) => (event ? event.points : 0))
+    .reduce(
+      (acc: number, cur: number | undefined) => (cur ? acc + cur : acc),
+      0,
+    );
 
   const ListOfEvents = eventsInCategory.map((event: Event) => {
     const complitionStatus = userInfo.events.find(
@@ -61,6 +61,8 @@ const CategoryPage = () => {
         key={event.id}
         event={event}
         complitionStatus={complitionStatus}
+        selectCardId={selectedCardId}
+        setSelectCardId={setSelectedCardId}
       />
     );
   });
