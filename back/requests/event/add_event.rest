@@ -34,7 +34,7 @@ Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InBodXhpd
 
 POST http://localhost:8000/api/events
 Content-Type: application/json
-Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InBodXhpdmF0b3JAdGYuZmkiLCJpZCI6MiwiaWF0IjoxNjI2MTc2MjQ5fQ.RxdtSz5rVkH38aHU_ZKw7eQTFxwZ0TGzMFNeOLHkQVU
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InBodXhpdmF0b3JAdGYuZmkiLCJpZCI6NSwiaWF0IjoxNjMwODQxMjI0fQ.YourtqdHBCZVZXtsiAinc4V347yg0XLSkpfCbSxm5NM
 
 { 
     "name": "Julphesten",

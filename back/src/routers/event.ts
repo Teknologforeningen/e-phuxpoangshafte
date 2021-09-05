@@ -32,4 +32,26 @@ eventRouter.post('/', userExtractor, async (req, res) => {
   res.json(event);
 });
 
+eventRouter.put('/:id', userExtractor, async (req, res) => {
+  const authUser = req.user;
+  if (authUser.role !== userRole.ADMIN) {
+    return res
+      .status(401)
+      .json({ error: 'You are not authorized for this page' });
+  }
+  const eventId = req.params.id;
+  const body = req.body;
+  const eventToUpdate = await Event.findByPk(eventId);
+  eventToUpdate.name = body.name;
+  eventToUpdate.description = body.description;
+  eventToUpdate.startTime = body.startTime;
+  eventToUpdate.endTime = body.endTime;
+  eventToUpdate.points = body.points;
+  eventToUpdate.userLimit = body.userLimit;
+  eventToUpdate.categoryId = body.categoryId;
+  eventToUpdate.mandatory = body.mandatory;
+  await eventToUpdate.save();
+  return eventToUpdate;
+});
+
 export default eventRouter;

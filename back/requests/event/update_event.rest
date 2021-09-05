@@ -1,0 +1,16 @@
+PUT http://localhost:8000/api/events/12
+Content-Type: application/json
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InBodXhpdmF0b3JAdGYuZmkiLCJpZCI6NSwiaWF0IjoxNjMwODQxMjI0fQ.YourtqdHBCZVZXtsiAinc4V347yg0XLSkpfCbSxm5NM
+
+{ 
+    "name": "Julphesten",
+    "description": "Människor e nog satins fulla här o PK måst städa",
+    "startTime": "01-01-2021",
+    "endTime": "02-01-2021",
+    "points": "-10",
+    "userLimit": 150,
+    "categoryId": 2,
+    "mandatory": false
+}
+
+###
