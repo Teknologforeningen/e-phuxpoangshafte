@@ -1,25 +1,39 @@
 import React from 'react';
-import { Box, Button, TextField } from '@material-ui/core';
+import { Box, Button, MenuItem, TextField } from '@material-ui/core';
+import * as CategorySelector from '../../../selectors/CategorySelectors';
 import * as CategoryService from '../../../services/CategoryServices';
 import * as CategoryAction from '../../../actions/CategoryActions';
+import * as AuthSelector from '../../../selectors/AuthSelectors';
 import * as Yup from 'yup';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useFormik } from 'formik';
 import {
   ErrorNotification,
   SuccessNotification,
 } from '../../../components/Notifications';
+import { NewCategoryAttributes } from './NewCategoryForm';
+import { Category } from '../../../types';
 
-export interface NewCategoryAttributes {
-  name: string;
-  description: string;
-  minPoints?: number;
+export interface EditCategoryAttributes extends NewCategoryAttributes {
+  categoryId?: number | '';
 }
 
-const NewCategoryForm = () => {
+const EditCategoryForm = () => {
   const dispatch = useDispatch();
+  const categories = useSelector(CategorySelector.allCategories).categories;
+  const CategoryMenuItems = categories.map((cat: Category) => {
+    return (
+      <MenuItem key={cat.id} value={cat.id}>
+        {cat.name}
+      </MenuItem>
+    );
+  });
 
-  const initial: NewCategoryAttributes = {
+  const findCategory = (categoryId: number) =>
+    categories.find((category: Category) => category.id === categoryId);
+
+  const initial: EditCategoryAttributes = {
+    categoryId: '',
     name: '',
     description: '',
     minPoints: 0,
@@ -35,17 +49,17 @@ const NewCategoryForm = () => {
   });
 
   const handleSubmit = async (
-    values: NewCategoryAttributes,
+    values: EditCategoryAttributes,
     { resetForm }: { resetForm: any },
   ) => {
     try {
-      const addedCategory = await CategoryService.addCategory(values);
-      dispatch(CategoryAction.addCategory(addedCategory));
-      SuccessNotification(`${addedCategory.name} har lagts till!`);
+      const addedCategory = await CategoryService.editCategory(values);
+      //dispatch(CategoryAction.addCategory(addedCategory));
+      SuccessNotification(`${addedCategory.name} har updaterats!`);
       resetForm({});
     } catch (e) {
-      console.error({ error: e, message: 'Could not add new category' });
-      ErrorNotification(`${values.name} kunde inte läggas till!`);
+      console.error({ error: e, message: 'Could not update the category' });
+      ErrorNotification(`${values.name} kunde inte uppdateras!`);
     }
   };
 
@@ -60,6 +74,34 @@ const NewCategoryForm = () => {
       <Box display={'flex'} flexDirection={'column'}>
         <Box margin={0.5} />
         <TextField
+          select
+          id={'categoryId'}
+          name={'categoryId'}
+          label={'Poäng'}
+          aria-label={'Poäng'}
+          placeholder={'Poäng...'}
+          value={formik.values.categoryId}
+          onChange={e => {
+            formik.handleChange(e);
+            const foundCateogry: Category | undefined = findCategory(
+              Number(e.target.value),
+            );
+            if (foundCateogry) {
+              formik.setFieldValue('name', foundCateogry.name);
+              formik.setFieldValue('description', foundCateogry.description);
+              formik.setFieldValue(
+                'minPoints',
+                foundCateogry.minPoints ? foundCateogry.minPoints : 0,
+              );
+            }
+          }}
+          error={formik.touched.categoryId && Boolean(formik.errors.categoryId)}
+          helperText={formik.touched.categoryId && formik.errors.categoryId}
+        >
+          {CategoryMenuItems}categoryId
+        </TextField>
+        <Box margin={0.5} />
+        <TextField
           id={'name'}
           name={'name'}
           label={'Namn'}
@@ -72,6 +114,7 @@ const NewCategoryForm = () => {
         />
         <Box margin={0.5} />
         <TextField
+          multiline
           id={'description'}
           name={'description'}
           label={'Beskrivning'}
@@ -99,7 +142,7 @@ const NewCategoryForm = () => {
         />
         <Box display={'flex'} flexDirection={'row'}>
           <Button variant={'contained'} type={'submit'}>
-            Lägg till
+            Uppdatera
           </Button>
         </Box>
       </Box>
@@ -107,4 +150,4 @@ const NewCategoryForm = () => {
   );
 };
 
-export default NewCategoryForm;
+export default EditCategoryForm;

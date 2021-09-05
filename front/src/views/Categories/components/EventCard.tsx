@@ -57,7 +57,7 @@ const EventCard = ({
   complitionStatus: EventStatus | undefined;
 }) => {
   const classes = useStyles();
-  const [expanded, setExpanded] = React.useState(false);
+  const [expanded, setExpanded] = React.useState(true);
   const dispatch = useDispatch();
   const auth = useSelector(AuthSelector.auth);
   const handleExpandClick = () => {
@@ -153,9 +153,9 @@ const useStyles = makeStyles((theme: Theme) =>
     actionButton: {
       zIndex: 1301,
     },
-    card:{
-      margin: '24px 0px'
-    }
+    card: {
+      margin: '24px 0px',
+    },
   }),
 );
 

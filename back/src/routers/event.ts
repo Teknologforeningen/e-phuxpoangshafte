@@ -5,6 +5,7 @@ import Event from '../db/models/models/event.model';
 import { userExtractor } from '../utils.ts/middleware';
 import { Event as EventType, userRole } from '../types';
 
+
 eventRouter.get('/', async (req, res) => {
   const events = await Event.findAll();
   res.json(events);
@@ -50,8 +51,8 @@ eventRouter.put('/:id', userExtractor, async (req, res) => {
   eventToUpdate.userLimit = body.userLimit;
   eventToUpdate.categoryId = body.categoryId;
   eventToUpdate.mandatory = body.mandatory;
-  await eventToUpdate.save();
-  return eventToUpdate;
+  const updatedEvent = await eventToUpdate.save();
+  res.json(updatedEvent);
 });
 
 export default eventRouter;

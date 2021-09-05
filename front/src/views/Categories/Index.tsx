@@ -26,19 +26,20 @@ const CategoryPage = () => {
   }
 
   const eventsInCategory = events.filter(
-    e => e.categoryId === Number(categoryID),
+    (event: Event) => event.categoryId === Number(categoryID),
   );
   const userCompletedEvents = userInfo.events.filter(
     (event: DoneEvent) => event.status === EventStatus.COMPLETED,
   );
 
   const completedEventsInCategory = userCompletedEvents.filter(
-    (event: DoneEvent) => {
+    (doneEvent: DoneEvent) => {
       return eventsInCategory
         .map((event: Event) => event.id)
-        .includes(event.id);
+        .includes(doneEvent.eventID);
     },
   );
+
   const completedEventsInCategoryCastedToEvents = completedEventsInCategory.map(
     (doneEvent: DoneEvent) =>
       eventsInCategory.find((event: Event) => doneEvent.eventID === event.id),

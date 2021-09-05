@@ -44,8 +44,7 @@ categoryRouter.put('/:id', userExtractor, async (req, res) => {
   categoryToUpdate.description = body.description;
   categoryToUpdate.minPoints = body.minPoints;
   const categoryUpdated = await categoryToUpdate.save();
-  console.log(categoryUpdated);
-  return categoryUpdated;
+  res.json(categoryUpdated); categoryUpdated;
 });
 
 export default categoryRouter;

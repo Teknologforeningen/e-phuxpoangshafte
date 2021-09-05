@@ -17,8 +17,8 @@ import * as Yup from 'yup';
 import * as CategorySelector from '../../../selectors/CategorySelectors';
 import * as EventServices from '../../../services/EventServices';
 import * as EventActions from '../../../actions/EventActions';
-import * as AuthSelector from '../../../selectors/AuthSelectors';
-import { Category } from '../../../types';
+import * as EventSelector from '../../../selectors/EventSelectors';
+import { Category, Event } from '../../../types';
 import { LocalizationProvider, DateTimePicker } from '@material-ui/lab';
 import AdapterLuxon from '@material-ui/lab/AdapterLuxon';
 import * as luxon from 'luxon';
@@ -26,21 +26,16 @@ import {
   ErrorNotification,
   SuccessNotification,
 } from '../../../components/Notifications';
+import { NewEventAttributes } from './NewEventForm';
 
-export interface NewEventAttributes {
-  name: string;
-  description: string;
-  startTime: luxon.DateTime;
-  endTime: luxon.DateTime;
-  points?: number | undefined;
-  userLimit?: number | undefined;
-  categoryId?: number | '';
-  mandatory: boolean;
+export interface EditedEventAttributes extends NewEventAttributes {
+  eventId?: number | '';
 }
 
-const NewEventForm = () => {
+const EditEventForm = () => {
   const dispatch = useDispatch();
   const categories = useSelector(CategorySelector.allCategories);
+  const events = useSelector(EventSelector.allEvents).events;
   const CategoryMenuItems = categories.categories.map((cat: Category) => {
     return (
       <MenuItem key={cat.id} value={cat.id}>
@@ -48,16 +43,25 @@ const NewEventForm = () => {
       </MenuItem>
     );
   });
+  const EventMenuItems = events.map((event: Event) => {
+    return (
+      <MenuItem key={event.id} value={event.id}>
+        {event.name}
+      </MenuItem>
+    );
+  });
   const maxCatId: number = Math.max(
     ...categories.categories.map((cat: Category) => cat.id),
   );
-  const initial: NewEventAttributes = {
+
+  const initial: EditedEventAttributes = {
+    eventId: '',
     name: '',
     description: '',
     startTime: luxon.DateTime.local(),
     endTime: luxon.DateTime.local(),
-    //points: 0,
-    //userLimit: 0,
+    points: 0,
+    userLimit: 0,
     mandatory: false,
     categoryId: '',
   };
@@ -82,17 +86,17 @@ const NewEventForm = () => {
       .max(maxCatId, 'Ingen sådan kategori id existerar'),
   });
   const handleSubmit = async (
-    values: NewEventAttributes,
+    values: EditedEventAttributes,
     { resetForm }: { resetForm: any },
   ) => {
     try {
-      const addedEvent = await EventServices.addEvent(values);
-      dispatch(EventActions.addEvent(addedEvent));
-      SuccessNotification(`${addedEvent.name} har lagts till!`);
+      const editedEvent = await EventServices.editEvent(values);
+      dispatch(EventActions.editEvent(editedEvent));
+      SuccessNotification(`${editedEvent.name} har updaterats!`);
       resetForm();
     } catch (e) {
-      console.error({ error: e, message: 'Could not add new event' });
-      ErrorNotification(`${values.name} kunde inte läggas till!`);
+      console.error({ error: e, message: 'Could not update the event' });
+      ErrorNotification(`${values.name} kunde inte updateras!`);
     }
   };
 
@@ -102,9 +106,48 @@ const NewEventForm = () => {
     onSubmit: handleSubmit,
   });
 
+  const findEvent = (eventId: number) =>
+    events.find((event: Event) => event.id === eventId);
+
   return (
     <form onSubmit={formik.handleSubmit}>
       <Box display={'flex'} flexDirection={'column'}>
+        <Box margin={0.5} />
+        <TextField
+          select
+          id={'eventId'}
+          name={'eventId'}
+          label={'Poäng'}
+          aria-label={'Poäng'}
+          placeholder={'Poäng...'}
+          value={formik.values.eventId}
+          onChange={e => {
+            formik.handleChange(e);
+            const foundEvent: Event | undefined = findEvent(
+              Number(e.target.value),
+            );
+            if (foundEvent) {
+              formik.setFieldValue('name', foundEvent.name);
+              formik.setFieldValue('description', foundEvent.description);
+              formik.setFieldValue('startTime', foundEvent.startTime);
+              formik.setFieldValue('endTime', foundEvent.endTime);
+              formik.setFieldValue(
+                'points',
+                foundEvent.points ? foundEvent.points : 0,
+              );
+              formik.setFieldValue(
+                'userLimit',
+                foundEvent.userLimit ? foundEvent.userLimit : 0,
+              );
+              formik.setFieldValue('mandatory', foundEvent.mandatory);
+              formik.setFieldValue('categoryId', foundEvent.categoryId);
+            }
+          }}
+          error={formik.touched.eventId && Boolean(formik.errors.eventId)}
+          helperText={formik.touched.eventId && formik.errors.eventId}
+        >
+          {EventMenuItems}
+        </TextField>
         <Box margin={0.5} />
         <TextField
           id={'name'}
@@ -205,7 +248,6 @@ const NewEventForm = () => {
         >
           {CategoryMenuItems}
         </TextField>
-        <Box margin={0.5} />
         <FormGroup row>
           <FormControlLabel
             control={
@@ -224,7 +266,7 @@ const NewEventForm = () => {
         </FormGroup>
         <Box display={'flex'} flexDirection={'row'}>
           <Button variant={'contained'} type={'submit'}>
-            Lägg till
+            Updatera
           </Button>
         </Box>
       </Box>
@@ -232,4 +274,4 @@ const NewEventForm = () => {
   );
 };
 
-export default NewEventForm;
+export default EditEventForm;

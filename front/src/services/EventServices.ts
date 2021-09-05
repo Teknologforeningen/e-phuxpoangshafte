@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { NewEventAttributes } from '../views/Admin/components/NewEventForm';
-
 import { Event, NewEvent } from '../types';
+import { EditedEventAttributes } from '../views/Admin/components/EditEventForm';
 const baseUrl = '/api/events';
 
 export const getAllEvents = async (): Promise<Event[]> => {
@@ -11,9 +11,26 @@ export const getAllEvents = async (): Promise<Event[]> => {
 
 export const addEvent = async (
   eventInfo: NewEventAttributes,
-  token: string,
 ): Promise<Event> => {
   const newEvent: NewEvent = {
+    name: eventInfo.name,
+    description: eventInfo.description,
+    startTime: eventInfo.startTime,
+    endTime: eventInfo.endTime,
+    points: eventInfo.points !== 0 ? eventInfo.points : undefined,
+    userLimit: eventInfo.userLimit !== 0 ? eventInfo.userLimit : undefined,
+    categoryId: eventInfo.categoryId as number,
+    mandatory: eventInfo.mandatory,
+  };
+
+  const response = await axios.post(baseUrl, newEvent);
+  return response.data as Event;
+};
+
+export const editEvent = async (
+  eventInfo: EditedEventAttributes,
+): Promise<Event> => {
+  const updatedEvent: NewEvent = {
     name: eventInfo.name,
     description: eventInfo.description,
     startTime: eventInfo.startTime,
@@ -23,11 +40,7 @@ export const addEvent = async (
     categoryId: eventInfo.categoryId as number,
     mandatory: eventInfo.mandatory,
   };
-
-  const response = await axios.post(
-    baseUrl,
-    newEvent /*, {headers: {...headers}}*/,
-  );
+  const url = `${baseUrl}/${eventInfo.eventId}`;
+  const response = await axios.put(url, updatedEvent);
   return response.data as Event;
 };
-
