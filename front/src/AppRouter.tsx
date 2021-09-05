@@ -8,7 +8,6 @@ import CategoryPage from './views/Categories/Index';
 import LoginForm from './views/LoginPage';
 import MemberDashboard from './views/MemberDashboard';
 import SignupPage from './views/SignupPage';
-import SuccessfulsignupPage from './views/SuccessfulsignupPage';
 import * as AuthSelector from './selectors/AuthSelectors';
 import { Box, CircularProgress, Theme } from '@material-ui/core';
 import UserSettings from './views/UserSettings';
@@ -48,9 +47,6 @@ const AppRouter = () => {
               />
               <Route path={'/admin'}>
                 <AdminPage />
-              </Route>
-              <Route path={'/successfulsignup'}>
-                <SuccessfulsignupPage />
               </Route>
               <PrivateRoute
                 component={MemberDashboard}

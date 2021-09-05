@@ -14,19 +14,20 @@ import {
   Typography,
   useMediaQuery,
 } from '@material-ui/core';
-import MenuIcon from '@material-ui/icons/Menu';
 import { Theme } from '@material-ui/core/styles';
 import * as Themes from '../../styles/themes';
 import { createStyles, makeStyles, useTheme } from '@material-ui/styles';
 import { useSelector } from 'react-redux';
+import { useLocation } from 'react-router-dom';
 
 import * as CategorySelector from '../../selectors/CategorySelectors';
 import * as AuthSelector from '../../selectors/AuthSelectors';
-import { Routes, userRole } from '../../types';
+import { Category, Routes, userRole } from '../../types';
 
 import LogOutButton from '../routing/LogoutButton';
 import SettingsIcon from '@material-ui/icons/Settings';
 import TFLogoSVG from '../../styles/img/TFlogo';
+import classNames from 'classnames';
 
 const NotLoggedInList = () => {
   const classes = useStyles();
@@ -84,9 +85,28 @@ const AdminList = () => {
   );
 };
 
+const getNavbarTitle = (
+  location: string,
+  userIsAutharized: boolean | null,
+  categories: Category[],
+): string => {
+  if (userIsAutharized) {
+    if (location === Routes.ROOT) {
+      return 'Home';
+    }
+    if (location.includes('kategori')) {
+      const locationSplits = location.split('/');
+      const kategoriId = parseInt(locationSplits[locationSplits.length - 1]);
+      return (
+        categories.find(category => category.id === kategoriId)?.name ?? ''
+      );
+    }
+  }
+  return '';
+};
+
 const NavBar = () => {
   const classes = useStyles();
-  //const theme = useTheme();
   const categoriesState = useSelector(CategorySelector.allCategories);
   const auth = useSelector(AuthSelector.auth);
   const [drawerOpen, toggleDrawer] = useState<boolean>(false);
@@ -95,6 +115,14 @@ const NavBar = () => {
   const isBrowser = typeof window !== 'undefined';
   const iOS = isBrowser && /iPad|iPhone|iPod/.test(navigator.userAgent);
   const isMdUp = useMediaQuery(Themes.theme.breakpoints.up('md'));
+
+  const location = useLocation();
+
+  const navbarTitle = getNavbarTitle(
+    location.pathname,
+    auth.userIsAutharized,
+    categoriesState.categories,
+  );
 
   const ListOfCategories: JSX.Element[] = !!categoriesState.categories.length
     ? categoriesState.categories
@@ -127,24 +155,14 @@ const NavBar = () => {
               toggleDrawer(!drawerOpen);
             }}
           >
-            <MenuIcon />
+            <TFLogoSVG className={classes.logo} />
           </IconButton>
-          {/* TODO: Check why margin un aligns stuff and chekc if fill can be primary  */}
-          <Box
-            className={classes.navBarSpacer}
-            marginTop={'46.6px'}
-            marginBottom={'46.6px'}
-          >
-            {/*<Typography
-              variant="h6"
-              marginTop={'46.6px'}
-              marginBottom={'46.6px'}
-            >
-            Phuxpoängshäfte
-            </Typography>*/}
-            <Link key={'root'} href={Routes.ROOT} variant={'inherit'}>
-              <TFLogoSVG className={classes.logo} />
-            </Link>
+          <Box className={classes.navBarSpacer}>
+            {
+              <Typography variant="body2" textAlign="center">
+                {navbarTitle}
+              </Typography>
+            }
           </Box>
         </Toolbar>
       </AppBar>
@@ -162,14 +180,6 @@ const NavBar = () => {
         <Box className={classes.sideBarSpacer}>
           {auth.userIsAutharized ? (
             <Box textAlign="center">
-              <ListItem key={'root'}>
-                <ListItemText
-                  primary={
-                    auth.userInfo?.firstName + ' ' + auth.userInfo?.lastName
-                  }
-                />
-              </ListItem>
-              <Divider />
               <List>{ListOfCategories}</List>
               {auth.userInfo && auth.userInfo.role === userRole.ADMIN ? (
                 <>
@@ -186,17 +196,31 @@ const NavBar = () => {
 
           {auth.userIsAutharized && (
             <List>
-              <ListItem key={'logout'}>
-                <LogOutButton handleClose={() => toggleDrawer(false)} />
-              </ListItem>
               <ListItem key={'settings'}>
                 <Link
                   key={'settings'}
                   href={Routes.USER_SETTINGS}
-                  variant={'inherit'}
+                  className={classes.flex}
                 >
-                  <SettingsIcon color={'inherit'} />
+                  <SettingsIcon
+                    className={classNames(
+                      classes.settingsIcon,
+                      classes.iconListItem,
+                    )}
+                  />
+                  <Typography className={classes.settingsIcon}>
+                    Inställningar
+                  </Typography>
                 </Link>
+              </ListItem>
+              <ListItem
+                key={'logout'}
+                className={classNames(classes.flex, classes.alignStart)}
+              >
+                <Box className={classes.iconListItem}>
+                  <LogOutButton handleClose={() => toggleDrawer(false)} />
+                </Box>
+                <Typography>Logga ut</Typography>
               </ListItem>
             </List>
           )}
@@ -236,7 +260,8 @@ const useStyles = makeStyles((theme: Theme) =>
       width: '100%',
       display: 'flex',
       flexDirection: 'row',
-      justifyContent: 'space-between',
+      justifyContent: 'center',
+      marginRight: theme.spacing(5),
     },
     topPadding: {
       paddingTop: navBarHeight + 5,
@@ -244,6 +269,15 @@ const useStyles = makeStyles((theme: Theme) =>
     logo: {
       fill: 'white',
       width: 42,
+    },
+    settingsIcon: {
+      color: theme.palette.primary.contrastText,
+    },
+    alignStart: {
+      alignItems: 'flex-start',
+    },
+    iconListItem: {
+      marginRight: theme.spacing(1),
     },
   }),
 );

@@ -18,6 +18,7 @@ import { FieldOfStudy, NewUser, Routes } from '../types';
 import * as Yup from 'yup';
 import NonAuthNavBar from '../components/Navigation/NonAuthNavBar';
 import { makeStyles, createStyles } from '@material-ui/styles';
+import { SuccessNotification } from '../components/Notifications';
 
 export interface UserFormAttributes extends NewUser {
   confirmPassword: string;
@@ -36,9 +37,9 @@ const SignupPage = () => {
 
   const handleSubmit = async (values: NewUser) => {
     try {
-      console.log('Submit initiated');
       const response = await UserService.addUser(values);
-      history.push('/successfulsignup');
+      SuccessNotification('Registreringen lyckades');
+      history.push('/login');
       return response;
     } catch (e) {
       console.error({ message: 'Could not add new user', error: e });
