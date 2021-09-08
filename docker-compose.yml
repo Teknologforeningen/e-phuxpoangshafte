@@ -5,7 +5,7 @@ services:
         build: ./front
         restart: always
         ports:
-            - "3000:3000"
+            - "80:80"
         container_name: front_phux
     back:
         restart: always
@@ -18,8 +18,8 @@ services:
             - db
         environment:
             - API_PORT=8000
-            - DB_USER=ephuxpoang
-            - DB_PASSWORD=ephuxpoang
+            - DB_USER=postgres
+            - DB_PASSWORD=postgres
             - DB_NAME=phuxdb
             - DB_HOST=db
             - SECRET=kossusmakarbasturmetalkopp2021
@@ -34,13 +34,13 @@ services:
         networks:
             - db
         environment:
-            - POSTGRES_USER=ephuxpoang
-            - POSTGRES_PASSWORD=ephuxpoang
+            - POSTGRES_USER=postgres
+            - POSTGRES_PASSWORD=postgres
             - POSTGRES_DB=phuxdb
             - POSTGRES_HOST=phuxdb
             - POSTGRES_PORT=5432
         volumes:
-            - db-data:/var/lib/postgresql/data/
+            - ./db-data:/var/lib/postgresql/data/
         restart: always
 
 volumes:

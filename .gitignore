@@ -4,3 +4,5 @@
 **/.DS_Store
 .metals
 **/dist
+db/**
+db-data

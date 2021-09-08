@@ -1,0 +1,3 @@
+CREATE USER postgres WITH PASSWORD postgres;
+CREATE DATABASE phuxdb;
+GRANT ALL PRIVILEGES ON DATABASE phuxdb TO postgres;

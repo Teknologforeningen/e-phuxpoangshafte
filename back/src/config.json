@@ -12,12 +12,5 @@
     "database": "phuxdbtest",
     "host": "127.0.0.1",
     "dialect": "postgres"
-  },
-  "production": {
-    "username": "ephuxpoang",
-    "password": "ephuxpoang",
-    "database": "phuxdb",
-    "host": "localhost",
-    "dialect": "postgres"
   }
 }

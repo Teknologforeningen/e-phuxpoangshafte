@@ -1,27 +1,24 @@
-var fs = require('fs');
 import { Sequelize } from 'sequelize-typescript';
-var env = process.env.NODE_ENV || 'development';
-var config = require('../../config.json')[env];
 var db: any = {};
 
 /*
-if (config.use_env_variable) {
-  var sequelize = new Sequelize(process.env[config.use_env_variable], config);
-} else {
-  var sequelize = new Sequelize({
+Kommentera in dehä då man devar
+var config = require('../../config.json')[env];
+  const sequelize = new Sequelize({
     database: config.database,
+    dialect: config.dialect,
     username: config.username,
     password: config.password,
     models: [__dirname + '/models'],
   });
-}
 */
 
 const sequelize = new Sequelize({
-  database: config.database,
-  dialect: config.dialect,
-  username: config.username,
-  password: config.password,
+  database: process.env.DB_NAME,
+  dialect: 'postgres',
+  username: process.env.DB_USER,
+  password: process.env.DB_PASSWORD,
+  host: process.env.DB_HOST,
   models: [__dirname + '/models'],
 });
 
