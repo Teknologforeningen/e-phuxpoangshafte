@@ -77,6 +77,7 @@ const MemberDashboard = () => {
   const completionAmountPerCategori: { [categoryId: number]: number } =
     Object.entries(pointsPerCategori).reduce(
       (prev, [categoryId, categoryPoints]) => {
+        console.log(categoryId, ':', categoryPoints);
         const newReturn = {
           ...prev,
           [categoryId]:

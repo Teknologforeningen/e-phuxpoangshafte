@@ -6,6 +6,8 @@ import { withStyles } from '@material-ui/styles';
 import {
   CheckBox,
   CheckBoxOutlineBlank,
+  Done,
+  DoneAll,
   InfoOutlined as InfoIcon,
 } from '@material-ui/icons/';
 
@@ -24,17 +26,21 @@ const CategoryProgress = ({
   requiredAmount: number;
 }) => {
   //TODO: check requiered amount, seems too big
+  console.log('Category:', category.name);
+  console.log('Progress:', progress);
+  console.log('Current Amount:', currentAmount);
+  console.log('Required Amount:', requiredAmount);
   const classes = useStyles();
   const progressIcon =
     requiredAmount > 0 ? (
       currentAmount > 0 ? (
         progress >= (currentAmount / requiredAmount) * 100 ? (
-          <CheckBox />
+          <DoneAll color={'success'} />
         ) : (
-          <CheckBoxOutlineBlank />
+          <Done color={'success'} />
         )
       ) : (
-        <CheckBoxOutlineBlank />
+        <></>
       )
     ) : (
       <></>
