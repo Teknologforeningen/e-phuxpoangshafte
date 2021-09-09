@@ -1,6 +1,7 @@
 import express from 'express';
 import cors from 'cors';
 require('dotenv').config();
+const path = require('path');
 
 import userRouter from './routers/user';
 import categoryRouter from './routers/category';
@@ -22,11 +23,9 @@ app.use('/api/events', eventRouter);
 app.use('/api/auth', authRouter);
 app.use('/api/hash', hashRouter);
 
-app.get('/', async (req, res) => {
-  res.send({
-    status: true,
-    message: 'Stuff happened',
-  });
+app.use(express.static(path.resolve(__dirname, '../../front/build')));
+app.get('*', (req, res) => {
+  res.sendFile(path.resolve(__dirname, '../../front/build', 'index.html'));
 });
 
 export default app;

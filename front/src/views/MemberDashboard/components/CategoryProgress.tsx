@@ -45,11 +45,6 @@ const CategoryProgress = ({
     ) : (
       <></>
     );
-  const ThickLinearProgress = withStyles({
-    root: {
-      height: 20,
-    },
-  })(LinearProgress);
   return (
     <Card variant={'outlined'}>
       <CardContent>
@@ -73,10 +68,15 @@ const CategoryProgress = ({
         )}
         <Box display="flex" alignItems="center">
           <Box width="100%" mr={1}>
-            <ThickLinearProgress
+            <LinearProgress
               variant="buffer"
               color="secondary"
               value={progress}
+              classes={{
+                root: {
+                  height: 20,
+                },
+              }}
             />
           </Box>
           <Box minWidth={35}>
