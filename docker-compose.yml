@@ -1,21 +1,15 @@
 version: '3'
 
 services:
-    front:
-        build: ./front
-        restart: always
-        ports:
-            - "80:80"
-        container_name: front_phux
     back:
         restart: always
-        build: ./back
-        command: yarn start
+        build: .
         ports:
             - "8000:8000"
         container_name: back_phux
         networks:
             - db
+            # Add the reverse proxy network here
         environment:
             - API_PORT=8000
             - DB_USER=postgres
