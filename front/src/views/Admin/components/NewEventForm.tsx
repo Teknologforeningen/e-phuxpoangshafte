@@ -8,6 +8,7 @@ import {
   MenuItem,
   Select,
   TextField,
+  Theme,
 } from '@material-ui/core';
 import { useFormik } from 'formik';
 import React from 'react';
@@ -26,6 +27,8 @@ import {
   ErrorNotification,
   SuccessNotification,
 } from '../../../components/Notifications';
+import { maxWidthAdminForms } from '../NewCategoryAndEventPage';
+import { makeStyles } from '@material-ui/styles';
 
 export interface NewEventAttributes {
   name: string;
@@ -40,6 +43,7 @@ export interface NewEventAttributes {
 
 const NewEventForm = () => {
   const dispatch = useDispatch();
+  const classes = useStyles();
   const categories = useSelector(CategorySelector.allCategories);
   const CategoryMenuItems = categories.categories.map((cat: Category) => {
     return (
@@ -116,6 +120,12 @@ const NewEventForm = () => {
           onChange={formik.handleChange}
           error={formik.touched.name && Boolean(formik.errors.name)}
           helperText={formik.touched.name && formik.errors.name}
+          className={classes.fields}
+          InputLabelProps={{
+            classes: {
+              focused: classes.labelFocused,
+            },
+          }}
         />
         <Box margin={0.5} />
         <TextField
@@ -131,6 +141,12 @@ const NewEventForm = () => {
             formik.touched.description && Boolean(formik.errors.description)
           }
           helperText={formik.touched.description && formik.errors.description}
+          className={classes.fields}
+          InputLabelProps={{
+            classes: {
+              focused: classes.labelFocused,
+            },
+          }}
         />
         <Box margin={0.5} />
         <LocalizationProvider dateAdapter={AdapterLuxon}>
@@ -146,6 +162,12 @@ const NewEventForm = () => {
                   formik.touched.startTime && Boolean(formik.errors.startTime)
                 }
                 helperText={formik.touched.startTime && formik.errors.startTime}
+                className={classes.fields}
+                InputLabelProps={{
+                  classes: {
+                    focused: classes.labelFocused,
+                  },
+                }}
               />
             )}
           />
@@ -160,6 +182,12 @@ const NewEventForm = () => {
                 {...props}
                 error={formik.touched.endTime && Boolean(formik.errors.endTime)}
                 helperText={formik.touched.endTime && formik.errors.endTime}
+                className={classes.fields}
+                InputLabelProps={{
+                  classes: {
+                    focused: classes.labelFocused,
+                  },
+                }}
               />
             )}
           />
@@ -176,6 +204,12 @@ const NewEventForm = () => {
           onChange={formik.handleChange}
           error={formik.touched.points && Boolean(formik.errors.points)}
           helperText={formik.touched.points && formik.errors.points}
+          className={classes.fields}
+          InputLabelProps={{
+            classes: {
+              focused: classes.labelFocused,
+            },
+          }}
         />
         <Box margin={0.5} />
         <TextField
@@ -189,6 +223,12 @@ const NewEventForm = () => {
           onChange={formik.handleChange}
           error={formik.touched.userLimit && Boolean(formik.errors.userLimit)}
           helperText={formik.touched.userLimit && formik.errors.userLimit}
+          className={classes.fields}
+          InputLabelProps={{
+            classes: {
+              focused: classes.labelFocused,
+            },
+          }}
         />
         <Box margin={0.5} />
         <TextField
@@ -202,11 +242,17 @@ const NewEventForm = () => {
           onChange={formik.handleChange}
           error={formik.touched.categoryId && Boolean(formik.errors.categoryId)}
           helperText={formik.touched.categoryId && formik.errors.categoryId}
+          className={classes.fields}
+          InputLabelProps={{
+            classes: {
+              focused: classes.labelFocused,
+            },
+          }}
         >
           {CategoryMenuItems}
         </TextField>
         <Box margin={0.5} />
-        <FormGroup row>
+        <FormGroup row className={classes.fields}>
           <FormControlLabel
             control={
               <Checkbox
@@ -223,7 +269,11 @@ const NewEventForm = () => {
           />
         </FormGroup>
         <Box display={'flex'} flexDirection={'row'}>
-          <Button variant={'contained'} type={'submit'}>
+          <Button
+            variant={'contained'}
+            type={'submit'}
+            className={classes.submitButton}
+          >
             Lägg till
           </Button>
         </Box>
@@ -231,5 +281,25 @@ const NewEventForm = () => {
     </form>
   );
 };
+
+const useStyles = makeStyles((theme: Theme) => ({
+  fields: {
+    width: '100%',
+    maxWidth: maxWidthAdminForms,
+    margin: '0 auto',
+  },
+  submitButton: {
+    backgroundColor: theme.palette.secondary.main,
+    color: theme.palette.primary.main,
+    width: '100%',
+    maxWidth: maxWidthAdminForms,
+    padding: theme.spacing(2, 0),
+    margin: '0 auto',
+    borderRadius: 0,
+  },
+  labelFocused: {
+    color: `${theme.palette.common.black} !important`,
+  },
+}));
 
 export default NewEventForm;

@@ -8,6 +8,7 @@ import {
   MenuItem,
   Select,
   TextField,
+  Theme,
 } from '@material-ui/core';
 import { useFormik } from 'formik';
 import React from 'react';
@@ -27,6 +28,8 @@ import {
   SuccessNotification,
 } from '../../../components/Notifications';
 import { NewEventAttributes } from './NewEventForm';
+import { makeStyles } from '@material-ui/styles';
+import { maxWidthAdminForms } from '../NewCategoryAndEventPage';
 
 export interface EditedEventAttributes extends NewEventAttributes {
   eventId?: number | '';
@@ -34,6 +37,7 @@ export interface EditedEventAttributes extends NewEventAttributes {
 
 const EditEventForm = () => {
   const dispatch = useDispatch();
+  const classes = useStyles();
   const categories = useSelector(CategorySelector.allCategories);
   const events = useSelector(EventSelector.allEvents).events;
   const CategoryMenuItems = categories.categories.map((cat: Category) => {
@@ -145,6 +149,12 @@ const EditEventForm = () => {
           }}
           error={formik.touched.eventId && Boolean(formik.errors.eventId)}
           helperText={formik.touched.eventId && formik.errors.eventId}
+          className={classes.fields}
+          InputLabelProps={{
+            classes: {
+              focused: classes.labelFocused,
+            },
+          }}
         >
           {EventMenuItems}
         </TextField>
@@ -159,6 +169,12 @@ const EditEventForm = () => {
           onChange={formik.handleChange}
           error={formik.touched.name && Boolean(formik.errors.name)}
           helperText={formik.touched.name && formik.errors.name}
+          className={classes.fields}
+          InputLabelProps={{
+            classes: {
+              focused: classes.labelFocused,
+            },
+          }}
         />
         <Box margin={0.5} />
         <TextField
@@ -174,6 +190,12 @@ const EditEventForm = () => {
             formik.touched.description && Boolean(formik.errors.description)
           }
           helperText={formik.touched.description && formik.errors.description}
+          className={classes.fields}
+          InputLabelProps={{
+            classes: {
+              focused: classes.labelFocused,
+            },
+          }}
         />
         <Box margin={0.5} />
         <LocalizationProvider dateAdapter={AdapterLuxon}>
@@ -189,6 +211,12 @@ const EditEventForm = () => {
                   formik.touched.startTime && Boolean(formik.errors.startTime)
                 }
                 helperText={formik.touched.startTime && formik.errors.startTime}
+                className={classes.fields}
+                InputLabelProps={{
+                  classes: {
+                    focused: classes.labelFocused,
+                  },
+                }}
               />
             )}
           />
@@ -203,6 +231,12 @@ const EditEventForm = () => {
                 {...props}
                 error={formik.touched.endTime && Boolean(formik.errors.endTime)}
                 helperText={formik.touched.endTime && formik.errors.endTime}
+                className={classes.fields}
+                InputLabelProps={{
+                  classes: {
+                    focused: classes.labelFocused,
+                  },
+                }}
               />
             )}
           />
@@ -219,6 +253,12 @@ const EditEventForm = () => {
           onChange={formik.handleChange}
           error={formik.touched.points && Boolean(formik.errors.points)}
           helperText={formik.touched.points && formik.errors.points}
+          className={classes.fields}
+          InputLabelProps={{
+            classes: {
+              focused: classes.labelFocused,
+            },
+          }}
         />
         <Box margin={0.5} />
         <TextField
@@ -232,6 +272,12 @@ const EditEventForm = () => {
           onChange={formik.handleChange}
           error={formik.touched.userLimit && Boolean(formik.errors.userLimit)}
           helperText={formik.touched.userLimit && formik.errors.userLimit}
+          className={classes.fields}
+          InputLabelProps={{
+            classes: {
+              focused: classes.labelFocused,
+            },
+          }}
         />
         <Box margin={0.5} />
         <TextField
@@ -245,10 +291,16 @@ const EditEventForm = () => {
           onChange={formik.handleChange}
           error={formik.touched.categoryId && Boolean(formik.errors.categoryId)}
           helperText={formik.touched.categoryId && formik.errors.categoryId}
+          className={classes.fields}
+          InputLabelProps={{
+            classes: {
+              focused: classes.labelFocused,
+            },
+          }}
         >
           {CategoryMenuItems}
         </TextField>
-        <FormGroup row>
+        <FormGroup row className={classes.fields}>
           <FormControlLabel
             control={
               <Checkbox
@@ -265,7 +317,11 @@ const EditEventForm = () => {
           />
         </FormGroup>
         <Box display={'flex'} flexDirection={'row'}>
-          <Button variant={'contained'} type={'submit'}>
+          <Button
+            variant={'contained'}
+            type={'submit'}
+            className={classes.submitButton}
+          >
             Updatera
           </Button>
         </Box>
@@ -273,5 +329,25 @@ const EditEventForm = () => {
     </form>
   );
 };
+
+const useStyles = makeStyles((theme: Theme) => ({
+  fields: {
+    width: '100%',
+    maxWidth: maxWidthAdminForms,
+    margin: '0 auto',
+  },
+  submitButton: {
+    backgroundColor: theme.palette.secondary.main,
+    color: theme.palette.primary.main,
+    width: '100%',
+    maxWidth: maxWidthAdminForms,
+    padding: theme.spacing(2, 0),
+    margin: '0 auto',
+    borderRadius: 0,
+  },
+  labelFocused: {
+    color: `${theme.palette.common.black} !important`,
+  },
+}));
 
 export default EditEventForm;

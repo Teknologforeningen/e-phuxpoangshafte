@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box, Button, TextField } from '@material-ui/core';
+import { Box, Button, TextField, Theme } from '@material-ui/core';
 import * as CategoryService from '../../../services/CategoryServices';
 import * as CategoryAction from '../../../actions/CategoryActions';
 import * as Yup from 'yup';
@@ -9,6 +9,8 @@ import {
   ErrorNotification,
   SuccessNotification,
 } from '../../../components/Notifications';
+import { makeStyles } from '@material-ui/styles';
+import { maxWidthAdminForms } from '../NewCategoryAndEventPage';
 
 export interface NewCategoryAttributes {
   name: string;
@@ -18,6 +20,7 @@ export interface NewCategoryAttributes {
 
 const NewCategoryForm = () => {
   const dispatch = useDispatch();
+  const classes = useStyles();
 
   const initial: NewCategoryAttributes = {
     name: '',
@@ -69,6 +72,12 @@ const NewCategoryForm = () => {
           onChange={formik.handleChange}
           error={formik.touched.name && Boolean(formik.errors.name)}
           helperText={formik.touched.name && formik.errors.name}
+          className={classes.fields}
+          InputLabelProps={{
+            classes: {
+              focused: classes.labelFocused,
+            },
+          }}
         />
         <Box margin={0.5} />
         <TextField
@@ -83,6 +92,12 @@ const NewCategoryForm = () => {
             formik.touched.description && Boolean(formik.errors.description)
           }
           helperText={formik.touched.description && formik.errors.description}
+          className={classes.fields}
+          InputLabelProps={{
+            classes: {
+              focused: classes.labelFocused,
+            },
+          }}
         />
         <Box margin={0.5} />
         <TextField
@@ -96,9 +111,19 @@ const NewCategoryForm = () => {
           onChange={formik.handleChange}
           error={formik.touched.minPoints && Boolean(formik.errors.minPoints)}
           helperText={formik.touched.minPoints && formik.errors.minPoints}
+          className={classes.fields}
+          InputLabelProps={{
+            classes: {
+              focused: classes.labelFocused,
+            },
+          }}
         />
         <Box display={'flex'} flexDirection={'row'}>
-          <Button variant={'contained'} type={'submit'}>
+          <Button
+            variant={'contained'}
+            type={'submit'}
+            className={classes.submitButton}
+          >
             Lägg till
           </Button>
         </Box>
@@ -106,5 +131,27 @@ const NewCategoryForm = () => {
     </form>
   );
 };
+
+
+
+const useStyles = makeStyles((theme: Theme) => ({
+  fields: {
+    width: '100%',
+    maxWidth: maxWidthAdminForms,
+    margin: '0 auto',
+  },
+  submitButton: {
+    backgroundColor: theme.palette.secondary.main,
+    color: theme.palette.primary.main,
+    width: '100%',
+    maxWidth: maxWidthAdminForms,
+    padding: theme.spacing(2, 0),
+    margin: '0 auto',
+    borderRadius: 0,
+  },
+  labelFocused: {
+    color: `${theme.palette.common.black} !important`,
+  },
+}));
 
 export default NewCategoryForm;

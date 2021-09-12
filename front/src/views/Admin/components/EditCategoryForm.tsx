@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box, Button, MenuItem, TextField } from '@material-ui/core';
+import { Box, Button, MenuItem, TextField, Theme } from '@material-ui/core';
 import * as CategorySelector from '../../../selectors/CategorySelectors';
 import * as CategoryService from '../../../services/CategoryServices';
 import * as CategoryAction from '../../../actions/CategoryActions';
@@ -13,6 +13,8 @@ import {
 } from '../../../components/Notifications';
 import { NewCategoryAttributes } from './NewCategoryForm';
 import { Category } from '../../../types';
+import { makeStyles } from '@material-ui/styles';
+import { maxWidthAdminForms } from '../NewCategoryAndEventPage';
 
 export interface EditCategoryAttributes extends NewCategoryAttributes {
   categoryId?: number | '';
@@ -20,6 +22,7 @@ export interface EditCategoryAttributes extends NewCategoryAttributes {
 
 const EditCategoryForm = () => {
   const dispatch = useDispatch();
+  const classes = useStyles();
   const categories = useSelector(CategorySelector.allCategories).categories;
   const CategoryMenuItems = categories.map((cat: Category) => {
     return (
@@ -97,6 +100,12 @@ const EditCategoryForm = () => {
           }}
           error={formik.touched.categoryId && Boolean(formik.errors.categoryId)}
           helperText={formik.touched.categoryId && formik.errors.categoryId}
+          className={classes.fields}
+          InputLabelProps={{
+            classes: {
+              focused: classes.labelFocused,
+            },
+          }}
         >
           {CategoryMenuItems}categoryId
         </TextField>
@@ -111,6 +120,12 @@ const EditCategoryForm = () => {
           onChange={formik.handleChange}
           error={formik.touched.name && Boolean(formik.errors.name)}
           helperText={formik.touched.name && formik.errors.name}
+          className={classes.fields}
+          InputLabelProps={{
+            classes: {
+              focused: classes.labelFocused,
+            },
+          }}
         />
         <Box margin={0.5} />
         <TextField
@@ -126,6 +141,12 @@ const EditCategoryForm = () => {
             formik.touched.description && Boolean(formik.errors.description)
           }
           helperText={formik.touched.description && formik.errors.description}
+          className={classes.fields}
+          InputLabelProps={{
+            classes: {
+              focused: classes.labelFocused,
+            },
+          }}
         />
         <Box margin={0.5} />
         <TextField
@@ -139,9 +160,19 @@ const EditCategoryForm = () => {
           onChange={formik.handleChange}
           error={formik.touched.minPoints && Boolean(formik.errors.minPoints)}
           helperText={formik.touched.minPoints && formik.errors.minPoints}
+          className={classes.fields}
+          InputLabelProps={{
+            classes: {
+              focused: classes.labelFocused,
+            },
+          }}
         />
         <Box display={'flex'} flexDirection={'row'}>
-          <Button variant={'contained'} type={'submit'}>
+          <Button
+            variant={'contained'}
+            type={'submit'}
+            className={classes.submitButton}
+          >
             Uppdatera
           </Button>
         </Box>
@@ -149,5 +180,25 @@ const EditCategoryForm = () => {
     </form>
   );
 };
+
+const useStyles = makeStyles((theme: Theme) => ({
+  fields: {
+    width: '100%',
+    maxWidth: maxWidthAdminForms,
+    margin: '0 auto',
+  },
+  submitButton: {
+    backgroundColor: theme.palette.secondary.main,
+    color: theme.palette.primary.main,
+    width: '100%',
+    maxWidth: maxWidthAdminForms,
+    padding: theme.spacing(2, 0),
+    margin: '0 auto',
+    borderRadius: 0,
+  },
+  labelFocused: {
+    color: `${theme.palette.common.black} !important`,
+  },
+}));
 
 export default EditCategoryForm;
