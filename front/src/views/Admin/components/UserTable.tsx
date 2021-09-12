@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
 
 import * as UserService from '../../../services/UserServices';
-import * as AuthSelector from '../../../selectors/AuthSelectors';
 import * as EventService from '../../../services/EventServices';
 import { User, DoneEvent, Event, EventStatus, userRole } from '../../../types';
 import {

@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { Redirect, useRouteMatch } from 'react-router-dom';
-import { DoneEvent, EventStatus, Routes, User } from '../../types';
+import { DoneEvent, Event, EventStatus, Routes, User } from '../../types';
 import * as HashServices from '../../services/HashServices';
 import * as UserServices from '../../services/UserServices';
 import { useSelector } from 'react-redux';
 import * as AuthSelector from '../../selectors/AuthSelectors';
+import * as EventSelector from '../../selectors/EventSelectors';
 import { CircularProgress, Typography } from '@material-ui/core';
 import { ErrorNotification, SuccessNotification } from '../Notifications';
 
@@ -19,6 +20,7 @@ const QRvalidation = () => {
   const [valid, setValid] = useState<boolean | null>(null);
   const [eventId, seteventId] = useState<number | null>(null);
   const [done, setDone] = useState<boolean>(false);
+  const events = useSelector(EventSelector.allEvents).events;
 
   useEffect(() => {
     const getAndSetQRcode = async () => {
@@ -28,7 +30,7 @@ const QRvalidation = () => {
       seteventId(eventIdReturned);
     };
     const addAndupdateStatus = async (user: User, eventId: number) => {
-      const addResponse = await UserServices.addDoneEvent(user.id!, eventId);
+      await UserServices.addDoneEvent(user.id!, eventId);
       const updateResponse = await UserServices.updateUserEventStatus(
         user,
         eventId,
@@ -67,7 +69,6 @@ const QRvalidation = () => {
     setDone(true);
   }, [eventId, hash, user, valid]);
 
-
   if (!user) {
     return (
       <Typography>
@@ -80,7 +81,6 @@ const QRvalidation = () => {
     <CircularProgress color="secondary" />;
   }
   if (done && valid === true) {
-    
     return <Redirect to={Routes.ROOT} />;
   }
   if (done && valid === false) {

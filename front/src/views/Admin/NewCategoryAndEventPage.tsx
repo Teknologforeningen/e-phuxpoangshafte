@@ -2,14 +2,13 @@ import { AppBar, Box, Tab, Tabs, Theme, Typography } from '@material-ui/core';
 import React, { useState } from 'react';
 import NewCategoryForm from './components/NewCategoryForm';
 import NewEventForm from './components/NewEventForm';
-import Togglable from '../../components/UI/Togglable';
 import EditEventForm from './components/EditEventForm';
 import EditCategoryForm from './components/EditCategoryForm';
 import { makeStyles } from '@material-ui/styles';
 
 //TabPanel taken directly from Mui documenation
 
-export const maxWidthAdminForms = 600
+export const maxWidthAdminForms = 600;
 interface TabPanelProps {
   children?: React.ReactNode;
   index: any;
@@ -77,32 +76,6 @@ const NewCatAndEventPage = () => {
         <EditEventForm />
       </TabPanel>
     </div>
-    /*<Box>
-      <Togglable
-        buttonLabelOpen={'Lägg till ny kategori'}
-        buttonLabelClose={'Stäng'}
-      >
-        <NewCategoryForm />
-      </Togglable>
-      <Togglable
-        buttonLabelOpen={'Lägg till nytt poäng'}
-        buttonLabelClose={'Stäng'}
-      >
-        <NewEventForm />
-      </Togglable>
-      <Togglable
-        buttonLabelOpen={'Ändra/Ta bort kategori'}
-        buttonLabelClose={'Stäng'}
-      >
-        <EditCategoryForm />
-      </Togglable>
-      <Togglable
-        buttonLabelOpen={'Ändra/Ta bort poäng'}
-        buttonLabelClose={'Stäng'}
-      >
-        <EditEventForm />
-      </Togglable>
-    </Box>*/
   );
 };
 
@@ -111,9 +84,9 @@ const useStyles = makeStyles((theme: Theme) => ({
     flexGrow: 1,
     backgroundColor: theme.palette.primary.main,
   },
-  bar :{
-    backgroundColor: theme.palette.secondary.main
-  }
+  bar: {
+    backgroundColor: theme.palette.secondary.main,
+  },
 }));
 
 export default NewCatAndEventPage;

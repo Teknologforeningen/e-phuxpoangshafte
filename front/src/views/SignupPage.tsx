@@ -2,9 +2,6 @@ import React from 'react';
 import {
   Box,
   Button,
-  Checkbox,
-  FormControlLabel,
-  FormGroup,
   Link,
   MenuItem,
   TextField,

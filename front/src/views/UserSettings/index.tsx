@@ -1,5 +1,4 @@
 import React from 'react';
-import UserForm from '../../components/UI/UserForm';
 import * as UserService from '../../services/UserServices';
 import * as AuthSelector from '../../selectors/AuthSelectors';
 import { useSelector } from 'react-redux';
@@ -10,9 +9,7 @@ import {
   Checkbox,
   FormControlLabel,
   FormGroup,
-  InputLabel,
   MenuItem,
-  Select,
   TextField,
   Theme,
   Typography,
@@ -81,10 +78,7 @@ const UserSettings = () => {
     try {
       const { confirmPassword: remove, ...valuesToSend } = values;
       if (auth.userInfo && auth.userInfo.id) {
-        const response = await UserService.updateUser(
-          valuesToSend,
-          auth.userInfo.id,
-        );
+        await UserService.updateUser(valuesToSend, auth.userInfo.id);
         SuccessNotification('Din information har uppdaterats');
       } else {
         console.error({
