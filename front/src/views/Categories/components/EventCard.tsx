@@ -76,7 +76,6 @@ const EventCard = ({
         const addedDoneEvent = (await UserService.addDoneEvent(
           auth.userInfo.id,
           event.id,
-          auth.userInfo.token,
         )) as DoneEvent;
         dispatch(AuthActions.addUserEvent(addedDoneEvent));
         InfoNotification(`Din begäran för ${event.name} har skickats`);

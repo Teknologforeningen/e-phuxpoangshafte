@@ -16,7 +16,6 @@ import { Theme } from '@material-ui/core';
 
 const UserTable = () => {
   const classes = useStyles();
-  const token = useSelector(AuthSelector.token);
   const [events, setEvents] = useState<Event[] | undefined>();
   const [users, setUsers] = useState<User[] | undefined>();
   useEffect(() => {
@@ -25,12 +24,12 @@ const UserTable = () => {
       setEvents(response);
     };
     const getUsers = async () => {
-      const response = await UserService.getAllUsers(token);
+      const response = await UserService.getAllUsers();
       setUsers(response);
     };
     getEvents();
     getUsers();
-  }, [token]);
+  }, []);
 
   const columns: GridColDef[] = events
     ? events.map((event: Event) => {

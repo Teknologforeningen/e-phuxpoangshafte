@@ -37,7 +37,7 @@ hashRouter.get('/validate/:hash', (req: Request, res: Response) => {
   const { hash } = req.params;
   const [eventId, key] = hash.split('-');
   const keyIsValid = validateKey(eventId, key);
-  return res.send({ valid: keyIsValid });
+  return res.send({ eventId, valid: keyIsValid });
 });
 
 export default hashRouter;

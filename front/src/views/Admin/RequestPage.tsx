@@ -15,15 +15,7 @@ import {
   SuccessNotification,
 } from '../../components/Notifications';
 
-const EventRequest = ({
-  user,
-  event,
-  token,
-}: {
-  user: User;
-  event: Event;
-  token: string;
-}) => {
+const EventRequest = ({ user, event }: { user: User; event: Event }) => {
   const acceptPoint = async () => {
     try {
       console.log(
@@ -84,15 +76,7 @@ const EventRequest = ({
   );
 };
 
-const UserRequests = ({
-  user,
-  events,
-  token,
-}: {
-  user: User;
-  events: Event[];
-  token: string;
-}) => {
+const UserRequests = ({ user, events }: { user: User; events: Event[] }) => {
   const userEvents = user.events.map((dv: DoneEvent) =>
     ensure(events.find((event: Event) => event.id === dv.eventID)),
   );
@@ -102,7 +86,6 @@ const UserRequests = ({
         key={`user${user.id}+event${event.id}`}
         user={user}
         event={event}
-        token={token}
       />
     ) : (
       <></>
@@ -126,7 +109,6 @@ const UserRequests = ({
 };
 
 const RequestPage = () => {
-  const token = useSelector(AuthSelector.token);
   const [users, setUsers] = useState<User[] | undefined>();
   const [events, setEvents] = useState<Event[] | undefined>();
   useEffect(() => {
@@ -135,12 +117,12 @@ const RequestPage = () => {
       setEvents(response);
     };
     const getUsers = async () => {
-      const response = await UserService.getAllUsers(token);
+      const response = await UserService.getAllUsers();
       setUsers(response);
     };
     getEvents();
     getUsers();
-  }, [token, users]);
+  }, [users]);
 
   if (!users || !events) {
     return <React.Fragment></React.Fragment>;
@@ -160,9 +142,7 @@ const RequestPage = () => {
   );
 
   const userRequests = usersWithRequests.map((user: User) => {
-    return (
-      <UserRequests key={user.id} user={user} events={events} token={token} />
-    );
+    return <UserRequests key={user.id} user={user} events={events} />;
   });
 
   return (

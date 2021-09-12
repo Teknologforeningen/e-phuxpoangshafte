@@ -14,6 +14,8 @@ import UserSettings from './views/UserSettings';
 import { makeStyles, createStyles } from '@material-ui/styles';
 import StartPage from './views/StartPage';
 import NavBar, { navBarHeight } from './components/Navigation/NavBar';
+import QRPage from './components/Hashing/QRPage';
+import QRvalidation from './components/Hashing/QRvalidation';
 
 const AppRouter = () => {
   const classes = useStyles();
@@ -32,6 +34,13 @@ const AppRouter = () => {
           <Route path={Routes.START}>
             <StartPage />
           </Route>
+          <Route path={Routes.EVENT_VALIDATION}>
+            <QRvalidation />
+          </Route>
+          <Route path={Routes.EVENT_GENERATION}>
+            <QRPage />
+          </Route>
+
           {auth.userIsAutharized ? (
             <Box className={classes.content}>
               <NavBar />

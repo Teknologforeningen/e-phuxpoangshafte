@@ -2,7 +2,7 @@ import axios from 'axios';
 import { User, EventStatus, NewUser, userRole } from '../types';
 const baseUrl = '/api/users';
 
-export const getAllUsers = async (token: string): Promise<User[]> => {
+export const getAllUsers = async (): Promise<User[]> => {
   const response = await axios.get(baseUrl);
   return response.data as User[];
 };
@@ -44,7 +44,6 @@ export const updateUser = async (userInfo: NewUser, userID: number) => {
 export const addDoneEvent = async (
   userID: number,
   eventID: number,
-  token: string,
 ) => {
   const url = `${baseUrl}/${userID}/done_events/${eventID}`;
   const response = await axios.post(url, null);
@@ -56,6 +55,7 @@ export const updateUserEventStatus = async (
   eventID: number,
   newStatus: EventStatus,
 ) => {
+  console.log(user)
   const url = `${baseUrl}/${user.id}/done_events/${eventID}`;
   const status = { status: newStatus };
   const response = await axios.put(url, status);

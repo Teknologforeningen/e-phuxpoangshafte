@@ -79,10 +79,12 @@ export interface DoneEvent {
 
 export enum Routes {
   ROOT = '/',
-  START= '/start',
+  START = '/start',
   LOGIN = '/login',
   SIGNUP = '/signup',
   CATEGORY = '/kategori',
+  EVENT_GENERATION = '/poang/generate/:eventId',
+  EVENT_VALIDATION = '/paong/validation/:hash',
   SPECIFIC_CATEGORY = '/kategori/:categoryId',
   ADMIN = '/admin',
   ADMIN_REQUESTS = '/admin/requests',
