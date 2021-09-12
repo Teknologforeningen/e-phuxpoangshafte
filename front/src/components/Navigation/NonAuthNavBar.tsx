@@ -16,19 +16,20 @@ const NonAuthNavBar = () => {
   );
 };
 
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    bar: {
-      justifyContent: 'flex-start',
-      
-    },
-    logo: {
-      justifyContent: '',
-      height: navBarHeight,
-      width: navBarHeight,
-      fill: theme.palette.secondary.main,
-    },
-  }),
+const useStyles = makeStyles(
+  (theme: Theme) =>
+    createStyles({
+      bar: {
+        justifyContent: 'flex-start',
+      },
+      logo: {
+        justifyContent: '',
+        height: navBarHeight,
+        width: navBarHeight,
+        fill: theme.palette.secondary.main,
+      },
+    }),
+  { index: 1 },
 );
 
 export default NonAuthNavBar;

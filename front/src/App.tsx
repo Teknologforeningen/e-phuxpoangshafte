@@ -1,6 +1,5 @@
 import React, { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
-
 import { localStorageGetter } from './utils.ts/localStorage';
 import { Box } from '@material-ui/core';
 import {
@@ -74,7 +73,5 @@ const App = () => {
     </Box>
   );
 };
-
-
 
 export default App;

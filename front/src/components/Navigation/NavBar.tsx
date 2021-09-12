@@ -244,53 +244,55 @@ const NavBar = () => {
 export const navBarHeight = 60;
 export const drawerWidth = 200;
 
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    flex: {
-      display: 'flex',
-    },
-    sideBar: {
-      color: theme.palette.primary.contrastText,
-    },
-    categoryLinks: {
-      color: theme.palette.primary.contrastText,
-    },
-    sideBarSpacer: {
-      height: '100%',
-      display: 'flex',
-      flexDirection: 'column',
-      justifyContent: 'space-between',
-    },
-    navbar: {
-      backgroundColor: theme.palette.secondary.main,
-      color: theme.palette.primary.main,
-      zIndex: theme.zIndex.drawer + 1,
-      height: navBarHeight,
-    },
-    navBarSpacer: {
-      width: '100%',
-      display: 'flex',
-      flexDirection: 'row',
-      justifyContent: 'center',
-      marginRight: theme.spacing(5),
-    },
-    topPadding: {
-      paddingTop: navBarHeight + 5,
-    },
-    logo: {
-      fill: 'white',
-      width: 42,
-    },
-    settingsIcon: {
-      color: theme.palette.primary.contrastText,
-    },
-    alignStart: {
-      alignItems: 'flex-start',
-    },
-    iconListItem: {
-      marginRight: theme.spacing(1),
-    },
-  }),
+const useStyles = makeStyles(
+  (theme: Theme) =>
+    createStyles({
+      flex: {
+        display: 'flex',
+      },
+      sideBar: {
+        color: theme.palette.primary.contrastText,
+      },
+      categoryLinks: {
+        color: theme.palette.primary.contrastText,
+      },
+      sideBarSpacer: {
+        height: '100%',
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'space-between',
+      },
+      navbar: {
+        backgroundColor: theme.palette.secondary.main,
+        color: theme.palette.primary.main,
+        zIndex: theme.zIndex.drawer + 1,
+        height: navBarHeight,
+      },
+      navBarSpacer: {
+        width: '100%',
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'center',
+        marginRight: theme.spacing(5),
+      },
+      topPadding: {
+        paddingTop: navBarHeight + 5,
+      },
+      logo: {
+        fill: 'white',
+        width: 42,
+      },
+      settingsIcon: {
+        color: theme.palette.primary.contrastText,
+      },
+      alignStart: {
+        alignItems: 'flex-start',
+      },
+      iconListItem: {
+        marginRight: theme.spacing(1),
+      },
+    }),
+  { index: 1 },
 );
 
 export default NavBar;

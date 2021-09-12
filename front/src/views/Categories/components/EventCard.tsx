@@ -145,46 +145,48 @@ const EventCard = ({
   );
 };
 
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    horizontalSpacer: {
-      width: '100%',
-      display: 'flex',
-      flexDirection: 'row',
-      justifyContent: 'space-between',
-    },
-    titleText: {
-      fontWeight: 800,
-    },
-    titleIcon: {},
-    incompleteIcon: {
-      border: `2px solid black`,
-      borderRadius: 24,
-    },
-    actionButton: {
-      flex: '0 1 0',
-      marginLeft: theme.spacing(1),
-      minWidth: 120,
-      color: theme.palette.primary.main,
-      backgroundColor: theme.palette.secondary.main,
-      padding: theme.spacing(2, 2),
-    },
-    card: {
-      margin: '24px 0px',
-    },
-    cardContent: {
-      display: 'flex',
-      justifyContent: 'space-between',
-      alignItems: 'center',
-      padding: theme.spacing(0, 2, 2, 2),
-    },
-    information: {
-      flex: '1 1 0',
-    },
-    selectedCard: {
-      border: `2px solid ${theme.palette.secondary.main}`,
-    },
-  }),
+const useStyles = makeStyles(
+  (theme: Theme) =>
+    createStyles({
+      horizontalSpacer: {
+        width: '100%',
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+      },
+      titleText: {
+        fontWeight: 800,
+      },
+      titleIcon: {},
+      incompleteIcon: {
+        border: `2px solid black`,
+        borderRadius: 24,
+      },
+      actionButton: {
+        flex: '0 1 0',
+        marginLeft: theme.spacing(1),
+        minWidth: 120,
+        color: theme.palette.primary.main,
+        backgroundColor: theme.palette.secondary.main,
+        padding: theme.spacing(2, 2),
+      },
+      card: {
+        margin: '24px 0px',
+      },
+      cardContent: {
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        padding: theme.spacing(0, 2, 2, 2),
+      },
+      information: {
+        flex: '1 1 0',
+      },
+      selectedCard: {
+        border: `2px solid ${theme.palette.secondary.main}`,
+      },
+    }),
+  { index: 1 },
 );
 
 export default EventCard;

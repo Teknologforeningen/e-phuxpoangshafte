@@ -7,7 +7,7 @@
     "@emotion/styled": "^11.3.0",
     "@material-ui/core": "^5.0.0-beta.1",
     "@material-ui/data-grid": "^4.0.0-alpha.35",
-    "@material-ui/icons": "^5.0.0-beta.1",
+    "@material-ui/icons": "^4.11.2",
     "@material-ui/lab": "^5.0.0-alpha.40",
     "@material-ui/pickers": "^4.0.0-alpha.12",
     "@material-ui/styles": "^5.0.0-beta.1",
@@ -36,10 +36,17 @@
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
-    "extends": ["react-app", "react-app/jest"]
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
   },
   "browserslist": {
-    "production": [">0.2%", "not dead", "not op_mini all"],
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
     "development": [
       "last 1 chrome version",
       "last 1 firefox version",

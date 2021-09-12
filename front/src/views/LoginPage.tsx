@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useDispatch } from 'react-redux';
 import { userLogin } from '../actions';
 import * as AuthServices from '../services/AuthServices';
@@ -21,7 +21,6 @@ import {
   SuccessNotification,
 } from '../components/Notifications';
 import { Routes } from '../types';
-import TFLogoSVG from '../styles/img/TFlogo';
 import NonAuthNavBar from '../components/Navigation/NonAuthNavBar';
 
 interface LoginCredentials {
@@ -160,49 +159,51 @@ const LoginForm = () => {
   );
 };
 
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    loginSpread: {
-      display: 'flex',
-      flexDirection: 'column',
-      height: 'calc(100vh - 72px)',
-      justifyContent: 'space-evenly',
-    },
-    centerAlign: {
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-      marginBottom: 16,
-    },
-    centerAlignRow: {
-      display: 'flex',
-      flexDirection: 'column',
-      justifyContent: 'center',
-      marginTop: 10,
-    },
-    helpText: {
-      textAlign: 'center',
-      maxWidth: '290px',
-      color: theme.palette.primary.contrastText,
-      margin: '10px auto 0 auto',
-    },
-    fields: {
-      width: '100%',
-      maxWidth: '290px',
-    },
-    submitButton: {
-      backgroundColor: theme.palette.secondary.main,
-      color: theme.palette.primary.main,
-      width: '100%',
-      maxWidth: '290px',
-      padding: theme.spacing(2, 0),
-      margin: '0 auto',
-      borderRadius: 0,
-    },
-    labelFocused: {
-      color: `${theme.palette.common.black} !important`,
-    },
-  }),
+const useStyles = makeStyles(
+  (theme: Theme) =>
+    createStyles({
+      loginSpread: {
+        display: 'flex',
+        flexDirection: 'column',
+        height: 'calc(100vh - 72px)',
+        justifyContent: 'space-evenly',
+      },
+      centerAlign: {
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        marginBottom: 16,
+      },
+      centerAlignRow: {
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
+        marginTop: 10,
+      },
+      helpText: {
+        textAlign: 'center',
+        maxWidth: '290px',
+        color: theme.palette.primary.contrastText,
+        margin: '10px auto 0 auto',
+      },
+      fields: {
+        width: '100%',
+        maxWidth: '290px',
+      },
+      submitButton: {
+        backgroundColor: theme.palette.secondary.main,
+        color: theme.palette.primary.main,
+        width: '100%',
+        maxWidth: '290px',
+        padding: theme.spacing(2, 0),
+        margin: '0 auto',
+        borderRadius: 0,
+      },
+      labelFocused: {
+        color: `${theme.palette.common.black} !important`,
+      },
+    }),
+  { index: 1 },
 );
 
 export default LoginForm;

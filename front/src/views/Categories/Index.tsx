@@ -1,5 +1,5 @@
-import { Box } from '@material-ui/core';
 import React, { useState } from 'react';
+import { Box } from '@material-ui/core';
 import { useSelector } from 'react-redux';
 import { useRouteMatch } from 'react-router-dom';
 import * as CategorySelector from '../../selectors/CategorySelectors';
@@ -45,12 +45,13 @@ const CategoryPage = () => {
     (doneEvent: DoneEvent) =>
       eventsInCategory.find((event: Event) => doneEvent.eventID === event.id),
   );
-  const completedPointsInCategory: number = completedEventsInCategoryCastedToEvents
-    .map((event: Event | undefined) => (event ? event.points : 0))
-    .reduce(
-      (acc: number, cur: number | undefined) => (cur ? acc + cur : acc),
-      0,
-    );
+  const completedPointsInCategory: number =
+    completedEventsInCategoryCastedToEvents
+      .map((event: Event | undefined) => (event ? event.points : 0))
+      .reduce(
+        (acc: number, cur: number | undefined) => (cur ? acc + cur : acc),
+        0,
+      );
 
   const ListOfEvents = eventsInCategory.map((event: Event) => {
     const complitionStatus = userInfo.events.find(

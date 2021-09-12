@@ -1,5 +1,4 @@
 import React from 'react';
-import UserForm from '../../components/UI/UserForm';
 import * as UserService from '../../services/UserServices';
 import * as AuthSelector from '../../selectors/AuthSelectors';
 import { useSelector } from 'react-redux';
@@ -10,9 +9,7 @@ import {
   Checkbox,
   FormControlLabel,
   FormGroup,
-  InputLabel,
   MenuItem,
-  Select,
   TextField,
   Theme,
   Typography,
@@ -81,10 +78,7 @@ const UserSettings = () => {
     try {
       const { confirmPassword: remove, ...valuesToSend } = values;
       if (auth.userInfo && auth.userInfo.id) {
-        const response = await UserService.updateUser(
-          valuesToSend,
-          auth.userInfo.id,
-        );
+        await UserService.updateUser(valuesToSend, auth.userInfo.id);
         SuccessNotification('Din information har uppdaterats');
       } else {
         console.error({
@@ -266,50 +260,52 @@ const UserSettings = () => {
   );
 };
 
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    loginSpread: {
-      display: 'flex',
-      flexDirection: 'column',
-      height: 'calc(100vh - 72px)',
-      justifyContent: 'space-evenly',
-    },
-    centerAlign: {
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-      marginBottom: 16,
-    },
-    centerAlignRow: {
-      display: 'flex',
-      flexDirection: 'column',
-      justifyContent: 'center',
-      marginTop: 10,
-    },
-    helpText: {
-      textAlign: 'center',
-      maxWidth: '290px',
-      color: theme.palette.primary.contrastText,
-      margin: '10px auto 0 auto',
-    },
-    fields: {
-      width: '100%',
-      maxWidth: '290px',
-      margin: '0 auto',
-    },
-    submitButton: {
-      backgroundColor: theme.palette.secondary.main,
-      color: theme.palette.primary.main,
-      width: '100%',
-      maxWidth: '290px',
-      padding: theme.spacing(2, 0),
-      margin: '0 auto',
-      borderRadius: 0,
-    },
-    labelFocused: {
-      color: `${theme.palette.common.black} !important`,
-    },
-  }),
+const useStyles = makeStyles(
+  (theme: Theme) =>
+    createStyles({
+      loginSpread: {
+        display: 'flex',
+        flexDirection: 'column',
+        height: 'calc(100vh - 72px)',
+        justifyContent: 'space-evenly',
+      },
+      centerAlign: {
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        marginBottom: 16,
+      },
+      centerAlignRow: {
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
+        marginTop: 10,
+      },
+      helpText: {
+        textAlign: 'center',
+        maxWidth: '290px',
+        color: theme.palette.primary.contrastText,
+        margin: '10px auto 0 auto',
+      },
+      fields: {
+        width: '100%',
+        maxWidth: '290px',
+        margin: '0 auto',
+      },
+      submitButton: {
+        backgroundColor: theme.palette.secondary.main,
+        color: theme.palette.primary.main,
+        width: '100%',
+        maxWidth: '290px',
+        padding: theme.spacing(2, 0),
+        margin: '0 auto',
+        borderRadius: 0,
+      },
+      labelFocused: {
+        color: `${theme.palette.common.black} !important`,
+      },
+    }),
+  { index: 1 },
 );
 
 export default UserSettings;

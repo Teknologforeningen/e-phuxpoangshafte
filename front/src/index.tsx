@@ -12,10 +12,11 @@ import '@material-ui/lab/themeAugmentation';
 ReactDOM.render(
   <Provider store={store}>
     <ThemeProvider theme={Themes.theme}>
-      <CssBaseline />
-      <Router>
-        <App />
-      </Router>
+      <CssBaseline>
+        <Router>
+          <App />
+        </Router>
+      </CssBaseline>
     </ThemeProvider>
   </Provider>,
   document.getElementById('root'),

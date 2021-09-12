@@ -49,18 +49,20 @@ const QRPage = () => {
   );
 };
 
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    verticalSpacer: {
-      height: '100%',
-      display: 'flex',
-      flexDirection: 'column',
-      justifyContent: 'space-between',
-    },
-    center: {
-      alignSelf: 'center',
-    },
-  }),
+const useStyles = makeStyles(
+  (theme: Theme) =>
+    createStyles({
+      verticalSpacer: {
+        height: '100%',
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'space-between',
+      },
+      center: {
+        alignSelf: 'center',
+      },
+    }),
+  { index: 1 },
 );
 
 export default QRPage;

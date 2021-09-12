@@ -1,5 +1,5 @@
-import { Box } from '@material-ui/core';
 import React from 'react';
+import { Box } from '@material-ui/core';
 import NewCategoryForm from './components/NewCategoryForm';
 import NewEventForm from './components/NewEventForm';
 import Togglable from '../../components/UI/Togglable';

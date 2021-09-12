@@ -1,16 +1,9 @@
-import { Box, Card, CardContent, Tooltip, Typography } from '@material-ui/core';
 import React from 'react';
+import { Box, Card, CardContent, Tooltip, Typography } from '@material-ui/core';
 import { Category } from '../../../types';
 import LinearProgress from '@material-ui/core/LinearProgress';
 import { withStyles } from '@material-ui/styles';
-import {
-  CheckBox,
-  CheckBoxOutlineBlank,
-  Done,
-  DoneAll,
-  InfoOutlined as InfoIcon,
-} from '@material-ui/icons/';
-
+import { Done, DoneAll, InfoOutlined as InfoIcon } from '@material-ui/icons/';
 import { createStyles, makeStyles } from '@material-ui/styles';
 import { Theme } from '@material-ui/core/styles';
 
@@ -45,11 +38,11 @@ const CategoryProgress = ({
     ) : (
       <></>
     );
-    const ThickLinearProgress = withStyles({
-      root: {
-        height: 20,
-      },
-    })(LinearProgress);
+  const ThickLinearProgress = withStyles({
+    root: {
+      height: 20,
+    },
+  })(LinearProgress);
   return (
     <Card variant={'outlined'}>
       <CardContent>
@@ -91,26 +84,28 @@ const CategoryProgress = ({
   );
 };
 
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    title: {
-      color: theme.palette.secondary.main,
-      fontSize: '12pt',
-    },
-    subtitle: {
-      color: '#454545',
-      fontSize: '10pt',
-    },
-    evenlySpacedBox: {
-      width: '100%',
-      display: 'flex',
-      flexDirection: 'row',
-      justifyContent: 'space-between',
-    },
-    smallInfoIcon: {
-      fontSize: 'small',
-    },
-  }),
+const useStyles = makeStyles(
+  (theme: Theme) =>
+    createStyles({
+      title: {
+        color: theme.palette.secondary.main,
+        fontSize: '12pt',
+      },
+      subtitle: {
+        color: '#454545',
+        fontSize: '10pt',
+      },
+      evenlySpacedBox: {
+        width: '100%',
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+      },
+      smallInfoIcon: {
+        fontSize: 'small',
+      },
+    }),
+  { index: 1 },
 );
 
 export default CategoryProgress;
