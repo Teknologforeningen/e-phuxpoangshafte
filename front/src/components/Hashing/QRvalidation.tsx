@@ -25,37 +25,50 @@ const QRvalidation = () => {
   const events = useSelector(EventSelector.allEvents).events;
 
   useEffect(() => {
-    const getAndSetQRcode = async () => {
+    const validateHash = async () => {
       const { eventId: eventIdReturned, valid: validReturned } =
         await HashServices.validateHash({ hash });
       setValid(validReturned);
       seteventId(eventIdReturned);
     };
-    const addAndupdateStatus = async (user: User, eventId: number) => {
-      await UserServices.addDoneEvent(user.id!, eventId);
-      const updateResponse = await UserServices.updateUserEventStatus(
-        user,
-        eventId,
-        EventStatus.COMPLETED,
-      );
-      return updateResponse;
+    validateHash();
+  }, [hash]);
+
+  useEffect(() => {
+    const addAndUpdateStatus = async (user: User, eventId: number) => {
+      try {
+        await UserServices.addDoneEvent(user.id!, eventId);
+        const updateResponse = await UserServices.updateUserEventStatus(
+          user,
+          eventId,
+          EventStatus.COMPLETED,
+        );
+        setDone(true);
+        return updateResponse;
+      } catch (e) {
+        console.error('error', e);
+      }
     };
-    const updateStatus = async (user: User, eventId: number) => {
-      const updateResponse = await UserServices.updateUserEventStatus(
-        user,
-        eventId,
-        EventStatus.COMPLETED,
-      );
-      return updateResponse;
+    const updateStatusToCompleted = async (user: User, eventId: number) => {
+      try {
+        const updateResponse = await UserServices.updateUserEventStatus(
+          user,
+          eventId,
+          EventStatus.COMPLETED,
+        );
+        setDone(true);
+        return updateResponse;
+      } catch (e) {
+        console.error('error', e);
+      }
     };
-    getAndSetQRcode();
 
     if (user && valid && eventId) {
       const userCompletedEvent: DoneEvent | undefined = user.events.find(
         (doneEvent: DoneEvent) => doneEvent.eventID === eventId,
       );
       if (!userCompletedEvent) {
-        const response = addAndupdateStatus(user, eventId);
+        const response = addAndUpdateStatus(user, eventId);
         console.log('Response:', response);
         console.log('Event marked done');
         SuccessNotification(`Poänget har markerats gjort`);
@@ -64,12 +77,11 @@ const QRvalidation = () => {
         userCompletedEvent &&
         userCompletedEvent.status !== EventStatus.COMPLETED
       ) {
-        updateStatus(user, eventId);
+        updateStatusToCompleted(user, eventId);
         SuccessNotification(`Poänget har markerats gjort`);
       }
     }
-    setDone(true);
-  }, [eventId, hash, user, valid]);
+  }, [user, valid, eventId]);
 
   if (!user) {
     return (

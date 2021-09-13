@@ -2,20 +2,14 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 import { BrowserRouter, Route, Switch, Redirect } from 'react-router-dom';
 import PrivateRoute from './components/routing/PrivateRoute';
-import { Routes } from './types';
+import { Routes, userRole } from './types';
 import AdminPage from './views/Admin';
 import CategoryPage from './views/Categories/Index';
 import LoginForm from './views/LoginPage';
 import MemberDashboard from './views/MemberDashboard';
 import SignupPage from './views/SignupPage';
 import * as AuthSelector from './selectors/AuthSelectors';
-import {
-  Box,
-  CircularProgress,
-  Theme,
-  useMediaQuery,
-  useTheme,
-} from '@material-ui/core';
+import { Box, CircularProgress, Theme } from '@material-ui/core';
 import UserSettings from './views/UserSettings';
 import { makeStyles, createStyles } from '@material-ui/styles';
 import StartPage from './views/StartPage';
@@ -23,12 +17,11 @@ import NavBar, { navBarHeight } from './components/Navigation/NavBar';
 import QRPage from './components/Hashing/QRPage';
 import QRvalidation from './components/Hashing/QRvalidation';
 import InstructionsList from './views/Instructions';
+import AdminRoute from './components/routing/AdminRoute';
 
 const AppRouter = () => {
   const classes = useStyles();
   const auth = useSelector(AuthSelector.auth);
-  const theme = useTheme();
-  const isMdUp = useMediaQuery(theme.breakpoints.up('md'));
 
   return (
     <Box>
@@ -45,9 +38,6 @@ const AppRouter = () => {
           </Route>
           <Route path={Routes.EVENT_VALIDATION}>
             <QRvalidation />
-          </Route>
-          <Route path={Routes.EVENT_GENERATION}>
-            <QRPage />
           </Route>
 
           {auth.userIsAutharized ? (
@@ -67,6 +57,11 @@ const AppRouter = () => {
                 <PrivateRoute
                   component={CategoryPage}
                   path={Routes.SPECIFIC_CATEGORY}
+                  exact
+                />
+                <AdminRoute
+                  component={QRPage}
+                  path={Routes.EVENT_GENERATION}
                   exact
                 />
                 <Route path={'/admin'}>
