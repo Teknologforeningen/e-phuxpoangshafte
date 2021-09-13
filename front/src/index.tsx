@@ -5,19 +5,29 @@ import { Provider } from 'react-redux';
 import App from './App';
 import store from './store';
 import { ThemeProvider } from '@material-ui/core/styles';
+import { StylesProvider, jssPreset } from '@material-ui/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import * as Themes from './styles/themes';
 import '@material-ui/lab/themeAugmentation';
 
+import { create } from 'jss';
+
+const jss = create({
+  ...jssPreset(),
+  // Define a custom insertion point that JSS will look for when injecting the styles into the DOM.
+  insertionPoint: document.getElementById('insertion-point')!,
+});
+
 ReactDOM.render(
   <Provider store={store}>
-    <ThemeProvider theme={Themes.theme}>
-      <CssBaseline>
+    <StylesProvider jss={jss}>
+      <ThemeProvider theme={Themes.theme}>
+        <CssBaseline />
         <Router>
           <App />
         </Router>
-      </CssBaseline>
-    </ThemeProvider>
+      </ThemeProvider>
+    </StylesProvider>
   </Provider>,
   document.getElementById('root'),
 );
