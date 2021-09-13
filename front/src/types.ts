@@ -83,7 +83,7 @@ export enum Routes {
   LOGIN = '/login',
   SIGNUP = '/signup',
   CATEGORY = '/kategori',
-  EVENT_GENERATION = '/poang/generate/:eventId',
+  EVENT_GENERATION = '/poang/generate',
   EVENT_VALIDATION = '/paong/validation/:hash',
   SPECIFIC_CATEGORY = '/kategori/:categoryId',
   ADMIN = '/admin',

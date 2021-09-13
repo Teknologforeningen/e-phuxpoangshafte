@@ -19,8 +19,9 @@ const QRPage = () => {
   const moreThan500px = useMediaQuery('(min-width:500px)');
   const QRCodeSize = moreThan500px ? 500 : 250;
 
-  const match = useRouteMatch(Routes.EVENT_GENERATION);
+  const match = useRouteMatch(`${Routes.EVENT_GENERATION}/:eventId`);
   const eventId = match ? Number((match.params as RouteType).eventId) : 1;
+  console.log(match);
 
   const events = useSelector(EventSelectors.allEvents).events;
   const foundEvent = events.find((event: Event) => event.id === eventId);

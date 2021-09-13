@@ -1,6 +1,12 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { DoneEvent, Event, EventStatus } from '../../../types';
+import {
+  DoneEvent,
+  Event,
+  EventStatus,
+  Routes,
+  userRole,
+} from '../../../types';
 import * as AuthSelector from '../../../selectors/AuthSelectors';
 import * as UserService from '../../../services/UserServices';
 import * as AuthActions from '../../../actions/AuthActions';
@@ -10,6 +16,7 @@ import {
   Card,
   CardContent,
   CardHeader,
+  Link,
   Theme,
   Typography,
 } from '@material-ui/core';
@@ -126,7 +133,9 @@ const EventCard = ({
                 : ''}
             </Typography>
           </Box>
-          {auth.userIsAutharized && unattendedEvent ? (
+          {auth.userIsAutharized &&
+          unattendedEvent &&
+          auth.userInfo.role !== userRole.ADMIN ? (
             <Button
               variant={'contained'}
               onClick={requestPoint}
@@ -139,6 +148,18 @@ const EventCard = ({
               Väntar på underskrift
             </Typography>
           ) : undefined}
+          {auth.userIsAutharized && auth.userInfo.role === userRole.ADMIN ? (
+            <Link
+              href={`${Routes.EVENT_GENERATION}/${event.id}`}
+              underline={'none'}
+            >
+              <Button variant={'contained'} className={classes.actionButton}>
+                Hämta QR kod
+              </Button>
+            </Link>
+          ) : (
+            <></>
+          )}
         </CardContent>
       )}
     </Card>
