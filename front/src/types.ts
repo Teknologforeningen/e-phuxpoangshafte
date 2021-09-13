@@ -90,6 +90,7 @@ export enum Routes {
   ADMIN_REQUESTS = '/admin/requests',
   ADMIN_ADDMORE = '/admin/addmore',
   USER_SETTINGS = '/settings',
+  INSTRUCTIONS = '/reglemente',
 }
 
 export enum FieldOfStudy {

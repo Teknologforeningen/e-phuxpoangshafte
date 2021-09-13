@@ -60,7 +60,7 @@ const AdminList = () => {
       <Link key={'admin'} href={Routes.ADMIN} variant={'inherit'}>
         <ListItem key={'admin'}>
           <ListItemText
-            primary={'Användar tabel'}
+            primary={'Användartabell'}
             className={classes.categoryLinks}
           />
         </ListItem>
@@ -76,7 +76,7 @@ const AdminList = () => {
       <Link key={'addmore'} href={Routes.ADMIN_ADDMORE} variant={'inherit'}>
         <ListItem key={'addmore'}>
           <ListItemText
-            primary={'Categorier och poäng'}
+            primary={'Kategorier och poäng'}
             className={classes.categoryLinks}
           />
         </ListItem>
@@ -185,6 +185,14 @@ const NavBar = () => {
                   <Link key={'home'} href={Routes.ROOT}>
                     <ListItemText
                       primary={'Hem'}
+                      className={classes.categoryLinks}
+                    />
+                  </Link>
+                </ListItem>
+                <ListItem key="instructions">
+                  <Link key={'instructions'} href={Routes.INSTRUCTIONS}>
+                    <ListItemText
+                      primary={'Reglemente'}
                       className={classes.categoryLinks}
                     />
                   </Link>

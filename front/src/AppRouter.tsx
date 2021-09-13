@@ -22,6 +22,7 @@ import StartPage from './views/StartPage';
 import NavBar, { navBarHeight } from './components/Navigation/NavBar';
 import QRPage from './components/Hashing/QRPage';
 import QRvalidation from './components/Hashing/QRvalidation';
+import InstructionsList from './views/Instructions';
 
 const AppRouter = () => {
   const classes = useStyles();
@@ -53,6 +54,11 @@ const AppRouter = () => {
             <Box className={classes.flex}>
               <NavBar />
               <Box className={classes.content}>
+                <PrivateRoute
+                  component={InstructionsList}
+                  path={Routes.INSTRUCTIONS}
+                  exact
+                />
                 <PrivateRoute
                   component={UserSettings}
                   path={Routes.USER_SETTINGS}
