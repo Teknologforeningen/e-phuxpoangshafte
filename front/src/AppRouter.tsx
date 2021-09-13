@@ -9,7 +9,13 @@ import LoginForm from './views/LoginPage';
 import MemberDashboard from './views/MemberDashboard';
 import SignupPage from './views/SignupPage';
 import * as AuthSelector from './selectors/AuthSelectors';
-import { Box, CircularProgress, Theme } from '@material-ui/core';
+import {
+  Box,
+  CircularProgress,
+  Theme,
+  useMediaQuery,
+  useTheme,
+} from '@material-ui/core';
 import UserSettings from './views/UserSettings';
 import { makeStyles, createStyles } from '@material-ui/styles';
 import StartPage from './views/StartPage';
@@ -20,6 +26,8 @@ import QRvalidation from './components/Hashing/QRvalidation';
 const AppRouter = () => {
   const classes = useStyles();
   const auth = useSelector(AuthSelector.auth);
+  const theme = useTheme();
+  const isMdUp = useMediaQuery(theme.breakpoints.up('md'));
 
   return (
     <Box>
@@ -42,26 +50,28 @@ const AppRouter = () => {
           </Route>
 
           {auth.userIsAutharized ? (
-            <Box className={classes.content}>
+            <Box className={classes.flex}>
               <NavBar />
-              <PrivateRoute
-                component={UserSettings}
-                path={Routes.USER_SETTINGS}
-                exact
-              />
-              <PrivateRoute
-                component={CategoryPage}
-                path={Routes.SPECIFIC_CATEGORY}
-                exact
-              />
-              <Route path={'/admin'}>
-                <AdminPage />
-              </Route>
-              <PrivateRoute
-                component={MemberDashboard}
-                path={Routes.ROOT}
-                exact
-              />
+              <Box className={classes.content}>
+                <PrivateRoute
+                  component={UserSettings}
+                  path={Routes.USER_SETTINGS}
+                  exact
+                />
+                <PrivateRoute
+                  component={CategoryPage}
+                  path={Routes.SPECIFIC_CATEGORY}
+                  exact
+                />
+                <Route path={'/admin'}>
+                  <AdminPage />
+                </Route>
+                <PrivateRoute
+                  component={MemberDashboard}
+                  path={Routes.ROOT}
+                  exact
+                />
+              </Box>
             </Box>
           ) : auth.userIsAutharized === null ? (
             <Box className={classes.centerBox}>
@@ -78,9 +88,16 @@ const AppRouter = () => {
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
+    flex: {
+      display: 'flex',
+    },
     content: {
       marginTop: navBarHeight + 5,
       padding: theme.spacing(0, 2),
+      flex: '1 1 0',
+      [theme.breakpoints.down('md')]: {
+        marginTop: navBarHeight + 5,
+      },
     },
     centerBox: {
       display: 'flex',

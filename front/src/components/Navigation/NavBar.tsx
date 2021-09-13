@@ -16,7 +16,7 @@ import {
 } from '@material-ui/core';
 import { Theme } from '@material-ui/core/styles';
 import * as Themes from '../../styles/themes';
-import { createStyles, makeStyles, useTheme } from '@material-ui/styles';
+import { createStyles, makeStyles } from '@material-ui/styles';
 import { useSelector } from 'react-redux';
 import { useLocation } from 'react-router-dom';
 
@@ -144,7 +144,7 @@ const NavBar = () => {
     : [<></>];
 
   return (
-    <Box className={classes.flex}>
+    <Box width={isMdUp ? 205 : undefined} className={classes.flex}>
       <AppBar position="fixed" className={classes.navbar}>
         <Toolbar>
           <IconButton

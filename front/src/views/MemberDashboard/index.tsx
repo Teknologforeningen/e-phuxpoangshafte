@@ -13,6 +13,7 @@ import {
   Category,
 } from '../../types';
 import CategoryProgress from './components/CategoryProgress';
+import { mapUserDoneEventsToEvents } from '../../utils.ts/HelperFunctions';
 import _ from 'lodash';
 import {
   Box,
@@ -22,11 +23,13 @@ import {
   Collapse,
   List,
   ListItem,
+  Theme,
   Typography,
 } from '@material-ui/core';
-import { mapUserDoneEventsToEvents } from '../../utils.ts/HelperFunctions';
+import { createStyles, makeStyles } from '@material-ui/styles';
 
 const MemberDashboard = () => {
+  const classes = useStyles();
   const [expanded, setExpanded] = useState(false);
   const auth: AuthState = useSelector(AuthSelectors.auth);
   const categoriesState: CategoryState = useSelector(
@@ -126,9 +129,9 @@ const MemberDashboard = () => {
   ).map((event: Event) => <ListItem key={event.id}>{event.name}</ListItem>);
 
   return (
-    <Box>
+    <Box maxWidth={600}>
       {pendingAmount > 0 ? (
-        <Card variant={'outlined'}>
+        <Card variant={'outlined'} className={classes.cardLayout}>
           <CardActionArea onClick={handleExpandClick}>
             <CardContent>
               <Typography>
@@ -147,5 +150,15 @@ const MemberDashboard = () => {
     </Box>
   );
 };
+
+const useStyles = makeStyles(
+  (theme: Theme) =>
+    createStyles({
+      cardLayout: {
+        margin: theme.spacing(2, 0),
+      },
+    }),
+  { index: 1 },
+);
 
 export default MemberDashboard;

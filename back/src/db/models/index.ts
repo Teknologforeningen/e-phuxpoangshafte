@@ -1,18 +1,17 @@
 import { Sequelize } from 'sequelize-typescript';
 var db: any = {};
-
 /*
 const env = 'development';
 
-Kommentera in dehä då man devar
+//Kommentera in dehä då man devar
 var config = require('../../config.json')[env];
-  const sequelize = new Sequelize({
-    database: config.database,
-    dialect: config.dialect,
-    username: config.username,
-    password: config.password,
-    models: [__dirname + '/models'],
-  });
+const sequelize = new Sequelize({
+  database: config.database,
+  dialect: config.dialect,
+  username: config.username,
+  password: config.password,
+  models: [__dirname + '/models'],
+});
 */
 
 const sequelize = new Sequelize({

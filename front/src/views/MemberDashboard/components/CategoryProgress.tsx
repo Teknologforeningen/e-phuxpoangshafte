@@ -7,30 +7,24 @@ import { Done, DoneAll, InfoOutlined as InfoIcon } from '@material-ui/icons/';
 import { createStyles, makeStyles } from '@material-ui/styles';
 import { Theme } from '@material-ui/core/styles';
 
-const CategoryProgress = ({
-  category,
-  progress,
-  currentAmount,
-  requiredAmount,
-}: {
+interface Props {
   category: Category;
   progress: number;
   currentAmount: number;
   requiredAmount: number;
-}) => {
-  //TODO: check requiered amount, seems too big
-  console.log('Category:', category.name);
-  console.log('Progress:', progress);
-  console.log('Current Amount:', currentAmount);
-  console.log('Required Amount:', requiredAmount);
-  const classes = useStyles();
+}
+
+const CategoryProgress = (props: Props) => {
+  const classes = useStyles(props);
+  console.log(props.progress);
+  const { category, progress, currentAmount, requiredAmount } = props;
   const progressIcon =
     requiredAmount > 0 ? (
       currentAmount > 0 ? (
         progress >= (currentAmount / requiredAmount) * 100 ? (
           <DoneAll color={'success'} />
         ) : (
-          <Done color={'success'} />
+          <Done color={'warning'} />
         )
       ) : (
         <></>
@@ -40,7 +34,8 @@ const CategoryProgress = ({
     );
   const ThickLinearProgress = withStyles({
     root: {
-      height: 20,
+      height: 16,
+      margin: '8px auto',
     },
   })(LinearProgress);
   return (
