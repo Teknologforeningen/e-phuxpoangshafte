@@ -54,6 +54,11 @@ const AppRouter = () => {
               <NavBar />
               <Box className={classes.content}>
                 <PrivateRoute
+                  component={InstructionsList}
+                  path={Routes.INSTRUCTIONS}
+                  exact
+                />
+                <PrivateRoute
                   component={UserSettings}
                   path={Routes.USER_SETTINGS}
                   exact

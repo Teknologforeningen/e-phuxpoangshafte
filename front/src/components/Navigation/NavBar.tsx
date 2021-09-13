@@ -189,6 +189,14 @@ const NavBar = () => {
                     />
                   </Link>
                 </ListItem>
+                <ListItem key="instructions">
+                  <Link key={'instructions'} href={Routes.INSTRUCTIONS}>
+                    <ListItemText
+                      primary={'Regelemente'}
+                      className={classes.categoryLinks}
+                    />
+                  </Link>
+                </ListItem>
               </List>
               <Divider />
               <List>{ListOfCategories}</List>
