@@ -22,6 +22,7 @@ import StartPage from './views/StartPage';
 import NavBar, { navBarHeight } from './components/Navigation/NavBar';
 import QRPage from './components/Hashing/QRPage';
 import QRvalidation from './components/Hashing/QRvalidation';
+import InstructionsList from './views/Instructions';
 
 const AppRouter = () => {
   const classes = useStyles();

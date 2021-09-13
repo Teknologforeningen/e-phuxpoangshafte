@@ -1,12 +1,21 @@
-import React from 'react'
+import { ListItem, ListItemText, Theme } from '@material-ui/core';
+import { createStyles, makeStyles } from '@material-ui/styles';
+import React from 'react';
 
-const ParagraphedListItem = ({index, content}) =>{
-    const classes = useStyle()
-    return(
-        <ListItem  key={index}>  
-           ${index}. <ListItemText>{content}</ListItemText>        
-        </ListItem>
-    )
+interface props {
+  index: number;
+  content: string;
 }
 
-export default ParagraphedListItem
+const ParagraphedListItem = ({ index, content }: props) => {
+  const classes = useStyles();
+  return (
+    <ListItem key={index} >
+      <ListItemText primary={`§ ${index}`} secondary={content}></ListItemText>
+    </ListItem>
+  );
+};
+
+const useStyles = makeStyles((theme: Theme) => createStyles({}));
+
+export default ParagraphedListItem;

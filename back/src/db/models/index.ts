@@ -1,6 +1,6 @@
 import { Sequelize } from 'sequelize-typescript';
 var db: any = {};
-/*
+
 const env = 'development';
 
 //Kommentera in dehä då man devar
@@ -12,8 +12,8 @@ const sequelize = new Sequelize({
   password: config.password,
   models: [__dirname + '/models'],
 });
-*/
 
+/*
 const sequelize = new Sequelize({
   database: process.env.DB_NAME,
   dialect: 'postgres',
@@ -22,6 +22,7 @@ const sequelize = new Sequelize({
   host: process.env.DB_HOST,
   models: [__dirname + '/models'],
 });
+*/
 
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;
