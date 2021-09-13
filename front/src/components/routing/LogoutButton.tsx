@@ -30,7 +30,7 @@ const LogoutButton = (props: Props) => {
     return <Redirect to={'/'} push={true} />;
   };
   return (
-    <ExitToAppIcon onClick={handleClick} >
+    <ExitToAppIcon onClick={handleClick}>
       Logga ut
     </ExitToAppIcon>
   );
