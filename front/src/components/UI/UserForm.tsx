@@ -13,7 +13,7 @@ import { useFormik } from 'formik';
 import React from 'react';
 import * as Yup from 'yup';
 
-import { FieldOfStudy, NewUser, User } from '../../types';
+import { FieldOfStudy, NewUser } from '../../types';
 import { ErrorNotification } from '../Notifications';
 
 export interface UserFormAttributes extends NewUser {
@@ -44,6 +44,7 @@ const UserForm = ({
     lastName: placeholder ? placeholder.lastName : 'Aalto',
     fieldOfStudy: placeholder ? placeholder.fieldOfStudy : '',
     capWithTF: placeholder ? placeholder.capWithTF : true,
+    otherFieldOfStudy: '',
   };
 
   const validation = Yup.object({
@@ -69,7 +70,7 @@ const UserForm = ({
     { resetForm }: { resetForm: any },
   ) => {
     try {
-      const { 'confirmPassword': remove, ...valuesToSend } = values;
+      const { confirmPassword: remove, ...valuesToSend } = values;
       if (userID) {
         const response = await submitFunction(valuesToSend, userID);
       } else {
@@ -79,7 +80,7 @@ const UserForm = ({
       resetForm();
     } catch (e) {
       console.error({ error: e, message: 'Submit failed' });
-      ErrorNotification('Något gick fel och din information updaterades inte')
+      ErrorNotification('Något gick fel och din information updaterades inte');
     }
   };
 

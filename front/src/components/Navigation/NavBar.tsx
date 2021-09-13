@@ -101,6 +101,12 @@ const getNavbarTitle = (
         categories.find(category => category.id === kategoriId)?.name ?? ''
       );
     }
+    if (location === Routes.USER_SETTINGS) {
+      return 'Inställningar';
+    }
+    if (location === Routes.INSTRUCTIONS) {
+      return 'Reglemente';
+    }
   }
   return '';
 };
@@ -239,7 +245,6 @@ const NavBar = () => {
                 <Box className={classes.iconListItem}>
                   <LogOutButton handleClose={() => toggleDrawer(false)} />
                 </Box>
-                <Typography>Logga ut</Typography>
               </ListItem>
             </List>
           )}

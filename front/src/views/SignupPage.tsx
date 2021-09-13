@@ -51,6 +51,7 @@ const SignupPage = () => {
     lastName: '',
     fieldOfStudy: '',
     capWithTF: true,
+    otherFieldOfStudy: null,
   };
 
   const validation = Yup.object({
@@ -206,6 +207,33 @@ const SignupPage = () => {
                 ...FieldOfStudyMenuItems,
               ]}
             </TextField>
+            {formik.values.fieldOfStudy === FieldOfStudy.OTHER ? (
+              <TextField
+                variant={'filled'}
+                id={'otherFieldOfStudy'}
+                name={'otherFieldOfStudy'}
+                label={'Annan studieinriktning'}
+                aria-label={'Annan studieinriktning'}
+                value={formik.values.otherFieldOfStudy}
+                onChange={formik.handleChange}
+                error={
+                  formik.touched.otherFieldOfStudy &&
+                  Boolean(formik.errors.otherFieldOfStudy)
+                }
+                helperText={
+                  formik.touched.otherFieldOfStudy &&
+                  formik.errors.otherFieldOfStudy
+                }
+                className={classes.fields}
+                InputLabelProps={{
+                  classes: {
+                    focused: classes.labelFocused,
+                  },
+                }}
+              />
+            ) : (
+              <></>
+            )}
             {/*
           <FormGroup row>
             <FormControlLabel

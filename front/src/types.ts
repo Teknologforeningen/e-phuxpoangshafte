@@ -36,6 +36,7 @@ export interface NewUser {
   firstName: string;
   lastName: string;
   fieldOfStudy: string;
+  otherFieldOfStudy: string | null;
   capWithTF: boolean;
 }
 
@@ -123,4 +124,5 @@ export enum FieldOfStudy {
   PRODEKO = 'Produktionsekonomi',
   TFM = 'Teknisk fysik och matematik',
   KOMMUNIKATIONDESIGN = 'Visuell kommunikation och design',
+  OTHER = 'Annat, vad?',
 }

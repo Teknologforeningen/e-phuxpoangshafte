@@ -50,6 +50,7 @@ const UserSettings = () => {
     firstName: currentValues.firstName,
     lastName: currentValues.lastName,
     fieldOfStudy: currentValues.fieldOfStudy,
+    otherFieldOfStudy: null,
     capWithTF: currentValues.capWithTF,
   };
 
@@ -105,9 +106,6 @@ const UserSettings = () => {
   return (
     <form onSubmit={formik.handleSubmit}>
       <Box className={classes.loginSpread}>
-        <Typography textAlign="center" variant={'h4'}>
-          Uppdatera ditt konto
-        </Typography>
         <Box display={'flex'} flexDirection={'column'}>
           <Box margin={0.5} />
           <TextField
@@ -228,6 +226,33 @@ const UserSettings = () => {
             {FieldOfStudyMenuItems}
           </TextField>
           <Box margin={0.5} />
+          {formik.values.fieldOfStudy === FieldOfStudy.OTHER ? (
+            <TextField
+              variant={'filled'}
+              id={'otherFieldOfStudy'}
+              name={'otherFieldOfStudy'}
+              label={'Annan studieinriktning'}
+              aria-label={'Annan studieinriktning'}
+              value={formik.values.otherFieldOfStudy}
+              onChange={formik.handleChange}
+              error={
+                formik.touched.otherFieldOfStudy &&
+                Boolean(formik.errors.otherFieldOfStudy)
+              }
+              helperText={
+                formik.touched.otherFieldOfStudy &&
+                formik.errors.otherFieldOfStudy
+              }
+              className={classes.fields}
+              InputLabelProps={{
+                classes: {
+                  focused: classes.labelFocused,
+                },
+              }}
+            />
+          ) : (
+            <></>
+          )}
           <FormGroup row>
             <FormControlLabel
               className={classes.fields}

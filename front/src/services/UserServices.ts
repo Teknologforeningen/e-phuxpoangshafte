@@ -20,7 +20,7 @@ export const addUser = async (userInfo: NewUser) => {
     email: userInfo.email,
     firstName: userInfo.firstName,
     lastName: userInfo.lastName,
-    fieldOfStudy: userInfo.fieldOfStudy,
+    fieldOfStudy: userInfo.otherFieldOfStudy || userInfo.fieldOfStudy,
     capWithTF: userInfo.capWithTF,
   };
   const response = await axios.post(baseUrl, userToAdd);
@@ -33,7 +33,7 @@ export const updateUser = async (userInfo: NewUser, userID: number) => {
     email: userInfo.email,
     firstName: userInfo.firstName,
     lastName: userInfo.lastName,
-    fieldOfStudy: userInfo.fieldOfStudy,
+    fieldOfStudy: userInfo.otherFieldOfStudy || userInfo.fieldOfStudy,
     capWithTF: userInfo.capWithTF,
   };
   const url = `${baseUrl}/${userID}`;
