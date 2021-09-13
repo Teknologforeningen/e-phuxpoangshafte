@@ -16,8 +16,10 @@ const generateKey = (eventId: string) => {
 };
 
 const validateKey = (eventId: string, hash: string) => {
-  const hashNow = hashGenerator(eventId);
-  const valid = hash === hashNow;
+  const eventHash = hashGenerator(eventId);
+  const encodedHash = encodeURIComponent(eventHash);
+  const hashFromURL = encodeURIComponent(hash);
+  const valid = hashFromURL === encodedHash;
   return valid;
 };
 
@@ -31,8 +33,7 @@ hashRouter.get('/generate/:eventId', (req: Request, res: Response) => {
 hashRouter.get('/validate/:hash', (req: Request, res: Response) => {
   const { hash } = req.params;
   const [eventId, key] = hash.split('-');
-  const decodedKey = decodeURIComponent(key);
-  const keyIsValid = validateKey(eventId, decodedKey);
+  const keyIsValid = validateKey(eventId, key);
   return res.send({ eventId, valid: keyIsValid });
 });
 
