@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { User, EventStatus, NewUser, userRole } from '../types';
+import { User, EventStatus, NewUser, userRole, DoneEvent } from '../types';
 const baseUrl = '/api/users';
 
 export const getAllUsers = async (): Promise<User[]> => {
@@ -41,10 +41,7 @@ export const updateUser = async (userInfo: NewUser, userID: number) => {
   return response.data;
 };
 
-export const addDoneEvent = async (
-  userID: number,
-  eventID: number,
-) => {
+export const addDoneEvent = async (userID: number, eventID: number) => {
   const url = `${baseUrl}/${userID}/done_events/${eventID}`;
   const response = await axios.post(url, null);
   return response.data;
@@ -55,9 +52,9 @@ export const updateUserEventStatus = async (
   eventID: number,
   newStatus: EventStatus,
 ) => {
-  console.log(user)
+  console.log(user);
   const url = `${baseUrl}/${user.id}/done_events/${eventID}`;
   const status = { status: newStatus };
   const response = await axios.put(url, status);
-  return response.data;
+  return response.data as DoneEvent;
 };

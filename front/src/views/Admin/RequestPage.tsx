@@ -1,10 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
 import { Box, Button, Typography } from '@material-ui/core';
 
 import { User, DoneEvent, Event, EventStatus } from '../../types';
 
-import * as AuthSelector from '../../selectors/AuthSelectors';
 import * as UserService from '../../services/UserServices';
 import * as EventService from '../../services/EventServices';
 import { ensure } from '../../utils.ts/HelperFunctions';
