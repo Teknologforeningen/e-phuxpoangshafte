@@ -34,7 +34,13 @@ const QRPage = () => {
     getAndSetQRcode();
   }, [eventId]);
 
-  const QRUrl = `http://localhost:3000/paong/validation/${hash}`;
+  const env =
+    process.env.NODE_ENV === 'development' ? 'development' : 'production';
+  const domain = {
+    development: 'http://localhost:3000',
+    production: 'https://xn--pong-moa.tf.fi/',
+  };
+  const QRUrl = `${domain[env]}/paong/validation/${hash}`;
 
   if (hash === '' || !hash) {
     return <></>;

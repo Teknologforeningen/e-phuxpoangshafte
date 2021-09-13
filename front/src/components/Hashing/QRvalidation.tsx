@@ -1,19 +1,21 @@
 import React, { useEffect, useState } from 'react';
 import { Redirect, useRouteMatch } from 'react-router-dom';
-import { DoneEvent, Event, EventStatus, Routes, User } from '../../types';
+import { DoneEvent, EventStatus, Routes, User } from '../../types';
 import * as HashServices from '../../services/HashServices';
 import * as UserServices from '../../services/UserServices';
 import { useSelector } from 'react-redux';
 import * as AuthSelector from '../../selectors/AuthSelectors';
 import * as EventSelector from '../../selectors/EventSelectors';
-import { CircularProgress, Typography } from '@material-ui/core';
+import { Box, CircularProgress, Theme, Typography } from '@material-ui/core';
 import { ErrorNotification, SuccessNotification } from '../Notifications';
+import { createStyles, makeStyles } from '@material-ui/styles';
 
 interface RouteType {
   hash: string;
 }
 
 const QRvalidation = () => {
+  const classes = useStyles();
   const match = useRouteMatch(Routes.EVENT_VALIDATION);
   const hash = match ? (match.params as RouteType).hash : '';
   const user = useSelector(AuthSelector.auth).userInfo;
@@ -71,14 +73,16 @@ const QRvalidation = () => {
 
   if (!user) {
     return (
-      <Typography>
+      <Typography variant={'h5'}>
         Du måste vara inloggad för att kunna accessa denna sida. Om du är
         inloggad och endå ser det här, var god vänta.
       </Typography>
     );
   }
   if (!done) {
-    <CircularProgress color="secondary" />;
+    <Box className={classes.centerBox}>
+      <CircularProgress color="secondary" className={classes.loadingSpinner} />;
+    </Box>;
   }
   if (done && valid === true) {
     return <Redirect to={Routes.ROOT} />;
@@ -90,5 +94,19 @@ const QRvalidation = () => {
 
   return <></>;
 };
+
+const useStyles = makeStyles((theme: Theme) =>
+  createStyles({
+    centerBox: {
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+    },
+    loadingSpinner: {
+      width: '100%',
+      height: '100%',
+    },
+  }),
+);
 
 export default QRvalidation;
