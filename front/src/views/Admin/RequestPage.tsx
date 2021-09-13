@@ -16,20 +16,11 @@ import {
 const EventRequest = ({ user, event }: { user: User; event: Event }) => {
   const acceptPoint = async () => {
     try {
-      console.log(
-        'FRONTEND: Updating event',
-        event.id,
-        'for user',
-        user.id,
-        'to status',
-        EventStatus.COMPLETED,
-      );
       const updatedEvent = await UserService.updateUserEventStatus(
         user,
         event.id,
         EventStatus.COMPLETED,
       );
-      console.log('Successfully accepted event', updatedEvent);
       SuccessNotification(
         `${event.name} för ${user.firstName} ${user.lastName} har godkännts!`,
       );
@@ -46,7 +37,6 @@ const EventRequest = ({ user, event }: { user: User; event: Event }) => {
   const declinePoint = () => {
     try {
       UserService.updateUserEventStatus(user, event.id, EventStatus.CANCELLED);
-      console.log('Successfully declined event');
       InfoNotification(
         `${event.name} för ${user.firstName} ${user.lastName} har förkastas`,
       );

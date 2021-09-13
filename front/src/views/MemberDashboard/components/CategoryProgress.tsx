@@ -16,7 +16,6 @@ interface Props {
 
 const CategoryProgress = (props: Props) => {
   const classes = useStyles(props);
-  console.log(props.progress);
   const { category, progress, currentAmount, requiredAmount } = props;
   const progressIcon =
     requiredAmount > 0 ? (

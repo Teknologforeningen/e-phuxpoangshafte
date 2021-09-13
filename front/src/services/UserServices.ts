@@ -52,7 +52,6 @@ export const updateUserEventStatus = async (
   eventID: number,
   newStatus: EventStatus,
 ) => {
-  console.log(user);
   const url = `${baseUrl}/${user.id}/done_events/${eventID}`;
   const status = { status: newStatus };
   const response = await axios.put(url, status);

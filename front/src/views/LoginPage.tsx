@@ -63,7 +63,6 @@ const LoginForm = () => {
       history.push('/');
     } catch (e) {
       // TODO: error handling om du ger fel credentials, meddela om de
-      console.log('Error loging in:', e);
       ErrorNotification('Inloggning misslyckades');
     }
   };
