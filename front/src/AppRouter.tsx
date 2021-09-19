@@ -2,7 +2,7 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 import { BrowserRouter, Route, Switch, Redirect } from 'react-router-dom';
 import PrivateRoute from './components/routing/PrivateRoute';
-import { Routes, userRole } from './types';
+import { Routes } from './types';
 import AdminPage from './views/Admin';
 import CategoryPage from './views/Categories/Index';
 import LoginForm from './views/LoginPage';

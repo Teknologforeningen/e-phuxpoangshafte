@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { User, EventStatus, NewUser, userRole, DoneEvent } from '../types';
+import { User, EventStatus, NewUser, UserRole, DoneEvent } from '../types';
 const baseUrl = '/api/users';
 
 export const getAllUsers = async (): Promise<User[]> => {
@@ -15,7 +15,7 @@ export const getSingleUserInfo = async (userId: number): Promise<User> => {
 
 export const addUser = async (userInfo: NewUser) => {
   const userToAdd = {
-    role: userRole.BASIC,
+    role: UserRole.BASIC,
     password: userInfo.password,
     email: userInfo.email,
     firstName: userInfo.firstName,

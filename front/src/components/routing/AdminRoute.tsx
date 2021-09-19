@@ -2,11 +2,11 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 import { Redirect, Route, RouteProps } from 'react-router-dom';
 import * as AuthSelectors from '../../selectors/AuthSelectors';
-import { Routes, userRole } from '../../types';
+import { Routes, UserRole } from '../../types';
 
  const AdminRoute: React.FC<RouteProps> = ({ component: Component, render, ...rest }) => {
   const auth = useSelector(AuthSelectors.auth)
-	if (!auth.userInfo || auth.userInfo.role === userRole.BASIC) {
+	if (!auth.userInfo || auth.userInfo.role === UserRole.BASIC) {
 		const unautharizedRedirect = {
 			to: {
 				pathname: Routes.ROOT,

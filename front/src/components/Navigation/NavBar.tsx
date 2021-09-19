@@ -22,7 +22,7 @@ import { useLocation } from 'react-router-dom';
 
 import * as CategorySelector from '../../selectors/CategorySelectors';
 import * as AuthSelector from '../../selectors/AuthSelectors';
-import { Category, Routes, userRole } from '../../types';
+import { Category, Routes, UserRole } from '../../types';
 
 import LogOutButton from '../routing/LogoutButton';
 import SettingsIcon from '@material-ui/icons/Settings';
@@ -206,7 +206,7 @@ const NavBar = () => {
               </List>
               <Divider />
               <List>{ListOfCategories}</List>
-              {auth.userInfo && auth.userInfo.role === userRole.ADMIN ? (
+              {auth.userInfo && auth.userInfo.role === UserRole.ADMIN ? (
                 <>
                   <Divider />
                   <AdminList />

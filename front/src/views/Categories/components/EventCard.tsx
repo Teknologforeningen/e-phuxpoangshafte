@@ -5,7 +5,7 @@ import {
   Event,
   EventStatus,
   Routes,
-  userRole,
+  UserRole,
 } from '../../../types';
 import * as AuthSelector from '../../../selectors/AuthSelectors';
 import * as UserService from '../../../services/UserServices';
@@ -133,7 +133,7 @@ const EventCard = ({
           </Box>
           {auth.userIsAutharized &&
           unattendedEvent &&
-          auth.userInfo.role !== userRole.ADMIN ? (
+          auth.userInfo.role !== UserRole.ADMIN ? (
             <Button
               variant={'contained'}
               onClick={requestPoint}
@@ -146,7 +146,7 @@ const EventCard = ({
               Väntar på underskrift
             </Typography>
           ) : undefined}
-          {auth.userIsAutharized && auth.userInfo.role === userRole.ADMIN ? (
+          {auth.userIsAutharized && auth.userInfo.role === UserRole.ADMIN ? (
             <Link
               href={`${Routes.EVENT_GENERATION}/${event.id}`}
               underline={'none'}

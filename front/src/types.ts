@@ -13,7 +13,7 @@ export interface EventState {
   events: Event[];
 }
 
-export enum userRole {
+export enum UserRole {
   BASIC = 'BASIC',
   ADMIN = 'ADMIN',
 }
@@ -21,7 +21,7 @@ export enum userRole {
 export interface User {
   token: string;
   id?: number;
-  role: userRole;
+  role: UserRole;
   email: string;
   firstName: string;
   lastName: string;
