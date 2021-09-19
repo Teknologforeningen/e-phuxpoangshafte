@@ -15,7 +15,7 @@ import { FieldOfStudy, NewUser, Routes } from '../types';
 import * as Yup from 'yup';
 import NonAuthNavBar from '../components/Navigation/NonAuthNavBar';
 import { makeStyles, createStyles } from '@material-ui/styles';
-import { SuccessNotification } from '../components/Notifications';
+import { ErrorNotification, SuccessNotification } from '../components/Notifications';
 
 export interface UserFormAttributes extends NewUser {
   confirmPassword: string;
@@ -40,6 +40,7 @@ const SignupPage = () => {
       return response;
     } catch (e) {
       console.error({ message: 'Could not add new user', error: e });
+      ErrorNotification('Registreringen misslyckades')
     }
   };
 
@@ -51,7 +52,7 @@ const SignupPage = () => {
     lastName: '',
     fieldOfStudy: '',
     capWithTF: true,
-    otherFieldOfStudy: null,
+    otherFieldOfStudy: undefined,
   };
 
   const validation = Yup.object({

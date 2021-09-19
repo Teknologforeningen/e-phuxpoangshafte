@@ -36,7 +36,7 @@ export interface NewUser {
   firstName: string;
   lastName: string;
   fieldOfStudy: string;
-  otherFieldOfStudy: string | null;
+  otherFieldOfStudy: string | undefined;
   capWithTF: boolean;
 }
 

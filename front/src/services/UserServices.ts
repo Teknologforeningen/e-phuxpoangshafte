@@ -1,5 +1,12 @@
 import axios from 'axios';
-import { User, EventStatus, NewUser, UserRole, DoneEvent } from '../types';
+import {
+  User,
+  EventStatus,
+  NewUser,
+  UserRole,
+  DoneEvent,
+  FieldOfStudy,
+} from '../types';
 const baseUrl = '/api/users';
 
 export const getAllUsers = async (): Promise<User[]> => {
@@ -33,7 +40,10 @@ export const updateUser = async (userInfo: NewUser, userID: number) => {
     email: userInfo.email,
     firstName: userInfo.firstName,
     lastName: userInfo.lastName,
-    fieldOfStudy: userInfo.otherFieldOfStudy || userInfo.fieldOfStudy,
+    fieldOfStudy:
+      userInfo.fieldOfStudy === FieldOfStudy.OTHER && userInfo.otherFieldOfStudy
+        ? userInfo.otherFieldOfStudy
+        : userInfo.fieldOfStudy,
     capWithTF: userInfo.capWithTF,
   };
   const url = `${baseUrl}/${userID}`;

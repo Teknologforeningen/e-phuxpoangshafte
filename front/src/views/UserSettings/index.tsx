@@ -42,34 +42,41 @@ const UserSettings = () => {
     </MenuItem>
   ));
 
+  const hasListedFieldOfStudy = FieldOfStudyValues.map((item: FieldOfStudy) =>
+    String(item),
+  ).includes(currentValues.fieldOfStudy);
+
   const initial: UserFormAttributes = {
     email: currentValues.email,
     password: '',
     confirmPassword: '',
     firstName: currentValues.firstName,
     lastName: currentValues.lastName,
-    fieldOfStudy: currentValues.fieldOfStudy,
-    otherFieldOfStudy: null,
+    fieldOfStudy: hasListedFieldOfStudy
+      ? currentValues.fieldOfStudy
+      : FieldOfStudy.OTHER,
+    otherFieldOfStudy: !hasListedFieldOfStudy
+      ? currentValues.fieldOfStudy
+      : undefined,
     capWithTF: currentValues.capWithTF,
   };
 
   const validation = Yup.object({
-    email: Yup.string()
-      .email('Måste vara av formen exempel@domain.com')
-      .required('Obligatorisk'),
+    email: Yup.string().email('Måste vara av formen exempel@domain.com'),
     password: Yup.string()
-      .required('Obligatorisk')
       .min(5, 'Lösen ordet måste vara mist 5 tecken långt')
       .oneOf(
         [Yup.ref('confirmPassword'), null],
         'Lösenorden är inte identiska!',
       ),
-    confirmPassword: Yup.string()
-      .required('Lösenorden är inte identiska!')
-      .oneOf([Yup.ref('password'), null], "Passwords don't match!"),
-    firstName: Yup.string().required('Obligatorisk'),
-    lastName: Yup.string().required('Obligatorisk'),
-    fieldOfStudy: Yup.string().required('Obligatorisk'),
+    confirmPassword: Yup.string().oneOf(
+      [Yup.ref('password'), null],
+      "Passwords don't match!",
+    ),
+    firstName: Yup.string(),
+    lastName: Yup.string(),
+    fieldOfStudy: Yup.string(),
+    otherFieldOfStudy: Yup.string(),
   });
   const handleSubmit = async (
     values: UserFormAttributes,
@@ -199,6 +206,7 @@ const UserSettings = () => {
             }}
           />
           <Box margin={0.5} />
+          {console.log(formik.values)}
           <TextField
             select
             variant={'filled'}
