@@ -3,7 +3,6 @@ import { Box, Button, MenuItem, TextField, Theme } from '@material-ui/core';
 import * as CategorySelector from '../../../selectors/CategorySelectors';
 import * as CategoryService from '../../../services/CategoryServices';
 import * as CategoryAction from '../../../actions/CategoryActions';
-import * as AuthSelector from '../../../selectors/AuthSelectors';
 import * as Yup from 'yup';
 import { useDispatch, useSelector } from 'react-redux';
 import { useFormik } from 'formik';
@@ -57,7 +56,7 @@ const EditCategoryForm = () => {
   ) => {
     try {
       const addedCategory = await CategoryService.editCategory(values);
-      //dispatch(CategoryAction.addCategory(addedCategory));
+      dispatch(CategoryAction.addCategory(addedCategory));
       SuccessNotification(`${addedCategory.name} har updaterats!`);
       resetForm({});
     } catch (e) {

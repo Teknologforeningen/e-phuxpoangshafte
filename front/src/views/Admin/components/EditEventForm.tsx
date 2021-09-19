@@ -5,9 +5,7 @@ import {
   Checkbox,
   FormControlLabel,
   FormGroup,
-  InputLabel,
   MenuItem,
-  Select,
   TextField,
   Theme,
 } from '@material-ui/core';

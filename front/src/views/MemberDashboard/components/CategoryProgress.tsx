@@ -1,8 +1,6 @@
 import React from 'react';
 import { Box, Card, CardContent, Tooltip, Typography } from '@material-ui/core';
 import { Category } from '../../../types';
-import LinearProgress from '@material-ui/core/LinearProgress';
-import { withStyles } from '@material-ui/styles';
 import { Done, DoneAll, InfoOutlined as InfoIcon } from '@material-ui/icons/';
 import { createStyles, makeStyles } from '@material-ui/styles';
 import { Theme } from '@material-ui/core/styles';
@@ -31,12 +29,14 @@ const CategoryProgress = (props: Props) => {
     ) : (
       <></>
     );
-  const ThickLinearProgress = withStyles({
+  //Legacy loader bra
+  /*const ThickLinearProgress = withStyles({
     root: {
       height: 16,
       margin: '8px auto',
     },
-  })(LinearProgress);
+  })(LinearProgress);*/
+
   return (
     <Card variant={'outlined'}>
       <CardContent>
