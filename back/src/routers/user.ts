@@ -62,7 +62,7 @@ userRouter.put('/:userID', userExtractor, async (req, res) => {
   const authUser = req.user;
   const body = req.body;
   const userID = req.params.userID;
-  if (authUser.id !== userID && authUser.role !== userRole.ADMIN) {
+  if (!(authUser.id !== userID || authUser.role !== userRole.ADMIN)) {
     return res
       .status(401)
       .json({ error: 'You are not authorized for this page' });
