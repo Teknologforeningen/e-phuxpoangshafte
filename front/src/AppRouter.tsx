@@ -61,7 +61,7 @@ const AppRouter = () => {
                 />
                 <AdminRoute
                   component={QRPage}
-                  path={Routes.EVENT_GENERATION}
+                  path={Routes.SPECIFIC_EVENT_GENERATION}
                   exact
                 />
                 <Route path={'/admin'}>
