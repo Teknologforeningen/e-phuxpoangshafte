@@ -16,6 +16,7 @@ const InstructionsList = () => {
     <ParagraphedListItem
       index={instructions.indexOf(instruction) + 1}
       content={instruction}
+      key={`${instructions.indexOf(instruction) + 1}-index`}
     />
   ));
   return (
