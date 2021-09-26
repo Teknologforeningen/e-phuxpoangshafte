@@ -1,5 +1,12 @@
 import React from 'react';
-import { Box, Card, CardContent, Tooltip, Typography } from '@material-ui/core';
+import {
+  Box,
+  Button,
+  Card,
+  CardContent,
+  Tooltip,
+  Typography,
+} from '@material-ui/core';
 import { Category } from '../../../types';
 import { Done, DoneAll, InfoOutlined as InfoIcon } from '@material-ui/icons/';
 import { createStyles, makeStyles } from '@material-ui/styles';
@@ -13,6 +20,7 @@ interface Props {
 }
 
 const CategoryProgress = (props: Props) => {
+  const [open, setOpen] = React.useState(false);
   const classes = useStyles(props);
   const { category, progress, currentAmount, requiredAmount } = props;
   const progressIcon =
@@ -29,7 +37,7 @@ const CategoryProgress = (props: Props) => {
     ) : (
       <></>
     );
-  //Legacy loader bra
+  //Legacy loader bar
   /*const ThickLinearProgress = withStyles({
     root: {
       height: 16,
@@ -45,8 +53,19 @@ const CategoryProgress = (props: Props) => {
             <Typography className={classes.title} fontWeight="fontWeightBold">
               {category.name}
             </Typography>
-            <Tooltip disableFocusListener title={category.description}>
-              <InfoIcon className={classes.smallInfoIcon} />
+            <Tooltip
+              PopperProps={{
+                disablePortal: true,
+              }}
+              title={category.description}
+              open={open}
+              onClose={() => setOpen(false)}
+              onOpen={() => setOpen(true)}
+            >
+              <InfoIcon
+                className={classes.smallInfoIcon}
+                onClick={() => setOpen(true)}
+              />
             </Tooltip>
           </Box>
           {progressIcon}
