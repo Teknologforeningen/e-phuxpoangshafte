@@ -68,6 +68,7 @@ const QRvalidation = () => {
         (doneEvent: DoneEvent) => doneEvent.eventID === eventId,
       );
       if (!userCompletedEvent) {
+        console.log("Adding and updating")
         const response = addAndUpdateStatus(user, eventId);
         console.log('Response:', response);
         console.log('Event marked done');
@@ -77,6 +78,7 @@ const QRvalidation = () => {
         userCompletedEvent &&
         userCompletedEvent.status !== EventStatus.COMPLETED
       ) {
+        console.log("Updating only")
         updateStatusToCompleted(user, eventId);
         SuccessNotification(`Poänget har markerats gjort`);
       }

@@ -101,13 +101,13 @@ userRouter.delete('/:userID', userExtractor, async (req, res) => {
 
 userRouter.get('/:userID/done_events/', userExtractor, async (req, res) => {
   const authUser = req.user;
-  const userID = req.params.userid;
-  if (authUser.id !== userID || authUser.role !== userRole.ADMIN) {
+  const userId = req.params.userid;
+  if (!(authUser.id !== userId || authUser.role !== userRole.ADMIN)) {
     return res
       .status(401)
       .json({ error: 'You are not authorized for this page' });
   }
-  const done_events = await DoneEvents.findAll({ where: { userID } });
+  const done_events = await DoneEvents.findAll({ where: { userID: userId } });
   res.status(200).json(done_events);
 });
 
@@ -118,7 +118,7 @@ userRouter.post(
     const authUser = req.user as User;
     const userId = Number(req.params.userid);
     const eventId = Number(req.params.eventid);
-    if (authUser.id !== userId && authUser.role !== userRole.ADMIN) {
+    if (!(authUser.id !== userId || authUser.role !== userRole.ADMIN)) {
       return res
         .status(401)
         .json({ error: 'You are not authorized for this page' });
@@ -141,7 +141,7 @@ userRouter.put(
   userExtractor,
   async (req, res) => {
     const authUser = req.user as User;
-    const newStatus = req.body.status;
+    const newStatus = req.body.status as EventStatus;
     const userId: number = Number(req.params.userID);
     const eventId: number = Number(req.params.eventID);
     const event = await DoneEvents.findOne({
@@ -156,7 +156,7 @@ userRouter.put(
 
     switch (newStatus) {
       case EventStatus.CANCELLED: {
-        if (authUser.role !== userRole.ADMIN && authUser.id !== userId) {
+        if (!(authUser.id !== userId || authUser.role !== userRole.ADMIN)) {
           console.log(
             'User does not have permission to updated the event of this user to cancelled',
           );
@@ -182,7 +182,7 @@ userRouter.put(
         }
       }
       case EventStatus.COMPLETED: {
-        if (authUser.role !== userRole.ADMIN) {
+        if (!(authUser.id !== userId || authUser.role !== userRole.ADMIN)) { //TODO: currently possible to complete points for yourself
           console.log(
             'User does not have permission to updated the event of this user to completed',
           );
