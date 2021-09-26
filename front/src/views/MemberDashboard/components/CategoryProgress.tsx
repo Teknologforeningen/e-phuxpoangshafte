@@ -1,16 +1,10 @@
 import React from 'react';
-import {
-  Box,
-  Button,
-  Card,
-  CardContent,
-  Tooltip,
-  Typography,
-} from '@material-ui/core';
-import { Category } from '../../../types';
+import { Box, Card, CardContent, Tooltip, Typography } from '@material-ui/core';
+import { Category, Event } from '../../../types';
 import { Done, DoneAll, InfoOutlined as InfoIcon } from '@material-ui/icons/';
 import { createStyles, makeStyles } from '@material-ui/styles';
 import { Theme } from '@material-ui/core/styles';
+import classnames from 'classnames';
 
 interface Props {
   category: Category;
@@ -19,10 +13,26 @@ interface Props {
   requiredAmount: number;
 }
 
+interface StyleProps extends Props {
+  widthBreakVerified: number;
+}
+
 const CategoryProgress = (props: Props) => {
   const [open, setOpen] = React.useState(false);
-  const classes = useStyles(props);
+
   const { category, progress, currentAmount, requiredAmount } = props;
+  const totalAvailablePoints = category.events.reduce(
+    (sum: number, event: Event) => (event.points ? sum + event.points : sum),
+    0,
+  );
+  const widthBreak: number | null =
+    requiredAmount && totalAvailablePoints > 0
+      ? requiredAmount / totalAvailablePoints
+      : null;
+  const widthBreakVerified = Math.min(widthBreak ? widthBreak * 100 : 0, 100);
+  const widthBreakComplementVerified = 100 - widthBreakVerified;
+  const styleProps: StyleProps = { ...props, widthBreakVerified };
+  const classes = useStyles(styleProps);
   const progressIcon =
     requiredAmount > 0 ? (
       currentAmount > 0 ? (
@@ -77,9 +87,64 @@ const CategoryProgress = (props: Props) => {
         ) : (
           ''
         )}
-        <Box className={classes.wrapper}>
-          <Box>{currentAmount}</Box>
-          <Box className={classes.rightAlignText}>{requiredAmount}</Box>
+        <Box className={classes.barContainer}>
+          <Box
+            className={classnames(
+              classes.wrapper,
+              classes.solidBorder,
+              classes.transparent,
+            )}
+          ></Box>
+          <Box
+            className={classes.wrapper}
+            style={{ width: `${progress}%` }}
+          ></Box>
+          <Box className={classes.flexBox}>
+            {/*Box for amount after required amount*/}
+            {requiredAmount && requiredAmount > 0 ? (
+              <Box
+                className={classnames(
+                  classes.wrapper,
+                  classes.dashedRightBorder,
+                  classes.transparent,
+                )}
+                style={{ width: `${widthBreakVerified}%` }}
+              >
+                <Box className={classes.offsetTextTop}>{currentAmount}</Box>
+                <Box
+                  className={classnames(
+                    classes.rightAlignText,
+                    classes.offsetTextTop,
+                    classes.offsetTextRight,
+                  )}
+                >
+                  {requiredAmount}
+                </Box>
+              </Box>
+            ) : (
+              <></>
+            )}
+            {/*Box for amount after required amount*/}
+            {totalAvailablePoints &&
+            totalAvailablePoints > 0 &&
+            totalAvailablePoints > requiredAmount ? (
+              <Box
+                className={classnames(classes.wrapper, classes.transparent)}
+                style={{ width: `${widthBreakComplementVerified}%` }}
+              >
+                <Box
+                  className={classnames(
+                    classes.rightAlignText,
+                    classes.offsetTextTop,
+                  )}
+                >
+                  {totalAvailablePoints}
+                </Box>
+              </Box>
+            ) : (
+              <></>
+            )}
+          </Box>
         </Box>
         {/*<Box display="flex" alignItems="center">
           <Box width="100%" mr={1}>
@@ -120,14 +185,21 @@ const useStyles = makeStyles((theme: Theme) =>
     smallInfoIcon: {
       fontSize: 'small',
     },
+    barContainer: {
+      display: 'grid',
+      paddingTop: '20px',
+    },
     wrapper: {
+      gridRow: 1,
+      gridColumn: 1,
       position: 'relative',
       display: 'grid',
       alignItem: 'center',
+      flexDirection: 'row',
       gridTemplateColumns: '1fr auto',
       gap: theme.spacing(1),
-      width: '100%',
-      minHeight: '60px',
+      //width: '100%',
+      minHeight: '40px',
       alignSelf: 'stretch',
       padding: theme.spacing(1),
       borderRadius: '5px',
@@ -149,6 +221,31 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     rightAlignText: {
       alignText: 'right',
+    },
+    offsetTextTop: {
+      position: 'relative',
+      top: '-30px',
+    },
+    offsetTextRight: {
+      right: '-20px',
+    },
+    //TODO: test color change
+    dashedRightBorder: {
+      borderRightStyle: 'dashed',
+      borderColor: (props: StyleProps) =>
+        props.progress < props.widthBreakVerified
+          ? theme.palette.secondary.main
+          : theme.palette.primary.main,
+    },
+    solidBorder: {
+      borderStyle: 'solid',
+      borderColor: theme.palette.secondary.main,
+    },
+    transparent: {
+      backgroundColor: 'transparent',
+    },
+    flexBox: {
+      display: 'flex',
     },
   }),
 );

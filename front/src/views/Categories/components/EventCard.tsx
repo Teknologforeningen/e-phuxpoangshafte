@@ -142,8 +142,9 @@ const EventCard = ({
               Underskrift
             </Button>
           ) : eventStatus === 'PENDING' ? (
+            //TODO: Add button for cancling request
             <Typography variant="caption" fontStyle={'italic'}>
-              Väntar på underskrift
+              Väntar på underskrift 
             </Typography>
           ) : undefined}
           {auth.userIsAutharized && auth.userInfo.role === UserRole.ADMIN ? (
