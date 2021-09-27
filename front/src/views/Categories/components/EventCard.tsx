@@ -5,7 +5,7 @@ import {
   Event,
   EventStatus,
   Routes,
-  userRole,
+  UserRole,
 } from '../../../types';
 import * as AuthSelector from '../../../selectors/AuthSelectors';
 import * as UserService from '../../../services/UserServices';
@@ -27,6 +27,7 @@ import {
 } from '../../../components/Notifications';
 import { createStyles, makeStyles } from '@material-ui/styles';
 import classNames from 'classnames';
+import LockIcon from '@material-ui/icons/Lock';
 
 const EventCardTitle = ({
   event,
@@ -40,16 +41,13 @@ const EventCardTitle = ({
     <Box className={classes.horizontalSpacer}>
       <Box className={classes.titleText}>
         <Typography variant={'h6'} color={'secondary'}>
-          {event.name}
-          {event.mandatory && ' *'}
+          {event.name}{' '}
+          {event.mandatory && <LockIcon className={classes.lockIcon} />}
         </Typography>
-
-        {event.points ? (
+        {event.points && (
           <Typography variant={'body2'} className={classes.titleText}>
             {event.points} poäng{' '}
           </Typography>
-        ) : (
-          ''
         )}
       </Box>
       <Box className={classes.titleIcon}>{icon}</Box>
@@ -135,20 +133,21 @@ const EventCard = ({
           </Box>
           {auth.userIsAutharized &&
           unattendedEvent &&
-          auth.userInfo.role !== userRole.ADMIN ? (
+          auth.userInfo.role !== UserRole.ADMIN ? (
             <Button
               variant={'contained'}
               onClick={requestPoint}
               className={classes.actionButton}
             >
-              Anmäl dig
+              Underskrift
             </Button>
           ) : eventStatus === 'PENDING' ? (
+            //TODO: Add button for cancling request
             <Typography variant="caption" fontStyle={'italic'}>
-              Väntar på underskrift
+              Väntar på underskrift 
             </Typography>
           ) : undefined}
-          {auth.userIsAutharized && auth.userInfo.role === userRole.ADMIN ? (
+          {auth.userIsAutharized && auth.userInfo.role === UserRole.ADMIN ? (
             <Link
               href={`${Routes.EVENT_GENERATION}/${event.id}`}
               underline={'none'}
@@ -178,7 +177,9 @@ const useStyles = makeStyles(
       titleText: {
         fontWeight: 800,
       },
-      titleIcon: {},
+      titleIcon: {
+        display: 'flex',
+      },
       incompleteIcon: {
         border: `2px solid black`,
         borderRadius: 24,
@@ -205,6 +206,11 @@ const useStyles = makeStyles(
       },
       selectedCard: {
         border: `2px solid ${theme.palette.secondary.main}`,
+      },
+      lockIcon: {
+        height: 24,
+        width: 12,
+        color: theme.palette.primary.contrastText,
       },
     }),
   { index: 1 },

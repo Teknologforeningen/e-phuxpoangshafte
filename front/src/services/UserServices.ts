@@ -1,5 +1,12 @@
 import axios from 'axios';
-import { User, EventStatus, NewUser, userRole, DoneEvent } from '../types';
+import {
+  User,
+  EventStatus,
+  NewUser,
+  UserRole,
+  DoneEvent,
+  FieldOfStudy,
+} from '../types';
 const baseUrl = '/api/users';
 
 export const getAllUsers = async (): Promise<User[]> => {
@@ -15,12 +22,12 @@ export const getSingleUserInfo = async (userId: number): Promise<User> => {
 
 export const addUser = async (userInfo: NewUser) => {
   const userToAdd = {
-    role: userRole.BASIC,
+    role: UserRole.BASIC,
     password: userInfo.password,
     email: userInfo.email,
     firstName: userInfo.firstName,
     lastName: userInfo.lastName,
-    fieldOfStudy: userInfo.fieldOfStudy,
+    fieldOfStudy: userInfo.otherFieldOfStudy || userInfo.fieldOfStudy,
     capWithTF: userInfo.capWithTF,
   };
   const response = await axios.post(baseUrl, userToAdd);
@@ -33,7 +40,10 @@ export const updateUser = async (userInfo: NewUser, userID: number) => {
     email: userInfo.email,
     firstName: userInfo.firstName,
     lastName: userInfo.lastName,
-    fieldOfStudy: userInfo.fieldOfStudy,
+    fieldOfStudy:
+      userInfo.fieldOfStudy === FieldOfStudy.OTHER && userInfo.otherFieldOfStudy
+        ? userInfo.otherFieldOfStudy
+        : userInfo.fieldOfStudy,
     capWithTF: userInfo.capWithTF,
   };
   const url = `${baseUrl}/${userID}`;

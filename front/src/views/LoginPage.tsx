@@ -61,9 +61,13 @@ const LoginForm = () => {
       resetForm();
       SuccessNotification('Din inloggning lyckades!');
       history.push('/');
-    } catch (e) {
+    } catch (e: any) {
       // TODO: error handling om du ger fel credentials, meddela om de
-      ErrorNotification('Inloggning misslyckades');
+      if (e.code === 401) {
+        ErrorNotification('Fel mail eller lösenord');
+      } else {
+        ErrorNotification('Inloggning misslyckades');
+      }
     }
   };
 

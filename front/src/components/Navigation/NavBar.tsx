@@ -22,7 +22,7 @@ import { useLocation } from 'react-router-dom';
 
 import * as CategorySelector from '../../selectors/CategorySelectors';
 import * as AuthSelector from '../../selectors/AuthSelectors';
-import { Category, Routes, userRole } from '../../types';
+import { Category, Routes, UserRole } from '../../types';
 
 import LogOutButton from '../routing/LogoutButton';
 import SettingsIcon from '@material-ui/icons/Settings';
@@ -33,7 +33,7 @@ const NotLoggedInList = () => {
   const classes = useStyles();
   return (
     <List>
-      <Link key={'login'} href={Routes.LOGIN}>
+      <Link key={'login-link'} href={Routes.LOGIN}>
         <ListItem key={'login'}>
           <ListItemText
             primary={'Logga in'}
@@ -41,7 +41,7 @@ const NotLoggedInList = () => {
           />
         </ListItem>
       </Link>
-      <Link key={'signup'} href={Routes.SIGNUP}>
+      <Link key={'signup-link'} href={Routes.SIGNUP}>
         <ListItem key={'signup'}>
           <ListItemText
             primary={'Registrera dig'}
@@ -57,7 +57,7 @@ const AdminList = () => {
   const classes = useStyles();
   return (
     <List>
-      <Link key={'admin'} href={Routes.ADMIN} variant={'inherit'}>
+      <Link key={'admin-link'} href={Routes.ADMIN} variant={'inherit'}>
         <ListItem key={'admin'}>
           <ListItemText
             primary={'Användartabell'}
@@ -65,7 +65,11 @@ const AdminList = () => {
           />
         </ListItem>
       </Link>
-      <Link key={'requests'} href={Routes.ADMIN_REQUESTS} variant={'inherit'}>
+      <Link
+        key={'requests-link'}
+        href={Routes.ADMIN_REQUESTS}
+        variant={'inherit'}
+      >
         <ListItem key={'requests'}>
           <ListItemText
             primary={'Förfrågningar'}
@@ -73,7 +77,11 @@ const AdminList = () => {
           />
         </ListItem>
       </Link>
-      <Link key={'addmore'} href={Routes.ADMIN_ADDMORE} variant={'inherit'}>
+      <Link
+        key={'addmore-link'}
+        href={Routes.ADMIN_ADDMORE}
+        variant={'inherit'}
+      >
         <ListItem key={'addmore'}>
           <ListItemText
             primary={'Kategorier och poäng'}
@@ -100,6 +108,12 @@ const getNavbarTitle = (
       return (
         categories.find(category => category.id === kategoriId)?.name ?? ''
       );
+    }
+    if (location === Routes.USER_SETTINGS) {
+      return 'Inställningar';
+    }
+    if (location === Routes.INSTRUCTIONS) {
+      return 'Reglemente';
     }
   }
   return '';
@@ -129,11 +143,11 @@ const NavBar = () => {
         .filter(cat => cat.events && cat.events.length > 0)
         .map(cat => (
           <Link
-            key={cat.id}
+            key={`${cat.id}-link`}
             href={Routes.CATEGORY + `/${cat.id}`}
             variant={'inherit'}
           >
-            <ListItem key={cat.id}>
+            <ListItem key={`${cat.name}-name`}>
               <ListItemText
                 primary={cat.name}
                 className={classes.categoryLinks}
@@ -182,7 +196,7 @@ const NavBar = () => {
             <Box textAlign="center">
               <List>
                 <ListItem key="home">
-                  <Link key={'home'} href={Routes.ROOT}>
+                  <Link key={'home-link'} href={Routes.ROOT}>
                     <ListItemText
                       primary={'Hem'}
                       className={classes.categoryLinks}
@@ -190,7 +204,7 @@ const NavBar = () => {
                   </Link>
                 </ListItem>
                 <ListItem key="instructions">
-                  <Link key={'instructions'} href={Routes.INSTRUCTIONS}>
+                  <Link key={'instructions-link'} href={Routes.INSTRUCTIONS}>
                     <ListItemText
                       primary={'Reglemente'}
                       className={classes.categoryLinks}
@@ -200,7 +214,7 @@ const NavBar = () => {
               </List>
               <Divider />
               <List>{ListOfCategories}</List>
-              {auth.userInfo && auth.userInfo.role === userRole.ADMIN ? (
+              {auth.userInfo && auth.userInfo.role === UserRole.ADMIN ? (
                 <>
                   <Divider />
                   <AdminList />
@@ -217,7 +231,7 @@ const NavBar = () => {
             <List>
               <ListItem key={'settings'}>
                 <Link
-                  key={'settings'}
+                  key={'settings-link'}
                   href={Routes.USER_SETTINGS}
                   className={classes.flex}
                 >
@@ -239,7 +253,6 @@ const NavBar = () => {
                 <Box className={classes.iconListItem}>
                   <LogOutButton handleClose={() => toggleDrawer(false)} />
                 </Box>
-                <Typography>Logga ut</Typography>
               </ListItem>
             </List>
           )}

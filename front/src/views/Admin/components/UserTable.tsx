@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 
 import * as UserService from '../../../services/UserServices';
 import * as EventService from '../../../services/EventServices';
-import { User, DoneEvent, Event, EventStatus, userRole } from '../../../types';
+import { User, DoneEvent, Event, EventStatus, UserRole } from '../../../types';
 import {
   DataGrid,
   GridCellParams,
@@ -42,7 +42,7 @@ const UserTable = () => {
     : [{ field: '', headerName: '' }];
 
   const usersNoAdmins = users
-    ? users.filter((user: User) => user.role !== userRole.ADMIN)
+    ? users.filter((user: User) => user.role !== UserRole.ADMIN)
     : undefined;
 
   const rows: GridRowsProp =

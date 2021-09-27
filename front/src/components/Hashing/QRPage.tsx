@@ -21,7 +21,6 @@ const QRPage = () => {
 
   const match = useRouteMatch(`${Routes.EVENT_GENERATION}/:eventId`);
   const eventId = match ? Number((match.params as RouteType).eventId) : 1;
-  console.log(match);
 
   const events = useSelector(EventSelectors.allEvents).events;
   const foundEvent = events.find((event: Event) => event.id === eventId);
@@ -41,7 +40,7 @@ const QRPage = () => {
     development: 'http://localhost:3000',
     production: 'https://xn--pong-moa.tf.fi',
   };
-  const QRUrl = `${domain[env]}/paong/validation/${hash}`;
+  const QRUrl = `${domain[env]}/poang/validation/${hash}`;
 
   if (hash === '' || !hash) {
     return <></>;

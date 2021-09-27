@@ -12,7 +12,6 @@ import {
   MenuItem,
   TextField,
   Theme,
-  Typography,
 } from '@material-ui/core';
 import * as Yup from 'yup';
 import { useFormik } from 'formik';
@@ -43,33 +42,41 @@ const UserSettings = () => {
     </MenuItem>
   ));
 
+  const hasListedFieldOfStudy = FieldOfStudyValues.map((item: FieldOfStudy) =>
+    String(item),
+  ).includes(currentValues.fieldOfStudy);
+
   const initial: UserFormAttributes = {
     email: currentValues.email,
     password: '',
     confirmPassword: '',
     firstName: currentValues.firstName,
     lastName: currentValues.lastName,
-    fieldOfStudy: currentValues.fieldOfStudy,
+    fieldOfStudy: hasListedFieldOfStudy
+      ? currentValues.fieldOfStudy
+      : FieldOfStudy.OTHER,
+    otherFieldOfStudy: !hasListedFieldOfStudy
+      ? currentValues.fieldOfStudy
+      : undefined,
     capWithTF: currentValues.capWithTF,
   };
 
   const validation = Yup.object({
-    email: Yup.string()
-      .email('Måste vara av formen exempel@domain.com')
-      .required('Obligatorisk'),
+    email: Yup.string().email('Måste vara av formen exempel@domain.com'),
     password: Yup.string()
-      .required('Obligatorisk')
       .min(5, 'Lösen ordet måste vara mist 5 tecken långt')
       .oneOf(
         [Yup.ref('confirmPassword'), null],
         'Lösenorden är inte identiska!',
       ),
-    confirmPassword: Yup.string()
-      .required('Lösenorden är inte identiska!')
-      .oneOf([Yup.ref('password'), null], "Passwords don't match!"),
-    firstName: Yup.string().required('Obligatorisk'),
-    lastName: Yup.string().required('Obligatorisk'),
-    fieldOfStudy: Yup.string().required('Obligatorisk'),
+    confirmPassword: Yup.string().oneOf(
+      [Yup.ref('password'), null],
+      "Passwords don't match!",
+    ),
+    firstName: Yup.string(),
+    lastName: Yup.string(),
+    fieldOfStudy: Yup.string(),
+    otherFieldOfStudy: Yup.string(),
   });
   const handleSubmit = async (
     values: UserFormAttributes,
@@ -105,9 +112,6 @@ const UserSettings = () => {
   return (
     <form onSubmit={formik.handleSubmit}>
       <Box className={classes.loginSpread}>
-        <Typography textAlign="center" variant={'h4'}>
-          Uppdatera ditt konto
-        </Typography>
         <Box display={'flex'} flexDirection={'column'}>
           <Box margin={0.5} />
           <TextField
@@ -202,6 +206,7 @@ const UserSettings = () => {
             }}
           />
           <Box margin={0.5} />
+          {console.log(formik.values)}
           <TextField
             select
             variant={'filled'}
@@ -228,6 +233,33 @@ const UserSettings = () => {
             {FieldOfStudyMenuItems}
           </TextField>
           <Box margin={0.5} />
+          {formik.values.fieldOfStudy === FieldOfStudy.OTHER ? (
+            <TextField
+              variant={'filled'}
+              id={'otherFieldOfStudy'}
+              name={'otherFieldOfStudy'}
+              label={'Annan studieinriktning'}
+              aria-label={'Annan studieinriktning'}
+              value={formik.values.otherFieldOfStudy}
+              onChange={formik.handleChange}
+              error={
+                formik.touched.otherFieldOfStudy &&
+                Boolean(formik.errors.otherFieldOfStudy)
+              }
+              helperText={
+                formik.touched.otherFieldOfStudy &&
+                formik.errors.otherFieldOfStudy
+              }
+              className={classes.fields}
+              InputLabelProps={{
+                classes: {
+                  focused: classes.labelFocused,
+                },
+              }}
+            />
+          ) : (
+            <></>
+          )}
           <FormGroup row>
             <FormControlLabel
               className={classes.fields}

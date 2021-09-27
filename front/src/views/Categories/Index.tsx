@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Box } from '@material-ui/core';
+import { Box, useTheme } from '@material-ui/core';
 import { useSelector } from 'react-redux';
 import { useRouteMatch } from 'react-router-dom';
 import * as CategorySelector from '../../selectors/CategorySelectors';
@@ -21,6 +21,7 @@ const CategoryPage = () => {
   const events: Event[] = useSelector(EventSelector.allEvents).events;
   const userInfo: User | undefined = useSelector(AuthSelector.auth).userInfo;
   const [selectedCardId, setSelectedCardId] = useState<number>(1);
+  const theme = useTheme();
 
   if (!category || !events || !userInfo) {
     return <React.Fragment></React.Fragment>;
@@ -68,7 +69,7 @@ const CategoryPage = () => {
     );
   });
   return (
-    <Box>
+    <Box mt={theme.spacing(4)}>
       <h2>{category.name}</h2>
       <i>{category.description}</i>
       <br />
@@ -82,3 +83,43 @@ const CategoryPage = () => {
 };
 
 export default CategoryPage;
+
+/*
+const ColorBox = styled.div<{
+  align?: 'left' | 'right';
+}>`
+  text-align: ${p => p.align || 'left'};
+  z-index: 1;
+`;
+
+const Wrapper = styled.div<{
+  width: number;
+}>`
+  position: relative;
+  display: grid;
+  align-items: center;
+  grid-template-columns: 1fr auto;
+  gap: ${p => p.theme.spacing.small};
+  width: 100%;
+  min-height: 60px;
+  height: 100%;
+  align-self: stretch;
+  padding: ${p => p.theme.spacing.default};
+  border-radius: 5px;
+  font-size: 1rem;
+  font-weight: bold;
+  background-color: ${p => p.theme.colors.grey};
+  transition: background-color 0.5s, opacity 0.1s;
+
+  ::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: ${p => p.width}%;
+    border-radius: ${p => (p.width === 100 ? '5px' : '5px 0 0 5px')};
+    background-color: ${p => p.theme.colors.seaweed};
+  }
+`;
+*/

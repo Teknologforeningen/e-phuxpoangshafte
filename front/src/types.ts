@@ -13,7 +13,7 @@ export interface EventState {
   events: Event[];
 }
 
-export enum userRole {
+export enum UserRole {
   BASIC = 'BASIC',
   ADMIN = 'ADMIN',
 }
@@ -21,7 +21,7 @@ export enum userRole {
 export interface User {
   token: string;
   id?: number;
-  role: userRole;
+  role: UserRole;
   email: string;
   firstName: string;
   lastName: string;
@@ -36,6 +36,7 @@ export interface NewUser {
   firstName: string;
   lastName: string;
   fieldOfStudy: string;
+  otherFieldOfStudy: string | undefined;
   capWithTF: boolean;
 }
 
@@ -84,7 +85,8 @@ export enum Routes {
   SIGNUP = '/signup',
   CATEGORY = '/kategori',
   EVENT_GENERATION = '/poang/generate',
-  EVENT_VALIDATION = '/paong/validation/:hash',
+  SPECIFIC_EVENT_GENERATION = '/poang/generate/:eventId',
+  EVENT_VALIDATION = '/poang/validation/:hash',
   SPECIFIC_CATEGORY = '/kategori/:categoryId',
   ADMIN = '/admin',
   ADMIN_REQUESTS = '/admin/requests',
@@ -123,4 +125,5 @@ export enum FieldOfStudy {
   PRODEKO = 'Produktionsekonomi',
   TFM = 'Teknisk fysik och matematik',
   KOMMUNIKATIONDESIGN = 'Visuell kommunikation och design',
+  OTHER = 'Annat, vad?',
 }

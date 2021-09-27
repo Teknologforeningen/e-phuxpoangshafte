@@ -11,26 +11,23 @@ app.use(express.static('public'));
 
 //credits to https://github.com/Hajoppi for the implementation of this and hashGenerator
 
-const TIME_STEP = 1000;
-
 const generateKey = (eventId: string) => {
-  return hashGenerator(eventId, { timeStep: TIME_STEP });
+  return hashGenerator(eventId);
 };
 
 const validateKey = (eventId: string, hash: string) => {
-  const hashNow = hashGenerator(eventId, { timeStep: TIME_STEP });
-  const hashOld = hashGenerator(eventId, {
-    timeStep: TIME_STEP,
-    timeOffset: TIME_STEP,
-  });
-  const valid = hash === hashNow || hash === hashOld;
+  const eventHash = hashGenerator(eventId);
+  const encodedHash = encodeURIComponent(eventHash);
+  const hashFromURL = encodeURIComponent(hash);
+  const valid = hashFromURL === encodedHash;
   return valid;
 };
 
 hashRouter.get('/generate/:eventId', (req: Request, res: Response) => {
   const { eventId } = req.params;
   const key = generateKey(eventId);
-  return res.send({ hash: `${eventId}-${key}` });
+  const encodedKey = encodeURIComponent(key);
+  return res.send({ hash: `${eventId}-${encodedKey}` });
 });
 
 hashRouter.get('/validate/:hash', (req: Request, res: Response) => {

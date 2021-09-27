@@ -1,4 +1,4 @@
-import { DoneEvent, EventStatus, User } from '../types';
+import { DoneEvent, User } from '../types';
 
 export type AuthActions =
   | UserLogin

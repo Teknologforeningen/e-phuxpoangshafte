@@ -16,7 +16,7 @@ import {
 const EventRequest = ({ user, event }: { user: User; event: Event }) => {
   const acceptPoint = async () => {
     try {
-      const updatedEvent = await UserService.updateUserEventStatus(
+      await UserService.updateUserEventStatus(
         user,
         event.id,
         EventStatus.COMPLETED,

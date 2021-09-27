@@ -1,11 +1,10 @@
 import React from 'react';
 import { Box, Card, CardContent, Tooltip, Typography } from '@material-ui/core';
-import { Category } from '../../../types';
-import LinearProgress from '@material-ui/core/LinearProgress';
-import { withStyles } from '@material-ui/styles';
+import { Category, Event } from '../../../types';
 import { Done, DoneAll, InfoOutlined as InfoIcon } from '@material-ui/icons/';
 import { createStyles, makeStyles } from '@material-ui/styles';
 import { Theme } from '@material-ui/core/styles';
+import classnames from 'classnames';
 
 interface Props {
   category: Category;
@@ -14,9 +13,26 @@ interface Props {
   requiredAmount: number;
 }
 
+interface StyleProps extends Props {
+  widthBreakVerified: number;
+}
+
 const CategoryProgress = (props: Props) => {
-  const classes = useStyles(props);
+  const [open, setOpen] = React.useState(false);
+
   const { category, progress, currentAmount, requiredAmount } = props;
+  const totalAvailablePoints = category.events.reduce(
+    (sum: number, event: Event) => (event.points ? sum + event.points : sum),
+    0,
+  );
+  const widthBreak: number | null =
+    requiredAmount && totalAvailablePoints > 0
+      ? requiredAmount / totalAvailablePoints
+      : null;
+  const widthBreakVerified = Math.min(widthBreak ? widthBreak * 100 : 0, 100);
+  const widthBreakComplementVerified = 100 - widthBreakVerified;
+  const styleProps: StyleProps = { ...props, widthBreakVerified };
+  const classes = useStyles(styleProps);
   const progressIcon =
     requiredAmount > 0 ? (
       currentAmount > 0 ? (
@@ -31,22 +47,35 @@ const CategoryProgress = (props: Props) => {
     ) : (
       <></>
     );
-  const ThickLinearProgress = withStyles({
+  //Legacy loader bar
+  /*const ThickLinearProgress = withStyles({
     root: {
       height: 16,
       margin: '8px auto',
     },
-  })(LinearProgress);
+  })(LinearProgress);*/
+
   return (
-    <Card variant={'outlined'}>
+    <Card variant={'outlined'} className={classes.spacing}>
       <CardContent>
         <Box className={classes.evenlySpacedBox}>
           <Box display="flex" alignItems="center">
             <Typography className={classes.title} fontWeight="fontWeightBold">
               {category.name}
             </Typography>
-            <Tooltip disableFocusListener title={category.description}>
-              <InfoIcon className={classes.smallInfoIcon} />
+            <Tooltip
+              PopperProps={{
+                disablePortal: true,
+              }}
+              title={category.description}
+              open={open}
+              onClose={() => setOpen(false)}
+              onOpen={() => setOpen(true)}
+            >
+              <InfoIcon
+                className={classes.smallInfoIcon}
+                onClick={() => setOpen(true)}
+              />
             </Tooltip>
           </Box>
           {progressIcon}
@@ -58,7 +87,62 @@ const CategoryProgress = (props: Props) => {
         ) : (
           ''
         )}
-        <Box display="flex" alignItems="center">
+        <Box className={classes.barContainer}>
+          <Box
+            className={classnames(
+              classes.wrapper,
+              classes.solidBorder,
+              classes.transparent,
+            )}
+          ></Box>
+          <Box
+            className={classes.wrapper}
+            style={{ width: `${progress}%` }}
+          ></Box>
+          <Box className={classnames(classes.sameGrid, classes.flexBox)}>
+            {/*Box for amount after required amount*/}
+            {requiredAmount && requiredAmount > 0 ? (
+              <Box
+                className={classnames(
+                  classes.wrapper,
+                  classes.dashedRightBorder,
+                  classes.transparent,
+                )}
+                style={{ width: `${widthBreakVerified}%` }}
+              >
+                <Box>{currentAmount}</Box>
+                <Box className={classes.offsetTextTop}>{requiredAmount}</Box>
+              </Box>
+            ) : (
+              <Box
+                className={classnames(
+                  classes.wrapper,
+                  classes.dashedRightBorder,
+                  classes.transparent,
+                )}
+                style={{ width: `${widthBreakVerified}%` }}
+              >
+                <Box>{currentAmount}</Box>
+              </Box>
+            )}
+            {/*Box for amount after required amount*/}
+            {totalAvailablePoints &&
+            totalAvailablePoints > 0 &&
+            totalAvailablePoints > requiredAmount ? (
+              <Box
+                className={classnames(classes.wrapper, classes.transparent)}
+                style={{ width: `${widthBreakComplementVerified}%` }}
+              >
+                <Box className={classes.rightAlignText}>
+                  {totalAvailablePoints}
+                </Box>
+              </Box>
+            ) : (
+              <></>
+            )}
+          </Box>
+        </Box>
+        {/*<Box display="flex" alignItems="center">
           <Box width="100%" mr={1}>
             <ThickLinearProgress
               variant="buffer"
@@ -72,34 +156,87 @@ const CategoryProgress = (props: Props) => {
               color="textSecondary"
             >{`${currentAmount}/${requiredAmount}`}</Typography>
           </Box>
-        </Box>
+        </Box>*/}
       </CardContent>
     </Card>
   );
 };
 
-const useStyles = makeStyles(
-  (theme: Theme) =>
-    createStyles({
-      title: {
-        color: theme.palette.secondary.main,
-        fontSize: '12pt',
-      },
-      subtitle: {
-        color: '#454545',
-        fontSize: '10pt',
-      },
-      evenlySpacedBox: {
-        width: '100%',
-        display: 'flex',
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-      },
-      smallInfoIcon: {
-        fontSize: 'small',
-      },
-    }),
-  { index: 1 },
+const useStyles = makeStyles((theme: Theme) =>
+  createStyles({
+    title: {
+      color: theme.palette.secondary.main,
+      fontSize: '12pt',
+    },
+    subtitle: {
+      color: '#454545',
+      fontSize: '10pt',
+    },
+    evenlySpacedBox: {
+      width: '100%',
+      display: 'flex',
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+    },
+    smallInfoIcon: {
+      fontSize: 'small',
+    },
+    barContainer: {
+      display: 'grid',
+      paddingTop: '20px',
+    },
+    wrapper: {
+      gridRow: 1,
+      gridColumn: 1,
+      position: 'relative',
+      display: 'grid',
+      flexDirection: 'row',
+      gridTemplateColumns: '1fr auto',
+      gap: theme.spacing(1),
+      //width: '100%',
+      minHeight: '40px',
+      alignSelf: 'stretch',
+      padding: theme.spacing(1),
+      borderRadius: '5px',
+      fontSize: '1rem',
+      fontWeight: 'bold',
+      backgroundColor: theme.palette.secondary.main,
+      transition: 'background-color 0.5s, opacity 0.1s',
+    },
+    rightAlignText: {
+      textAlign: 'right',
+    },
+    offsetTextTop: {
+      position: 'relative',
+      right: '-20px',
+      top: '-30px',
+    },
+    //TODO: test color change
+    dashedRightBorder: {
+      borderRightStyle: 'dashed',
+      borderColor: (props: StyleProps) =>
+        props.progress < props.widthBreakVerified
+          ? theme.palette.secondary.main
+          : theme.palette.primary.main,
+    },
+    solidBorder: {
+      borderStyle: 'solid',
+      borderColor: theme.palette.secondary.main,
+    },
+    transparent: {
+      backgroundColor: 'transparent',
+    },
+    flexBox: {
+      display: 'flex',
+    },
+    sameGrid: {
+      gridRow: 1,
+      gridColumn: 1,
+    },
+    spacing: {
+      margin: theme.spacing(2, 0),
+    },
+  }),
 );
 
 export default CategoryProgress;

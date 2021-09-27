@@ -1,6 +1,4 @@
-import { useSelector } from "react-redux";
 import { User, DoneEvent, Event } from "../types";
-import * as EventSelector from '../selectors/EventSelectors'
 
 /**
  * 
