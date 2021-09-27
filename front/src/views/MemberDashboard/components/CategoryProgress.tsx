@@ -56,7 +56,7 @@ const CategoryProgress = (props: Props) => {
   })(LinearProgress);*/
 
   return (
-    <Card variant={'outlined'}>
+    <Card variant={'outlined'} className={classes.spacing}>
       <CardContent>
         <Box className={classes.evenlySpacedBox}>
           <Box display="flex" alignItems="center">
@@ -99,7 +99,7 @@ const CategoryProgress = (props: Props) => {
             className={classes.wrapper}
             style={{ width: `${progress}%` }}
           ></Box>
-          <Box className={classes.flexBox}>
+          <Box className={classnames(classes.sameGrid, classes.flexBox)}>
             {/*Box for amount after required amount*/}
             {requiredAmount && requiredAmount > 0 ? (
               <Box
@@ -110,19 +110,20 @@ const CategoryProgress = (props: Props) => {
                 )}
                 style={{ width: `${widthBreakVerified}%` }}
               >
-                <Box className={classes.offsetTextTop}>{currentAmount}</Box>
-                <Box
-                  className={classnames(
-                    classes.rightAlignText,
-                    classes.offsetTextTop,
-                    classes.offsetTextRight,
-                  )}
-                >
-                  {requiredAmount}
-                </Box>
+                <Box>{currentAmount}</Box>
+                <Box className={classes.offsetTextTop}>{requiredAmount}</Box>
               </Box>
             ) : (
-              <></>
+              <Box
+                className={classnames(
+                  classes.wrapper,
+                  classes.dashedRightBorder,
+                  classes.transparent,
+                )}
+                style={{ width: `${widthBreakVerified}%` }}
+              >
+                <Box>{currentAmount}</Box>
+              </Box>
             )}
             {/*Box for amount after required amount*/}
             {totalAvailablePoints &&
@@ -132,12 +133,7 @@ const CategoryProgress = (props: Props) => {
                 className={classnames(classes.wrapper, classes.transparent)}
                 style={{ width: `${widthBreakComplementVerified}%` }}
               >
-                <Box
-                  className={classnames(
-                    classes.rightAlignText,
-                    classes.offsetTextTop,
-                  )}
-                >
+                <Box className={classes.rightAlignText}>
                   {totalAvailablePoints}
                 </Box>
               </Box>
@@ -194,7 +190,6 @@ const useStyles = makeStyles((theme: Theme) =>
       gridColumn: 1,
       position: 'relative',
       display: 'grid',
-      alignItem: 'center',
       flexDirection: 'row',
       gridTemplateColumns: '1fr auto',
       gap: theme.spacing(1),
@@ -207,27 +202,14 @@ const useStyles = makeStyles((theme: Theme) =>
       fontWeight: 'bold',
       backgroundColor: theme.palette.secondary.main,
       transition: 'background-color 0.5s, opacity 0.1s',
-      '&::before': {
-        content: '',
-        position: 'absolute',
-        top: 0,
-        left: 0,
-        bottom: 0,
-        width: (props: Props) => `${props.progress}%`,
-        borderRadius: (props: Props) =>
-          props.progress === 100 ? '5px' : '5px 0 0 5px',
-        backgroundColor: theme.palette.secondary.main,
-      },
     },
     rightAlignText: {
-      alignText: 'right',
+      textAlign: 'right',
     },
     offsetTextTop: {
       position: 'relative',
-      top: '-30px',
-    },
-    offsetTextRight: {
       right: '-20px',
+      top: '-30px',
     },
     //TODO: test color change
     dashedRightBorder: {
@@ -246,6 +228,13 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     flexBox: {
       display: 'flex',
+    },
+    sameGrid: {
+      gridRow: 1,
+      gridColumn: 1,
+    },
+    spacing: {
+      margin: theme.spacing(2, 0),
     },
   }),
 );
