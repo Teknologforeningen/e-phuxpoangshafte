@@ -44,7 +44,7 @@ const EventCardTitle = ({
           {event.name}{' '}
           {event.mandatory && <LockIcon className={classes.lockIcon} />}
         </Typography>
-        {event.points && (
+        {!!event.points && (
           <Typography variant={'body2'} className={classes.titleText}>
             {event.points} poäng{' '}
           </Typography>
@@ -144,7 +144,7 @@ const EventCard = ({
           ) : eventStatus === 'PENDING' ? (
             //TODO: Add button for cancling request
             <Typography variant="caption" fontStyle={'italic'}>
-              Väntar på underskrift 
+              Väntar på underskrift
             </Typography>
           ) : undefined}
           {auth.userIsAutharized && auth.userInfo.role === UserRole.ADMIN ? (
