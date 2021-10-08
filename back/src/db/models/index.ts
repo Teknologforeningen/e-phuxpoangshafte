@@ -4,11 +4,11 @@ var db: any = {};
 const sequelize = new Sequelize(
   process.env.NODE_ENV !== 'production'
     ? {
-        database: 'phuxdb',
+        database: process.env.DEV_USERNAME,
         dialect: 'postgres',
-        username: 'ephuxpoang',
-        password: 'ephuxpoang',
-        host: 'localhost',
+        username: process.env.DEV_USERNAME,
+        password: process.env.DEV_PASSWORD,
+        host: process.env.DEV_HOST,
         models: [__dirname + '/models'],
       }
     : {
