@@ -1,0 +1,2 @@
+DELETE http://localhost:8000/api/users/done_events/duplicates
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InBodXhpdmF0b3JAdGYuZmkiLCJpZCI6MiwiaWF0IjoxNjMzNzE0Nzc2fQ.H0dACf2ooyMw-ezaSgjNM64VjQb7qywYnNPlqqk2nbc

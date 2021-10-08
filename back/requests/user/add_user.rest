@@ -19,7 +19,7 @@ Content-Type: application/json
 { 
     "role": "ADMIN",
     "email": "phuxivator@tf.fi",
-    "password": "naritet4ever",
+    "password": "123123",
     "firstName": "Phux",
     "lastName": "Ivator",
     "fieldOfStudy": "TF",
