@@ -13,5 +13,5 @@ Content-Type: application/json
 
 { 
     "email": "phuxivator@tf.fi",
-    "password": "naritet4ever"
+    "password": "123123"
 }

@@ -11,6 +11,7 @@ import {
   userRole,
 } from '../types';
 import { userExtractor } from '../utils.ts/middleware';
+import { Op } from 'sequelize';
 
 userRouter.get('/', userExtractor, async (req, res) => {
   const authUser = req.user;
@@ -123,6 +124,20 @@ userRouter.post(
         .status(401)
         .json({ error: 'You are not authorized for this page' });
     }
+    const allDoneEvents = await DoneEvents.findAll({
+      where: { status: { [Op.not]: String(EventStatus.CANCELLED) } },
+    });
+    if (allDoneEvents) {
+      const completed = allDoneEvents
+        .filter(doneEvent => doneEvent.userID === userId)
+        .map(doneEvent => doneEvent.eventID)
+        .includes(eventId);
+      if (completed) {
+        return res.status(400).json({
+          error: 'You have already requested or completed that event',
+        });
+      }
+    }
     const doneEvent: Omit<DoneEventType, 'id'> = {
       status: EventStatus.PENDING,
       timeOfSignup: new Date(),
@@ -182,7 +197,8 @@ userRouter.put(
         }
       }
       case EventStatus.COMPLETED: {
-        if (!(authUser.id !== userId || authUser.role !== userRole.ADMIN)) { //TODO: currently possible to complete points for yourself
+        if (!(authUser.id !== userId || authUser.role !== userRole.ADMIN)) {
+          //TODO: currently possible to complete points for yourself
           console.log(
             'User does not have permission to updated the event of this user to completed',
           );
@@ -198,6 +214,61 @@ userRouter.put(
         return res.status(400).send({ error: 'No such status available' });
     }
     return res.status(200).json(event);
+  },
+);
+
+userRouter.delete(
+  '/done_events/duplicates',
+  userExtractor,
+  async (req, res) => {
+    console.log('Running removal of duplicates');
+    const authUser = req.user;
+    if (authUser.role !== userRole.ADMIN) {
+      return res
+        .status(401)
+        .json({ error: 'You are not authorized for this page' });
+    }
+    let doneEvents = await DoneEvents.findAll({
+      where: { status: { [Op.not]: String(EventStatus.CANCELLED) } },
+    });
+    let ids_to_remove = <number[]>[];
+    for (const currentEvent of doneEvents) {
+      const doneEventClone = doneEvents.filter(
+        doneEvent => !ids_to_remove.includes(doneEvent.id),
+      );
+      let duplicates = doneEventClone.filter(
+        doneEvent =>
+          doneEvent.eventID === currentEvent.eventID &&
+          doneEvent.userID === currentEvent.userID,
+      );
+      const eventCompleted = duplicates.find(
+        doneEvent => doneEvent.status === EventStatus.COMPLETED,
+      );
+      if (duplicates.length > 0) {
+        if (eventCompleted) {
+          duplicates = duplicates.filter(
+            doneEvent => doneEvent.id !== eventCompleted.id,
+          );
+        } else {
+          duplicates.shift();
+        }
+        duplicates.forEach(duplicate => ids_to_remove.push(duplicate.id));
+      }
+    }
+    if (ids_to_remove.length > 0) {
+      ids_to_remove.forEach(async (id: number) => {
+        const doneEventToDelete = await DoneEvents.findByPk(id);
+        const deleted = await doneEventToDelete.destroy();
+        Promise.resolve(deleted);
+      });
+      // Unclear if this row does anything or if the for loop is generated at init and this only slows it down
+      doneEvents = doneEvents.filter(
+        doneEvent => !ids_to_remove.includes(doneEvent.id),
+      );
+    }
+    return res
+      .status(200)
+      .json({ removedAmount: ids_to_remove.length, removed: ids_to_remove });
   },
 );
 
