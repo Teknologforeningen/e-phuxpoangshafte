@@ -95,9 +95,10 @@ const UserTable = () => {
   };
 
   return (
-    <div style={{ height: 400, width: '100%' }} className={classes.DataGrid}>
+    <div className={classes.DataGrid}>
       <div style={{ display: 'flex', height: '100%' }}>
         <DataGrid
+          autoHeight
           rows={[...rows]}
           columns={columnsWithNames}
           getCellClassName={cellClassNames}
@@ -116,6 +117,7 @@ const useStyles = makeStyles((theme: Theme) =>
       color: theme.palette.secondary.main,
     },
     DataGrid: {
+      width: '100%',
       '& .NOSTATUS': {
         backgroundColor: '#004777',
       },
