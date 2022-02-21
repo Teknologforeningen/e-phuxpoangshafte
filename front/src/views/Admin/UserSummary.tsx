@@ -118,12 +118,20 @@ const UserSummary = () => {
       'Användarens hela namn. Grön ifall alla kategorier uppfyller poängkraven.',
     width: 150,
     cellClassName: params =>
-      params.row.pointsByCategory.every(
-        (p: { categoryId: number; points: number }) => {
-          const category = categories.find(category => p.categoryId)!;
-          return (p.points ?? 0) >= (category.minPoints ?? 0);
-        },
-      ) && 'all_categories_check',
+      categories.every(category => {
+        const pointsInCategory:
+          | {
+              categoryId: number;
+              points: number | undefined;
+            }
+          | undefined = params.row.pointsByCategory.find(
+          (p: { categoryId: number; points: number | undefined }) =>
+            p.categoryId === category.id,
+        );
+        return (pointsInCategory?.points ?? 0) >= (category.minPoints ?? 0);
+      })
+        ? 'all_categories_check'
+        : '',
   };
 
   const categoryColumns: GridColDef[] = categories.map(category => {
@@ -184,18 +192,11 @@ const UserSummary = () => {
 
   return (
     <>
-      {userToShow && (
-        <UserCard
-          user={users.find(user => user.id === userToShow)!}
-          allEvents={events}
-          allCategories={categories}
-          clearUserId={() => setUserToShow(undefined)}
-        />
-      )}
       <div className={classes.DataGrid}>
         <div style={{ display: 'flex', height: '100%' }}>
           <DataGrid
             autoHeight
+            pageSize={10}
             rows={usersWithCompletedPoints}
             columns={columnsWithNames}
             onRowClick={(params, event) => {
@@ -205,6 +206,14 @@ const UserSummary = () => {
           />
         </div>
       </div>
+      {userToShow && (
+        <UserCard
+          user={users.find(user => user.id === userToShow)!}
+          allEvents={events}
+          allCategories={categories}
+          clearUserId={() => setUserToShow(undefined)}
+        />
+      )}
     </>
   );
 };
