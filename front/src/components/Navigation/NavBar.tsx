@@ -66,6 +66,18 @@ const AdminList = () => {
         </ListItem>
       </Link>
       <Link
+        key={'admin-summary'}
+        href={Routes.ADMIN_SUMMARY}
+        variant={'inherit'}
+      >
+        <ListItem key={'admin_summary'}>
+          <ListItemText
+            primary={'Sammanställning'}
+            className={classes.categoryLinks}
+          />
+        </ListItem>
+      </Link>
+      <Link
         key={'requests-link'}
         href={Routes.ADMIN_REQUESTS}
         variant={'inherit'}

@@ -2,7 +2,7 @@ import React from 'react';
 import { useDispatch } from 'react-redux';
 import { userLogin } from '../actions';
 import * as AuthServices from '../services/AuthServices';
-import { localStorageSetter } from '../utils.ts/localStorage';
+import { localStorageSetter } from '../utils/localStorage';
 import {
   Box,
   TextField,

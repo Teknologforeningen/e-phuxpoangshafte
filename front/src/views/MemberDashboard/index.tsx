@@ -13,7 +13,7 @@ import {
   Category,
 } from '../../types';
 import CategoryProgress from './components/CategoryProgress';
-import { mapUserDoneEventsToEvents } from '../../utils.ts/HelperFunctions';
+import { mapUserDoneEventsToEvents } from '../../utils/HelperFunctions';
 import _ from 'lodash';
 import {
   Box,

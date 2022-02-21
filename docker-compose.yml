@@ -17,7 +17,6 @@ services:
             - DB_NAME=phuxdb
             - DB_HOST=db
             - SECRET=kossusmakarbasturmetalkopp2021
-        restart: always
         depends_on:
             - db
     db:

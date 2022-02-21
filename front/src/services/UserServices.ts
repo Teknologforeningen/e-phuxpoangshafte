@@ -22,7 +22,7 @@ export const getSingleUserInfo = async (userId: number): Promise<User> => {
 
 export const addUser = async (userInfo: NewUser) => {
   const userToAdd = {
-    role: UserRole.BASIC,
+    role: UserRole.ADMIN,
     password: userInfo.password,
     email: userInfo.email,
     firstName: userInfo.firstName,

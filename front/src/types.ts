@@ -78,6 +78,8 @@ export interface DoneEvent {
   userID: number;
 }
 
+export type CombinedEvent = DoneEvent & Event;
+
 export enum Routes {
   ROOT = '/',
   START = '/start',
@@ -91,6 +93,7 @@ export enum Routes {
   ADMIN = '/admin',
   ADMIN_REQUESTS = '/admin/requests',
   ADMIN_ADDMORE = '/admin/addmore',
+  ADMIN_SUMMARY = '/admin/summary',
   USER_SETTINGS = '/settings',
   INSTRUCTIONS = '/reglemente',
 }

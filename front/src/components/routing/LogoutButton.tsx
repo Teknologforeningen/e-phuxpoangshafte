@@ -4,7 +4,7 @@ import { Redirect } from 'react-router-dom';
 import {
   localStorageDeleter,
   localStorageGetter,
-} from '../../utils.ts/localStorage';
+} from '../../utils/localStorage';
 import { Typography, Box, Theme } from '@material-ui/core';
 import * as AuthActions from '../../actions/AuthActions';
 import { InfoNotification } from '../Notifications';

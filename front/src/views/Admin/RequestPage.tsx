@@ -5,7 +5,7 @@ import { User, DoneEvent, Event, EventStatus } from '../../types';
 
 import * as UserService from '../../services/UserServices';
 import * as EventService from '../../services/EventServices';
-import { ensure } from '../../utils.ts/HelperFunctions';
+import { ensure } from '../../utils/HelperFunctions';
 import Togglable from '../../components/UI/Togglable';
 import {
   ErrorNotification,

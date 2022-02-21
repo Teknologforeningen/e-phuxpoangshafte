@@ -102,6 +102,7 @@ const UserTable = () => {
           rows={[...rows]}
           columns={columnsWithNames}
           getCellClassName={cellClassNames}
+          hideFooterSelectedRowCount={true}
         />
       </div>
     </div>

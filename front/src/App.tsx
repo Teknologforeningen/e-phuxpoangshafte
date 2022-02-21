@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
-import { localStorageGetter } from './utils.ts/localStorage';
+import { localStorageGetter } from './utils/localStorage';
 import { Box } from '@material-ui/core';
 import {
   initCategories,
