@@ -62,7 +62,7 @@ const UserSummary = () => {
   };
 
   const usersNoAdmins = users.filter(
-    (user: User) => true, //user.role !== UserRole.ADMIN,
+    (user: User) => user.role !== UserRole.ADMIN,
   );
 
   const getPointsByCategoryFromCompletedEvents = (
