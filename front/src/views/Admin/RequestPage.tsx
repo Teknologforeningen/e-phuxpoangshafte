@@ -4,7 +4,7 @@ import { Box, Button, Typography } from '@material-ui/core';
 import { User, DoneEvent, Event, EventStatus } from '../../types';
 
 import * as UserService from '../../services/UserServices';
-import * as EventService from '../../services/EventServices';
+import * as EventSelector from '../../selectors/EventSelectors';
 import { ensure } from '../../utils/HelperFunctions';
 import Togglable from '../../components/UI/Togglable';
 import {
@@ -12,6 +12,8 @@ import {
   InfoNotification,
   SuccessNotification,
 } from '../../components/Notifications';
+import { orderBy } from 'lodash';
+import { useSelector } from 'react-redux';
 
 const EventRequest = ({ user, event }: { user: User; event: Event }) => {
   const acceptPoint = async () => {
@@ -68,7 +70,8 @@ const UserRequests = ({ user, events }: { user: User; events: Event[] }) => {
   const userEvents = user.events.map((dv: DoneEvent) =>
     ensure(events.find((event: Event) => event.id === dv.eventID)),
   );
-  const eventsWithRequests = userEvents.map((event: Event) =>
+  const userEventsOrderedByStartDate = orderBy(userEvents, 'startTime', 'desc');
+  const eventsWithRequests = userEventsOrderedByStartDate.map((event: Event) =>
     event ? (
       <EventRequest
         key={`user${user.id}+event${event.id}`}
@@ -98,17 +101,17 @@ const UserRequests = ({ user, events }: { user: User; events: Event[] }) => {
 
 const RequestPage = () => {
   const [users, setUsers] = useState<User[] | undefined>();
-  const [events, setEvents] = useState<Event[] | undefined>();
+  const events: Event[] = useSelector(EventSelector.allEvents).events;
   useEffect(() => {
-    const getEvents = async () => {
-      const response = await EventService.getAllEvents();
-      setEvents(response);
-    };
     const getUsers = async () => {
       const response = await UserService.getAllUsers();
-      setUsers(response);
+      const users = orderBy(
+        response,
+        ['lastName', 'firstName'],
+        ['asc', 'asc'],
+      );
+      setUsers(users);
     };
-    getEvents();
     getUsers();
   }, [users]);
 

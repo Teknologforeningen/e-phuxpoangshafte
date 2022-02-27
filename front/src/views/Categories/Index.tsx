@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Box, useTheme } from '@material-ui/core';
 import { useSelector } from 'react-redux';
 import { useRouteMatch } from 'react-router-dom';
@@ -18,10 +18,16 @@ const CategoryPage = () => {
   const category: Category = useSelector(state =>
     CategorySelector.categoryById(state, categoryID),
   );
-  const events: Event[] = useSelector(EventSelector.allEvents).events;
+  const events: Event[] = useSelector(
+    EventSelector.allEventsOrderedByStartTime,
+  );
   const userInfo: User | undefined = useSelector(AuthSelector.auth).userInfo;
-  const [selectedCardId, setSelectedCardId] = useState<number>(1);
+  const [selectedCardId, setSelectedCardId] = useState<number>(0);
   const theme = useTheme();
+
+  useEffect(() => {
+    events.length > 0 && setSelectedCardId(events[0].id);
+  }, [events]);
 
   if (!category || !events || !userInfo) {
     return <React.Fragment></React.Fragment>;

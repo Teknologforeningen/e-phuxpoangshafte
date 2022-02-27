@@ -7,9 +7,10 @@ import {
   GridColDef,
   MuiEvent,
 } from '@material-ui/data-grid';
+import { useSelector } from 'react-redux';
 import * as UserService from '../../services/UserServices';
-import * as EventService from '../../services/EventServices';
-import * as CategoryService from '../../services/CategoryServices';
+import * as EventSelector from '../../selectors/EventSelectors';
+import * as CategorySelector from '../../selectors/CategorySelectors';
 import {
   Event,
   User,
@@ -18,31 +19,31 @@ import {
   Category,
   CombinedEvent,
 } from '../../types';
-import { groupBy } from 'lodash';
+import { groupBy, orderBy } from 'lodash';
 import UserCard from './components/UserCard';
 
 const UserSummary = () => {
   const classes = useStyles();
-  const [events, setEvents] = useState<Event[] | undefined>();
+  const events: Event[] = useSelector(
+    EventSelector.allEventsOrderedByStartTime,
+  );
+  const categories: Category[] = useSelector(
+    CategorySelector.allCategoriesOrderedByNameAsc,
+  );
+
   const [users, setUsers] = useState<User[] | undefined>();
-  const [categories, setCategories] = useState<Category[] | undefined>();
   const [userToShow, setUserToShow] = useState<number | undefined>();
   useEffect(() => {
-    const getEvents = async () => {
-      const response = await EventService.getAllEvents();
-      setEvents(response);
-    };
     const getUsers = async () => {
       const response = await UserService.getAllUsers();
-      setUsers(response);
+      const users = orderBy(
+        response,
+        ['lastName', 'firstName'],
+        ['asc', 'asc'],
+      );
+      setUsers(users);
     };
-    const getCategies = async () => {
-      const response = await CategoryService.getAllCategories();
-      setCategories(response);
-    };
-    getEvents();
     getUsers();
-    getCategies();
   }, []);
 
   if (!events || !users || !categories) {

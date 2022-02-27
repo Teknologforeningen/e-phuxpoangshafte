@@ -1,8 +1,4 @@
 import React, { useEffect, useState } from 'react';
-
-import * as UserService from '../../../services/UserServices';
-import * as EventService from '../../../services/EventServices';
-import { User, DoneEvent, Event, EventStatus, UserRole } from '../../../types';
 import {
   DataGrid,
   GridCellParams,
@@ -11,21 +7,28 @@ import {
 } from '@material-ui/data-grid';
 import { createStyles, makeStyles } from '@material-ui/styles';
 import { Theme } from '@material-ui/core';
+import { useSelector } from 'react-redux';
+import { orderBy } from 'lodash';
+import * as UserService from '../../../services/UserServices';
+import * as EventSelector from '../../../selectors/EventSelectors';
+import { User, DoneEvent, Event, EventStatus, UserRole } from '../../../types';
 
 const UserTable = () => {
   const classes = useStyles();
-  const [events, setEvents] = useState<Event[] | undefined>();
+  const events: Event[] = useSelector(
+    EventSelector.allEventsOrderedByStartTime,
+  );
   const [users, setUsers] = useState<User[] | undefined>();
   useEffect(() => {
-    const getEvents = async () => {
-      const response = await EventService.getAllEvents();
-      setEvents(response);
-    };
     const getUsers = async () => {
       const response = await UserService.getAllUsers();
-      setUsers(response);
+      const users = orderBy(
+        response,
+        ['lastName', 'firstName'],
+        ['asc', 'asc'],
+      );
+      setUsers(users);
     };
-    getEvents();
     getUsers();
   }, []);
 
