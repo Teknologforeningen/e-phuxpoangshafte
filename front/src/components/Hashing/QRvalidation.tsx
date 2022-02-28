@@ -4,7 +4,7 @@ import { DoneEvent, EventStatus, Routes, User } from '../../types';
 import * as HashServices from '../../services/HashServices';
 import * as UserServices from '../../services/UserServices';
 import { useSelector } from 'react-redux';
-import * as AuthSelector from '../../selectors/AuthSelectors';
+import { auth } from '../../selectors/AuthSelectors';
 import * as EventSelector from '../../selectors/EventSelectors';
 import { Box, CircularProgress, Theme, Typography } from '@material-ui/core';
 import { ErrorNotification, SuccessNotification } from '../Notifications';
@@ -18,7 +18,7 @@ const QRvalidation = () => {
   const classes = useStyles();
   const match = useRouteMatch(Routes.EVENT_VALIDATION);
   const hash = match ? (match.params as RouteType).hash : '';
-  const user = useSelector(AuthSelector.auth).userInfo;
+  const user = useSelector(auth).userInfo;
   const [valid, setValid] = useState<boolean | null>(null);
   const [eventId, seteventId] = useState<number | null>(null);
   const [done, setDone] = useState<boolean>(false);
@@ -68,7 +68,7 @@ const QRvalidation = () => {
         (doneEvent: DoneEvent) => doneEvent.eventID === eventId,
       );
       if (!userCompletedEvent) {
-        console.log("Adding and updating")
+        console.log('Adding and updating');
         const response = addAndUpdateStatus(user, eventId);
         console.log('Response:', response);
         console.log('Event marked done');
@@ -78,7 +78,7 @@ const QRvalidation = () => {
         userCompletedEvent &&
         userCompletedEvent.status !== EventStatus.COMPLETED
       ) {
-        console.log("Updating only")
+        console.log('Updating only');
         updateStatusToCompleted(user, eventId);
         SuccessNotification(`Poänget har markerats gjort`);
       }

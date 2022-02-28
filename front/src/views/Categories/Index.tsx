@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Box, useTheme } from '@material-ui/core';
 import { useSelector } from 'react-redux';
 import { useRouteMatch } from 'react-router-dom';
 import * as CategorySelector from '../../selectors/CategorySelectors';
 import * as EventSelector from '../../selectors/EventSelectors';
-import * as AuthSelector from '../../selectors/AuthSelectors';
-import { User, Category, DoneEvent, Event, EventStatus } from '../../types';
+import { auth } from '../../selectors/AuthSelectors';
+import { User, Category, DoneEvent, Event } from '../../types';
 import EventCard from './components/EventCard';
 
 interface RouteType {
@@ -26,33 +26,9 @@ const CategoryPage = () => {
     EventSelector.eventsInCategory(categoryID),
   );
 
-  const userInfo: User | undefined = useSelector(AuthSelector.auth).userInfo;
-
-  const theme = useTheme();
-
-  const userCompletedEvents = userInfo?.events.filter(
-    (event: DoneEvent) => event.status === EventStatus.COMPLETED,
+  const completedEventsInCategoryCastedToEvents = useSelector(
+    EventSelector.completedEventsInCategoryCastedToEvents(categoryID),
   );
-
-  const completedEventsInCategory = userCompletedEvents?.filter(
-    (doneEvent: DoneEvent) => {
-      return eventsInCategory
-        .map((event: Event) => event.id)
-        .includes(doneEvent.eventID);
-    },
-  );
-
-  const completedEventsInCategoryCastedToEvents =
-    completedEventsInCategory?.map((doneEvent: DoneEvent) =>
-      eventsInCategory.find((event: Event) => doneEvent.eventID === event.id),
-    );
-  const completedPointsInCategory: number =
-    completedEventsInCategoryCastedToEvents
-      ?.map((event: Event | undefined) => (event ? event.points : 0))
-      .reduce(
-        (acc: number, cur: number | undefined) => (cur ? acc + cur : acc),
-        0,
-      ) ?? 0;
 
   const firstEventNotCompleted = eventsInCategory.find(
     (event: Event) =>
@@ -61,13 +37,31 @@ const CategoryPage = () => {
       ),
   );
 
-  const [selectedCardId, setSelectedCardId] = useState<number>(
-    firstEventNotCompleted?.id ?? events[0].id ?? 0,
-  );
+  const userInfo: User | undefined = useSelector(auth).userInfo;
 
-  if (!userInfo) {
+  const theme = useTheme();
+
+  const [selectedCardId, setSelectedCardId] = useState<number>(0);
+
+  useEffect(() => {
+    firstEventNotCompleted
+      ? setSelectedCardId(firstEventNotCompleted.id)
+      : events.length > 0
+      ? setSelectedCardId(events[0].id)
+      : setSelectedCardId(0);
+  }, [firstEventNotCompleted, events]);
+
+  if (!userInfo || !category || !events) {
     return <React.Fragment></React.Fragment>;
   }
+
+  const completedPointsInCategory: number =
+    completedEventsInCategoryCastedToEvents
+      ?.map((event: Event | undefined) => (event ? event.points : 0))
+      .reduce(
+        (acc: number, cur: number | undefined) => (cur ? acc + cur : acc),
+        0,
+      ) ?? 0;
 
   const renderEvent = (event: Event) => {
     const complitionStatus = userInfo.events.find(

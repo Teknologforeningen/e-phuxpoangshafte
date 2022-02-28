@@ -21,7 +21,7 @@ import { useSelector } from 'react-redux';
 import { useLocation } from 'react-router-dom';
 
 import * as CategorySelector from '../../selectors/CategorySelectors';
-import * as AuthSelector from '../../selectors/AuthSelectors';
+import { auth } from '../../selectors/AuthSelectors';
 import { Category, Routes, UserRole } from '../../types';
 
 import LogOutButton from '../routing/LogoutButton';
@@ -134,7 +134,7 @@ const getNavbarTitle = (
 const NavBar = () => {
   const classes = useStyles();
   const categoriesState = useSelector(CategorySelector.allCategories);
-  const auth = useSelector(AuthSelector.auth);
+  const authentication = useSelector(auth);
   const [drawerOpen, toggleDrawer] = useState<boolean>(false);
   const anchor = 'left';
 
@@ -146,7 +146,7 @@ const NavBar = () => {
 
   const navbarTitle = getNavbarTitle(
     location.pathname,
-    auth.userIsAutharized,
+    authentication.userIsAutharized,
     categoriesState.categories,
   );
 
@@ -204,7 +204,7 @@ const NavBar = () => {
       >
         <Box className={classes.topPadding}></Box>
         <Box className={classes.sideBarSpacer}>
-          {auth.userIsAutharized ? (
+          {authentication.userIsAutharized ? (
             <Box textAlign="center">
               <List>
                 <ListItem key="home">
@@ -226,7 +226,7 @@ const NavBar = () => {
               </List>
               <Divider />
               <List>{ListOfCategories}</List>
-              {auth.userInfo && auth.userInfo.role === UserRole.ADMIN ? (
+              {authentication.userInfo?.role === UserRole.ADMIN ? (
                 <>
                   <Divider />
                   <AdminList />
@@ -239,7 +239,7 @@ const NavBar = () => {
             <NotLoggedInList />
           )}
 
-          {auth.userIsAutharized && (
+          {authentication.userIsAutharized && (
             <List>
               <ListItem key={'settings'}>
                 <Link

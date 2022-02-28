@@ -7,7 +7,7 @@ import {
   Routes,
   UserRole,
 } from '../../../types';
-import * as AuthSelector from '../../../selectors/AuthSelectors';
+import { auth } from '../../../selectors/AuthSelectors';
 import * as UserService from '../../../services/UserServices';
 import * as AuthActions from '../../../actions/AuthActions';
 import {
@@ -68,18 +68,18 @@ const EventCard = ({
 }) => {
   const classes = useStyles();
   const dispatch = useDispatch();
-  const auth = useSelector(AuthSelector.auth);
+  const authentication = useSelector(auth);
 
-  if (!auth.userInfo) {
+  if (!authentication.userInfo) {
     return <React.Fragment></React.Fragment>;
   }
 
   const requestPoint = async () => {
     try {
-      if (auth.userInfo && auth.userInfo.id) {
+      if (authentication.userInfo?.id) {
         //For type guard, the button isn't rendered in case no user is autherized
         const addedDoneEvent = (await UserService.addDoneEvent(
-          auth.userInfo.id,
+          authentication.userInfo.id,
           event.id,
         )) as DoneEvent;
         dispatch(AuthActions.addUserEvent(addedDoneEvent));
@@ -91,11 +91,11 @@ const EventCard = ({
     }
   };
 
-  const eventStatus = auth.userInfo.events.find(
+  const eventStatus = authentication.userInfo.events.find(
     (dv: DoneEvent) => dv.eventID === event.id,
   )?.status;
 
-  const unattendedEvent = !auth.userInfo.events.find(
+  const unattendedEvent = !authentication.userInfo.events.find(
     (dv: DoneEvent) => dv.eventID === event.id,
   );
 
@@ -131,9 +131,9 @@ const EventCard = ({
                 : ''}
             </Typography>
           </Box>
-          {auth.userIsAutharized &&
+          {authentication.userIsAutharized &&
           unattendedEvent &&
-          auth.userInfo.role !== UserRole.ADMIN ? (
+          authentication.userInfo.role !== UserRole.ADMIN ? (
             <Button
               variant={'contained'}
               onClick={requestPoint}
@@ -147,7 +147,8 @@ const EventCard = ({
               Väntar på underskrift
             </Typography>
           ) : undefined}
-          {auth.userIsAutharized && auth.userInfo.role === UserRole.ADMIN ? (
+          {authentication.userIsAutharized &&
+          authentication.userInfo.role === UserRole.ADMIN ? (
             <Link
               href={`${Routes.EVENT_GENERATION}/${event.id}`}
               underline={'none'}

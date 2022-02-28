@@ -8,7 +8,7 @@ import CategoryPage from './views/Categories/Index';
 import LoginForm from './views/LoginPage';
 import MemberDashboard from './views/MemberDashboard';
 import SignupPage from './views/SignupPage';
-import * as AuthSelector from './selectors/AuthSelectors';
+import { auth } from './selectors/AuthSelectors';
 import { Box, CircularProgress, Theme } from '@material-ui/core';
 import UserSettings from './views/UserSettings';
 import { makeStyles, createStyles } from '@material-ui/styles';
@@ -21,7 +21,7 @@ import AdminRoute from './components/routing/AdminRoute';
 
 const AppRouter = () => {
   const classes = useStyles();
-  const auth = useSelector(AuthSelector.auth);
+  const authentication = useSelector(auth);
 
   return (
     <Box>
@@ -40,7 +40,7 @@ const AppRouter = () => {
             <QRvalidation />
           </Route>
 
-          {auth.userIsAutharized ? (
+          {authentication.userIsAutharized ? (
             <Box className={classes.flex}>
               <NavBar />
               <Box className={classes.content}>
@@ -74,7 +74,7 @@ const AppRouter = () => {
                 />
               </Box>
             </Box>
-          ) : auth.userIsAutharized === null ? (
+          ) : authentication.userIsAutharized === null ? (
             <Box className={classes.centerBox}>
               <CircularProgress color={'secondary'} />
             </Box>

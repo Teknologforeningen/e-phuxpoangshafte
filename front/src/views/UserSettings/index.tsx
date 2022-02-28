@@ -1,6 +1,6 @@
 import React from 'react';
 import * as UserService from '../../services/UserServices';
-import * as AuthSelector from '../../selectors/AuthSelectors';
+import { auth } from '../../selectors/AuthSelectors';
 import { useSelector } from 'react-redux';
 import { FieldOfStudy, NewUser } from '../../types';
 import {
@@ -23,16 +23,20 @@ export interface UserFormAttributes extends NewUser {
 }
 
 const UserSettings = () => {
-  const auth = useSelector(AuthSelector.auth);
+  const authentication = useSelector(auth);
   const classes = useStyles();
   const currentValues = {
-    email: auth.userInfo ? auth.userInfo.email : '',
+    email: authentication.userInfo ? authentication.userInfo.email : '',
     password: '',
     confirmPassword: '',
-    firstName: auth.userInfo ? auth.userInfo.firstName : '',
-    lastName: auth.userInfo ? auth.userInfo.lastName : '',
-    fieldOfStudy: auth.userInfo ? auth.userInfo.fieldOfStudy : '',
-    capWithTF: auth.userInfo ? auth.userInfo.capWithTF : true,
+    firstName: authentication.userInfo ? authentication.userInfo.firstName : '',
+    lastName: authentication.userInfo ? authentication.userInfo.lastName : '',
+    fieldOfStudy: authentication.userInfo
+      ? authentication.userInfo.fieldOfStudy
+      : '',
+    capWithTF: authentication.userInfo
+      ? authentication.userInfo.capWithTF
+      : true,
   };
 
   const FieldOfStudyValues = Object.values(FieldOfStudy);
@@ -84,8 +88,8 @@ const UserSettings = () => {
   ) => {
     try {
       const { confirmPassword: remove, ...valuesToSend } = values;
-      if (auth.userInfo && auth.userInfo.id) {
-        await UserService.updateUser(valuesToSend, auth.userInfo.id);
+      if (authentication.userInfo && authentication.userInfo.id) {
+        await UserService.updateUser(valuesToSend, authentication.userInfo.id);
         SuccessNotification('Din information har uppdaterats');
       } else {
         console.error({
@@ -105,7 +109,7 @@ const UserSettings = () => {
     onSubmit: handleSubmit,
   });
 
-  if (!auth.userIsAutharized || !auth.userInfo) {
+  if (!authentication.userIsAutharized || !authentication.userInfo) {
     return <></>;
   }
 
@@ -341,10 +345,3 @@ const useStyles = makeStyles(
 );
 
 export default UserSettings;
-
-/*<UserForm
-placeholder={placeholder}
-userID = {auth.userInfo.id}
-submissionButtonLabel={'Updatera'}
-submitFunction={UserService.updateUser}
-/>*/

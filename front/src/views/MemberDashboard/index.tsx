@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
-import * as AuthSelectors from '../../selectors/AuthSelectors';
+import { auth } from '../../selectors/AuthSelectors';
 import * as CategorySelectors from '../../selectors/CategorySelectors';
 import * as EventSelectors from '../../selectors/EventSelectors';
 import {
@@ -31,7 +31,7 @@ import { createStyles, makeStyles } from '@material-ui/styles';
 const MemberDashboard = () => {
   const classes = useStyles();
   const [expanded, setExpanded] = useState(false);
-  const auth: AuthState = useSelector(AuthSelectors.auth);
+  const authentication: AuthState = useSelector(auth);
   const categoriesState: CategoryState = useSelector(
     CategorySelectors.allCategories,
   );
@@ -40,7 +40,12 @@ const MemberDashboard = () => {
   );
   const eventState: EventState = useSelector(EventSelectors.allEvents);
   const events = eventState.events;
-  if (!auth || !auth.userInfo || !nonEmptyCategories || !events) {
+  if (
+    !authentication ||
+    !authentication.userInfo ||
+    !nonEmptyCategories ||
+    !events
+  ) {
     return <></>;
   }
 
@@ -52,7 +57,7 @@ const MemberDashboard = () => {
     ),
   );
 
-  const listOfCompletedEvents = auth.userInfo.events.filter(
+  const listOfCompletedEvents = authentication.userInfo.events.filter(
     (event: DoneEvent) => event.status === EventStatus.COMPLETED,
   );
 
@@ -113,7 +118,7 @@ const MemberDashboard = () => {
       ))
     : [<></>];
 
-  const pendingEvents = auth.userInfo.events.filter(
+  const pendingEvents = authentication.userInfo.events.filter(
     (doneEvent: DoneEvent) => doneEvent.status === EventStatus.PENDING,
   );
   const pendingAmount = pendingEvents.length;
