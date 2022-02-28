@@ -13,6 +13,11 @@ export interface EventState {
   events: Event[];
 }
 
+export interface ServiState {
+  isFetched: boolean;
+  servis: Servi[];
+}
+
 export enum UserRole {
   BASIC = 'BASIC',
   ADMIN = 'ADMIN',
@@ -53,6 +58,18 @@ export interface Event {
 }
 
 export type NewEvent = Omit<Event, 'id'>;
+
+export interface Servi {
+  id: number;
+  name: string;
+  description: string;
+  startTime: luxon.DateTime;
+  endTime: luxon.DateTime;
+  points: number;
+  userLimit?: number;
+}
+
+export type NewServi = Omit<Servi, 'id'>;
 
 export interface Category {
   id: number;

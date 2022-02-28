@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
 import { AppBar, Box, Tab, Tabs, Theme, Typography } from '@material-ui/core';
+import { makeStyles } from '@material-ui/styles';
 import NewCategoryForm from './components/NewCategoryForm';
 import NewEventForm from './components/NewEventForm';
 import EditEventForm from './components/EditEventForm';
 import EditCategoryForm from './components/EditCategoryForm';
-import { makeStyles } from '@material-ui/styles';
+import NewServiForm from './components/NewServiForm';
+import EditServiForm from './components/EditServiForm';
 
 //TabPanel taken directly from Mui documenation
 
@@ -73,7 +75,7 @@ const NewCatAndEventPage = () => {
         <NewEventForm />
       </TabPanel>
       <TabPanel value={value} index={2}>
-        <NewEventForm />
+        <NewServiForm />
       </TabPanel>
       <TabPanel value={value} index={3}>
         <EditCategoryForm />
@@ -82,7 +84,7 @@ const NewCatAndEventPage = () => {
         <EditEventForm />
       </TabPanel>
       <TabPanel value={value} index={5}>
-        <EditEventForm />
+        <EditServiForm />
       </TabPanel>
     </div>
   );

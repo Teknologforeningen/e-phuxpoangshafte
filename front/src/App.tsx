@@ -5,11 +5,13 @@ import { Box } from '@material-ui/core';
 import {
   initCategories,
   initEvents,
+  initServis,
   userLogin,
   changeAutharizedStatus,
 } from './actions';
 import * as CategoryServices from './services/CategoryServices';
 import * as EventServices from './services/EventServices';
+import * as ServiServices from './services/ServiServices';
 import * as UserServices from './services/UserServices';
 import { User } from './types';
 import AppRouter from './AppRouter';
@@ -61,6 +63,20 @@ const App = () => {
     } catch (e) {
       console.error({ error: 'Failed to fetch events from back end:', e });
       ErrorNotification('Ett problem uppstod då poängen hämtades.');
+    }
+  }, [dispatch]);
+
+  // Get servis from backend
+  useEffect(() => {
+    const getAndSetServis = async () => {
+      const response = await ServiServices.getAllServis();
+      dispatch(initServis(response));
+    };
+    try {
+      getAndSetServis();
+    } catch (e) {
+      console.error({ error: 'Failed to fetch servis from back end:', e });
+      ErrorNotification('Ett problem uppstod då servina hämtades.');
     }
   }, [dispatch]);
 

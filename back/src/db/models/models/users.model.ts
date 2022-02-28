@@ -12,7 +12,7 @@ import {
 import { User as UserType, userRole } from '../../../types';
 
 import DoneEvent from './doneEvent.model';
-import DoneServi from './doneServi.model';
+import DoneServi from './DoneServi.model';
 
 interface UserTypeCreation extends Optional<UserType, 'id'> {}
 

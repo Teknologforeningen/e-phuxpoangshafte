@@ -13,7 +13,7 @@ import {
 } from '../types';
 import { userExtractor } from '../utils.ts/middleware';
 import { Op } from 'sequelize';
-import DoneServi from 'db/models/models/doneServi.model';
+import DoneServi from '../db/models/models/DoneServi.model';
 
 userRouter.get('/', userExtractor, async (req, res) => {
   const authUser = req.user;

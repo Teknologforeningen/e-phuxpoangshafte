@@ -9,7 +9,7 @@ import {
   DefaultScope,
 } from 'sequelize-typescript';
 import { Servi as ServiType } from 'types';
-import DoneServi from './doneServi.model';
+import DoneServi from './DoneServi.model';
 
 interface ServiTypeCreation extends Optional<ServiType, 'id'> {}
 
