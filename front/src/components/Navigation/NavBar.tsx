@@ -226,6 +226,17 @@ const NavBar = () => {
               </List>
               <Divider />
               <List>{ListOfCategories}</List>
+              <Divider />
+              <List>
+                <ListItem key="servi">
+                  <Link key={'servi-link'} href={Routes.SERVI}>
+                    <ListItemText
+                      primary={'Servi'}
+                      className={classes.categoryLinks}
+                    />
+                  </Link>
+                </ListItem>
+              </List>
               {authentication.userInfo?.role === UserRole.ADMIN ? (
                 <>
                   <Divider />

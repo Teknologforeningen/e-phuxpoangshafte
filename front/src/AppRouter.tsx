@@ -5,6 +5,7 @@ import PrivateRoute from './components/routing/PrivateRoute';
 import { Routes } from './types';
 import AdminPage from './views/Admin';
 import CategoryPage from './views/Categories/Index';
+import ServiPage from './views/Servi';
 import LoginForm from './views/LoginPage';
 import MemberDashboard from './views/MemberDashboard';
 import SignupPage from './views/SignupPage';
@@ -59,6 +60,7 @@ const AppRouter = () => {
                   path={Routes.SPECIFIC_CATEGORY}
                   exact
                 />
+                <PrivateRoute component={ServiPage} path={Routes.SERVI} exact />
                 <AdminRoute
                   component={QRPage}
                   path={Routes.SPECIFIC_EVENT_GENERATION}

@@ -113,6 +113,7 @@ export enum Routes {
   ADMIN_SUMMARY = '/admin/summary',
   USER_SETTINGS = '/settings',
   INSTRUCTIONS = '/reglemente',
+  SERVI = '/servi',
 }
 
 export enum FieldOfStudy {
