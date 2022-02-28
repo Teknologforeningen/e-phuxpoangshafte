@@ -1,10 +1,19 @@
-import { AuthState } from '../types';
+import { createSelector } from 'reselect';
+import { AuthState, DoneEvent, EventStatus } from '../types';
 
 export const auth = (state: any): AuthState => state.auth;
 
-export const token = (state: any): string => {
-  if(state.auth.userIsAutharized){
-    return state.auth.userInfo.token
+export const userCompletedEvents = createSelector(auth, auth => {
+  if (auth.userInfo) {
+    return auth.userInfo.events.filter(
+      (event: DoneEvent) => event.status === EventStatus.COMPLETED,
+    );
   }
-  return ''
-}
+});
+
+export const token = (state: any): string => {
+  if (state.auth.userIsAutharized) {
+    return state.auth.userInfo.token;
+  }
+  return '';
+};
