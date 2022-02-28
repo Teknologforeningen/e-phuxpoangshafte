@@ -6,6 +6,7 @@ const path = require('path');
 import userRouter from './routers/user';
 import categoryRouter from './routers/category';
 import eventRouter from './routers/event';
+import serviRouter from './routers/servi';
 import authRouter from './routers/auth';
 import hashRouter from './routers/hash';
 import { tokenExtractor } from './utils.ts/middleware';
@@ -20,6 +21,7 @@ app.use(tokenExtractor);
 app.use('/api/users', userRouter);
 app.use('/api/categories', categoryRouter);
 app.use('/api/events', eventRouter);
+app.use('/api/servi', serviRouter);
 app.use('/api/auth', authRouter);
 app.use('/api/hash', hashRouter);
 

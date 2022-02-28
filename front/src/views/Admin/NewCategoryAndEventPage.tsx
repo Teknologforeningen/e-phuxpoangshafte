@@ -51,16 +51,19 @@ const NewCatAndEventPage = () => {
   };
   return (
     <div className={classes.tabs}>
-      <AppBar position="static" className={classes.bar}>
+      <AppBar position="static">
         <Tabs
           value={value}
           onChange={handleChange}
-          aria-label="simple tabs example"
+          textColor="secondary"
+          indicatorColor="secondary"
         >
           <Tab label="Lägg till kategori" {...a11yProps(0)} />
           <Tab label="Lägg till poäng" {...a11yProps(1)} />
-          <Tab label="Ändra/Ta bort kategori" {...a11yProps(2)} />
-          <Tab label="Ändra/Ta bort poäng" {...a11yProps(3)} />
+          <Tab label="Lägg till servi" {...a11yProps(2)} />
+          <Tab label="Ändra/Ta bort kategori" {...a11yProps(3)} />
+          <Tab label="Ändra/Ta bort poäng" {...a11yProps(4)} />
+          <Tab label="Ändra/Ta bort servi" {...a11yProps(5)} />
         </Tabs>
       </AppBar>
       <TabPanel value={value} index={0}>
@@ -70,9 +73,15 @@ const NewCatAndEventPage = () => {
         <NewEventForm />
       </TabPanel>
       <TabPanel value={value} index={2}>
-        <EditCategoryForm />
+        <NewEventForm />
       </TabPanel>
       <TabPanel value={value} index={3}>
+        <EditCategoryForm />
+      </TabPanel>
+      <TabPanel value={value} index={4}>
+        <EditEventForm />
+      </TabPanel>
+      <TabPanel value={value} index={5}>
         <EditEventForm />
       </TabPanel>
     </div>
@@ -84,8 +93,8 @@ const useStyles = makeStyles((theme: Theme) => ({
     flexGrow: 1,
     backgroundColor: theme.palette.primary.main,
   },
-  bar: {
-    backgroundColor: theme.palette.secondary.main,
+  selected: {
+    color: theme.palette.primary.main,
   },
 }));
 

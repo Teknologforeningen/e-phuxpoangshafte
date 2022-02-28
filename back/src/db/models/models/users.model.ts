@@ -12,6 +12,7 @@ import {
 import { User as UserType, userRole } from '../../../types';
 
 import DoneEvent from './doneEvent.model';
+import DoneServi from './doneServi.model';
 
 interface UserTypeCreation extends Optional<UserType, 'id'> {}
 
@@ -70,6 +71,9 @@ class User extends Model<UserTypeCreation> {
 
   @HasMany(() => DoneEvent)
   events: DoneEvent[];
+
+  @HasMany(() => DoneServi)
+  servis: DoneServi[];
 }
 
 export default User;

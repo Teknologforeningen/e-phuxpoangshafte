@@ -34,6 +34,16 @@ export interface Event {
   mandatory: boolean;
 }
 
+export interface Servi {
+  id: number;
+  name: string;
+  description: string;
+  startTime: Date;
+  endTime: Date;
+  points: number;
+  userLimit?: number;
+}
+
 export enum EventStatus {
   PENDING = 'PENDING',
   CONFIRMED = 'CONFIRMED',
@@ -48,4 +58,13 @@ export interface DoneEvents {
   timeOfCompletion: Date;
   eventID: number;
   userID: number;
+}
+
+export interface DoneServi {
+  id: number;
+  userID: number;
+  serviID: number;
+  status: EventStatus;
+  timeOfSignup: Date;
+  timeOfCompletion: Date;
 }

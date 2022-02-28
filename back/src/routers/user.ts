@@ -7,11 +7,13 @@ import DoneEvents from '../db/models/models/doneEvent.model';
 import {
   User as UserType,
   DoneEvents as DoneEventType,
+  DoneServi as DoneServiType,
   EventStatus,
   userRole,
 } from '../types';
 import { userExtractor } from '../utils.ts/middleware';
 import { Op } from 'sequelize';
+import DoneServi from 'db/models/models/doneServi.model';
 
 userRouter.get('/', userExtractor, async (req, res) => {
   const authUser = req.user;
@@ -201,6 +203,123 @@ userRouter.put(
           //TODO: currently possible to complete points for yourself
           console.log(
             'User does not have permission to updated the event of this user to completed',
+          );
+          return res
+            .status(401)
+            .send({ error: "You don't have permission to do that" });
+        } else {
+          event.update({ status: newStatus, timeOfCompletion: new Date() });
+          break;
+        }
+      }
+      default:
+        return res.status(400).send({ error: 'No such status available' });
+    }
+    return res.status(200).json(event);
+  },
+);
+
+userRouter.get('/:userID/done_servis/', userExtractor, async (req, res) => {
+  const authUser = req.user as User;
+  const userId = Number(req.params.userID);
+  if (!(authUser.id !== userId || authUser.role !== userRole.ADMIN)) {
+    return res
+      .status(401)
+      .json({ error: 'You are not authorized for this page' });
+  }
+  const done_servis = await DoneServi.findAll({ where: { userID: userId } });
+  res.status(200).json(done_servis);
+});
+
+userRouter.post(
+  '/:userID/done_servis/:serviID',
+  userExtractor,
+  async (req, res) => {
+    const authUser = req.user as User;
+    const userID = Number(req.params.userID);
+    const serviID = Number(req.params.serviID);
+    if (!(authUser.id !== userID || authUser.role !== userRole.ADMIN)) {
+      return res
+        .status(401)
+        .json({ error: 'You are not authorized for this page' });
+    }
+    const allDoneSevis = await DoneServi.findAll({
+      where: { status: { [Op.not]: String(EventStatus.CANCELLED) } },
+    });
+    if (allDoneSevis) {
+      const completed = allDoneSevis
+        .filter(doneServi => doneServi.userID === userID)
+        .map(doneServi => doneServi.serviID)
+        .includes(serviID);
+      if (completed) {
+        return res.status(400).json({
+          error: 'You have already requested or completed that event',
+        });
+      }
+    }
+    const doneServi: Omit<DoneServiType, 'id'> = {
+      status: EventStatus.PENDING,
+      timeOfSignup: new Date(),
+      timeOfCompletion: null,
+      userID,
+      serviID,
+    };
+    console.log(doneServi);
+    const addedDoneServi = await DoneServi.create(doneServi);
+    res.status(200).json(addedDoneServi);
+  },
+);
+
+userRouter.put(
+  '/:userID/done_servis/:serviID',
+  userExtractor,
+  async (req, res) => {
+    const authUser = req.user as User;
+    const newStatus = req.body.status as EventStatus;
+    const userID: number = Number(req.params.userID);
+    const serviID: number = Number(req.params.serviID);
+    const event = await DoneServi.findOne({
+      where: { userID, serviID },
+    });
+
+    console.log('UserID:', userID);
+    console.log('serviID:', serviID);
+    if (!event) {
+      res.status(404).send({ error: "Couldn't find the servi for this user" });
+    }
+
+    switch (newStatus) {
+      case EventStatus.CANCELLED: {
+        if (!(authUser.id !== userID || authUser.role !== userRole.ADMIN)) {
+          console.log(
+            'User does not have permission to updated the servi of this user to cancelled',
+          );
+          return res
+            .status(401)
+            .send({ error: "You don't have permission to do that" });
+        } else {
+          event.update({ status: newStatus });
+          break;
+        }
+      }
+      case EventStatus.CONFIRMED: {
+        if (authUser.role !== userRole.ADMIN) {
+          console.log(
+            'User does not have permission to updated the servi of this user to confirmed',
+          );
+          return res
+            .status(401)
+            .send({ error: "You don't have permission to do that" });
+        } else {
+          event.update({ status: newStatus });
+          break;
+        }
+      }
+      case EventStatus.COMPLETED: {
+        if (!(authUser.id !== userID || authUser.role !== userRole.ADMIN)) {
+          //TODO: currently possible to complete points for yourself
+          console.log(
+            'User does not have permission to updated the servi of this user to completed',
           );
           return res
             .status(401)
