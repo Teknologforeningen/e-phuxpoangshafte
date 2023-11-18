@@ -3,15 +3,8 @@ import { useDispatch } from 'react-redux';
 import { userLogin } from '../actions';
 import * as AuthServices from '../services/AuthServices';
 import { localStorageSetter } from '../utils/localStorage';
-import {
-  Box,
-  TextField,
-  Button,
-  Theme,
-  Typography,
-  Link,
-} from '@material-ui/core';
-import { makeStyles, createStyles } from '@material-ui/styles';
+import { Box, TextField, Button, Theme, Typography, Link } from '@mui/material';
+import { makeStyles, createStyles } from '@mui/styles';
 import { useHistory } from 'react-router-dom';
 import axios from 'axios';
 import * as Yup from 'yup';

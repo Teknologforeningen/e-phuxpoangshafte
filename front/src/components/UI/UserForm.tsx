@@ -8,7 +8,7 @@ import {
   MenuItem,
   Select,
   TextField,
-} from '@material-ui/core';
+} from '@mui/material';
 import { useFormik } from 'formik';
 import React from 'react';
 import * as Yup from 'yup';

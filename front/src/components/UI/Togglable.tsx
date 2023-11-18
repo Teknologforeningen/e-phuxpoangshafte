@@ -1,5 +1,5 @@
 import React, { useState, useImperativeHandle } from 'react';
-import { Button } from '@material-ui/core';
+import { Button } from '@mui/material';
 
 interface TogglableProps {
   buttonLabelOpen: string;

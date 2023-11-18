@@ -5,11 +5,11 @@ import {
   localStorageDeleter,
   localStorageGetter,
 } from '../../utils/localStorage';
-import { Typography, Box, Theme } from '@material-ui/core';
+import { Typography, Box, Theme } from '@mui/material';
 import * as AuthActions from '../../actions/AuthActions';
 import { InfoNotification } from '../Notifications';
-import ExitToAppIcon from '@material-ui/icons/ExitToApp';
-import { createStyles, makeStyles } from '@material-ui/styles';
+import ExitToAppIcon from '@mui/icons-material/ExitToApp';
+import { createStyles, makeStyles } from '@mui/styles';
 
 interface Props {
   handleClose: () => void;

@@ -1,9 +1,9 @@
 import React from 'react';
-import { Box, Card, CardContent, Tooltip, Typography } from '@material-ui/core';
+import { Box, Card, CardContent, Tooltip, Typography } from '@mui/material';
 import { Category, Event } from '../../../types';
-import { Done, DoneAll, InfoOutlined as InfoIcon } from '@material-ui/icons/';
-import { createStyles, makeStyles } from '@material-ui/styles';
-import { Theme } from '@material-ui/core/styles';
+import { Done, DoneAll, InfoOutlined as InfoIcon } from '@mui/icons-material/';
+import { createStyles, makeStyles } from '@mui/styles';
+import { Theme } from '@mui/material/styles';
 import classnames from 'classnames';
 
 interface Props {

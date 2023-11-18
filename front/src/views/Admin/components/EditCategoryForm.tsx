@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box, Button, MenuItem, TextField, Theme } from '@material-ui/core';
+import { Box, Button, MenuItem, TextField, Theme } from '@mui/material';
 import * as CategorySelector from '../../../selectors/CategorySelectors';
 import * as CategoryService from '../../../services/CategoryServices';
 import * as CategoryAction from '../../../actions/CategoryActions';
@@ -12,7 +12,7 @@ import {
 } from '../../../components/Notifications';
 import { NewCategoryAttributes } from './NewCategoryForm';
 import { Category } from '../../../types';
-import { makeStyles } from '@material-ui/styles';
+import { makeStyles } from '@mui/styles';
 import { maxWidthAdminForms } from '../NewCategoryAndEventPage';
 
 export interface EditCategoryAttributes extends NewCategoryAttributes {

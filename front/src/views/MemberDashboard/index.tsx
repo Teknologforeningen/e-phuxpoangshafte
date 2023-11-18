@@ -25,8 +25,8 @@ import {
   ListItem,
   Theme,
   Typography,
-} from '@material-ui/core';
-import { createStyles, makeStyles } from '@material-ui/styles';
+} from '@mui/material';
+import { createStyles, makeStyles } from '@mui/styles';
 
 const MemberDashboard = () => {
   const classes = useStyles();

@@ -8,7 +8,8 @@ import {
   MenuItem,
   TextField,
   Theme,
-} from '@material-ui/core';
+  TextFieldProps,
+} from '@mui/material';
 import { useFormik } from 'formik';
 import { useDispatch, useSelector } from 'react-redux';
 import * as Yup from 'yup';
@@ -18,15 +19,15 @@ import * as EventServices from '../../../services/EventServices';
 import * as EventActions from '../../../actions/EventActions';
 import * as EventSelector from '../../../selectors/EventSelectors';
 import { Category, Event } from '../../../types';
-import { LocalizationProvider, DateTimePicker } from '@material-ui/lab';
-import AdapterLuxon from '@material-ui/lab/AdapterLuxon';
+import { LocalizationProvider, DateTimePicker } from '@mui/lab';
+import AdapterLuxon from '@mui/lab/AdapterLuxon';
 import * as luxon from 'luxon';
 import {
   ErrorNotification,
   SuccessNotification,
 } from '../../../components/Notifications';
 import { NewEventAttributes } from './NewEventForm';
-import { makeStyles } from '@material-ui/styles';
+import { makeStyles } from '@mui/styles';
 import { maxWidthAdminForms } from '../NewCategoryAndEventPage';
 
 export interface EditedEventAttributes extends NewEventAttributes {
@@ -201,14 +202,18 @@ const EditEventForm = () => {
             label={'Start tid'}
             ampm={false}
             value={formik.values.startTime}
-            onChange={newValue => formik.setFieldValue('startTime', newValue)}
-            renderInput={props => (
+            onChange={(newValue: string) =>
+              formik.setFieldValue('startTime', newValue)
+            }
+            renderInput={(props: TextFieldProps) => (
               <TextField
                 {...props}
                 error={
                   formik.touched.startTime && Boolean(formik.errors.startTime)
                 }
-                helperText={formik.touched.startTime && formik.errors.startTime}
+                helperText={
+                  formik.touched.startTime && <>{formik.errors.startTime}</>
+                }
                 className={classes.fields}
                 InputLabelProps={{
                   classes: {
@@ -223,12 +228,16 @@ const EditEventForm = () => {
             label="Slut tid"
             ampm={false}
             value={formik.values.endTime}
-            onChange={newValue => formik.setFieldValue('endTime', newValue)}
-            renderInput={props => (
+            onChange={(newValue: string) =>
+              formik.setFieldValue('endTime', newValue)
+            }
+            renderInput={(props: TextFieldProps) => (
               <TextField
                 {...props}
                 error={formik.touched.endTime && Boolean(formik.errors.endTime)}
-                helperText={formik.touched.endTime && formik.errors.endTime}
+                helperText={
+                  formik.touched.endTime && <>{formik.errors.endTime}</>
+                }
                 className={classes.fields}
                 InputLabelProps={{
                   classes: {

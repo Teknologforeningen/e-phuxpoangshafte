@@ -1,5 +1,5 @@
 import React from 'react';
-import { ListItem, ListItemText } from '@material-ui/core';
+import { ListItem, ListItemText } from '@mui/material';
 
 interface props {
   index: number;

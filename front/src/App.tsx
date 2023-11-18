@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { localStorageGetter } from './utils/localStorage';
-import { Box } from '@material-ui/core';
+import { Box } from '@mui/material';
 import {
   initCategories,
   initEvents,

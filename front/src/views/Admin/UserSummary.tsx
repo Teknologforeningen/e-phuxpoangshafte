@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { Theme } from '@material-ui/core/styles';
-import { makeStyles } from '@material-ui/styles';
+import { Theme } from '@mui/material/styles';
+import { makeStyles } from '@mui/styles';
 import {
   DataGrid,
   GridRowParams,
   GridColDef,
   MuiEvent,
-} from '@material-ui/data-grid';
+} from '@mui/x-data-grid';
 import { useSelector } from 'react-redux';
 import * as UserService from '../../services/UserServices';
 import * as EventSelector from '../../selectors/EventSelectors';
@@ -197,7 +197,7 @@ const UserSummary = () => {
         <div style={{ display: 'flex', height: '100%' }}>
           <DataGrid
             autoHeight
-            pageSize={10}
+            paginationModel={{ page: 0, pageSize: 10 }}
             rows={usersWithCompletedPoints}
             columns={columnsWithNames}
             onRowClick={(params, event) => {

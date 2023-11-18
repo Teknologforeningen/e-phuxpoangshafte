@@ -12,11 +12,11 @@ import {
   MenuItem,
   TextField,
   Theme,
-} from '@material-ui/core';
+} from '@mui/material';
 import * as Yup from 'yup';
 import { useFormik } from 'formik';
 import { SuccessNotification } from '../../components/Notifications';
-import { makeStyles, createStyles } from '@material-ui/styles';
+import { makeStyles, createStyles } from '@mui/styles';
 
 export interface UserFormAttributes extends NewUser {
   confirmPassword: string;
@@ -210,7 +210,6 @@ const UserSettings = () => {
             }}
           />
           <Box margin={0.5} />
-          {console.log(formik.values)}
           <TextField
             select
             variant={'filled'}

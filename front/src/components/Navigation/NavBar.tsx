@@ -13,10 +13,10 @@ import {
   Toolbar,
   Typography,
   useMediaQuery,
-} from '@material-ui/core';
-import { Theme } from '@material-ui/core/styles';
+} from '@mui/material';
+import { Theme } from '@mui/material/styles';
 import * as Themes from '../../styles/themes';
-import { createStyles, makeStyles } from '@material-ui/styles';
+import { createStyles, makeStyles } from '@mui/styles';
 import { useSelector } from 'react-redux';
 import { useLocation } from 'react-router-dom';
 
@@ -25,7 +25,7 @@ import { auth } from '../../selectors/AuthSelectors';
 import { Category, Routes, UserRole } from '../../types';
 
 import LogOutButton from '../routing/LogoutButton';
-import SettingsIcon from '@material-ui/icons/Settings';
+import SettingsIcon from '@mui/icons-material/Settings';
 import TFLogoSVG from '../../styles/img/TFlogo';
 import classNames from 'classnames';
 

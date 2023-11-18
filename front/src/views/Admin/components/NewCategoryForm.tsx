@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box, Button, TextField, Theme } from '@material-ui/core';
+import { Box, Button, TextField, Theme } from '@mui/material';
 import * as CategoryService from '../../../services/CategoryServices';
 import * as CategoryAction from '../../../actions/CategoryActions';
 import * as Yup from 'yup';
@@ -9,7 +9,7 @@ import {
   ErrorNotification,
   SuccessNotification,
 } from '../../../components/Notifications';
-import { makeStyles } from '@material-ui/styles';
+import { makeStyles } from '@mui/styles';
 import { maxWidthAdminForms } from '../NewCategoryAndEventPage';
 
 export interface NewCategoryAttributes {
@@ -131,8 +131,6 @@ const NewCategoryForm = () => {
     </form>
   );
 };
-
-
 
 const useStyles = makeStyles((theme: Theme) => ({
   fields: {

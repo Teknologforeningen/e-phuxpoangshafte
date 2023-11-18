@@ -1,7 +1,7 @@
 {
   "development": {
-    "username": "ephuxpoang",
-    "password": "ephuxpoang",
+    "username": "postgres",
+    "password": "postgres",
     "database": "phuxdb",
     "host": "127.0.0.1",
     "dialect": "postgres"

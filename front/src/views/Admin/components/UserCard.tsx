@@ -10,9 +10,9 @@ import {
   TableHead,
   IconButton,
   Box,
-} from '@material-ui/core';
-import { makeStyles } from '@material-ui/styles';
-import { Theme } from '@material-ui/core/styles';
+} from '@mui/material';
+import { makeStyles } from '@mui/styles';
+import { Theme } from '@mui/material/styles';
 import classNames from 'classnames';
 import {
   User,
@@ -27,7 +27,7 @@ import {
   CloseOutlined,
   KeyboardArrowDown,
   KeyboardArrowUp,
-} from '@material-ui/icons';
+} from '@mui/icons-material';
 
 interface Props {
   user: User;

@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
-import { AppBar, Box, Tab, Tabs, Theme, Typography } from '@material-ui/core';
+import { AppBar, Box, Tab, Tabs, Theme, Typography } from '@mui/material';
 import NewCategoryForm from './components/NewCategoryForm';
 import NewEventForm from './components/NewEventForm';
 import EditEventForm from './components/EditEventForm';
 import EditCategoryForm from './components/EditCategoryForm';
-import { makeStyles } from '@material-ui/styles';
+import { makeStyles } from '@mui/styles';
 
 //TabPanel taken directly from Mui documenation
 

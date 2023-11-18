@@ -4,7 +4,7 @@ var db: any = {};
 const sequelize = new Sequelize(
   process.env.NODE_ENV !== 'production'
     ? {
-        database: process.env.DEV_USERNAME,
+        database: process.env.DEV_DB,
         dialect: 'postgres',
         username: process.env.DEV_USERNAME,
         password: process.env.DEV_PASSWORD,

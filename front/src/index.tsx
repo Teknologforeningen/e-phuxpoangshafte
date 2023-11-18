@@ -4,11 +4,11 @@ import { BrowserRouter as Router } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import App from './App';
 import store from './store';
-import { ThemeProvider } from '@material-ui/core/styles';
-import { StylesProvider, jssPreset } from '@material-ui/styles';
-import CssBaseline from '@material-ui/core/CssBaseline';
+import { ThemeProvider } from '@mui/material/styles';
+import { StylesProvider, jssPreset } from '@mui/styles';
+import CssBaseline from '@mui/material/CssBaseline';
 import * as Themes from './styles/themes';
-import '@material-ui/lab/themeAugmentation';
+import '@mui/lab/themeAugmentation';
 
 import { create } from 'jss';
 

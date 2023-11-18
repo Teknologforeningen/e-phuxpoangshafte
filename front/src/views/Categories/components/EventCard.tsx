@@ -19,15 +19,15 @@ import {
   Link,
   Theme,
   Typography,
-} from '@material-ui/core';
-import { Done, DoneAll, Close } from '@material-ui/icons';
+} from '@mui/material';
+import { Done, DoneAll, Close } from '@mui/icons-material';
 import {
   ErrorNotification,
   InfoNotification,
 } from '../../../components/Notifications';
-import { createStyles, makeStyles } from '@material-ui/styles';
+import { createStyles, makeStyles } from '@mui/styles';
 import classNames from 'classnames';
-import LockIcon from '@material-ui/icons/Lock';
+import LockIcon from '@mui/icons-material/Lock';
 
 const EventCardTitle = ({
   event,

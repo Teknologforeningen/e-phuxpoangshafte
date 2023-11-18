@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import * as HashServices from '../../services/HashServices';
 import * as EventSelectors from '../../selectors/EventSelectors';
-import QRCode from 'qrcode.react';
+import { QRCodeSVG } from 'qrcode.react';
 import { useRouteMatch } from 'react-router-dom';
-import { Box, Theme, Typography, useMediaQuery } from '@material-ui/core';
-import { makeStyles, createStyles } from '@material-ui/styles';
+import { Box, Theme, Typography, useMediaQuery } from '@mui/material';
+import { makeStyles, createStyles } from '@mui/styles';
 import { useSelector } from 'react-redux';
 import { Event, Routes } from '../../types';
 
@@ -50,7 +50,7 @@ const QRPage = () => {
       <Typography variant={'h3'} className={classes.center}>
         {eventName}
       </Typography>
-      <QRCode value={QRUrl} size={QRCodeSize} className={classes.center} />
+      <QRCodeSVG value={QRUrl} size={QRCodeSize} className={classes.center} />
     </Box>
   );
 };

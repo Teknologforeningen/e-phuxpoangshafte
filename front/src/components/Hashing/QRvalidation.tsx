@@ -1,14 +1,13 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Redirect, useRouteMatch } from 'react-router-dom';
 import { DoneEvent, EventStatus, Routes, User } from '../../types';
 import * as HashServices from '../../services/HashServices';
 import * as UserServices from '../../services/UserServices';
 import { useSelector } from 'react-redux';
 import { auth } from '../../selectors/AuthSelectors';
-import * as EventSelector from '../../selectors/EventSelectors';
-import { Box, CircularProgress, Theme, Typography } from '@material-ui/core';
+import { Box, CircularProgress, Theme, Typography } from '@mui/material';
 import { ErrorNotification, SuccessNotification } from '../Notifications';
-import { createStyles, makeStyles } from '@material-ui/styles';
+import { createStyles, makeStyles } from '@mui/styles';
 
 interface RouteType {
   hash: string;
@@ -22,7 +21,6 @@ const QRvalidation = () => {
   const [valid, setValid] = useState<boolean | null>(null);
   const [eventId, seteventId] = useState<number | null>(null);
   const [done, setDone] = useState<boolean>(false);
-  const events = useSelector(EventSelector.allEvents).events;
 
   useEffect(() => {
     const validateHash = async () => {

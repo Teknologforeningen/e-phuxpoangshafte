@@ -1,4 +1,4 @@
-import { User, DoneEvent, Event, EventStatus } from '../types';
+import { User, DoneEvent, Event } from '../types';
 
 /**
  *

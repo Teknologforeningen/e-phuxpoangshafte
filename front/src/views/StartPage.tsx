@@ -1,6 +1,6 @@
 import React from 'react';
-import { Box, Button, Link, Theme, Typography } from '@material-ui/core';
-import { createStyles, makeStyles } from '@material-ui/styles';
+import { Box, Button, Link, Theme, Typography } from '@mui/material';
+import { createStyles, makeStyles } from '@mui/styles';
 import TFlogoSVG from '../styles/img/TFlogo';
 import { Routes } from '../types';
 

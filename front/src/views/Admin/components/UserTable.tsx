@@ -4,9 +4,9 @@ import {
   GridCellParams,
   GridColDef,
   GridRowsProp,
-} from '@material-ui/data-grid';
-import { createStyles, makeStyles } from '@material-ui/styles';
-import { Theme } from '@material-ui/core';
+} from '@mui/x-data-grid';
+import { createStyles, makeStyles } from '@mui/styles';
+import { Theme } from '@mui/material';
 import { useSelector } from 'react-redux';
 import { orderBy } from 'lodash';
 import * as UserService from '../../../services/UserServices';
