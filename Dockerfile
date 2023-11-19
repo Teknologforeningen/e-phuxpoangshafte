@@ -4,6 +4,8 @@ WORKDIR /app
 COPY front/package.json front/yarn.lock ./
 RUN yarn --frozen-lockfile
 
+ARG REACT_APP_PHUX_YEAR
+
 COPY front/ .
 RUN yarn build
 

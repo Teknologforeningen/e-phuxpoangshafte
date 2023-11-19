@@ -3,7 +3,10 @@ version: "3"
 services:
   back:
     restart: always
-    build: .
+    build:
+      context: .
+      args:
+        REACT_APP_PHUX_YEAR: 2022
     ports:
       - "8000:8000"
     container_name: back_phux
