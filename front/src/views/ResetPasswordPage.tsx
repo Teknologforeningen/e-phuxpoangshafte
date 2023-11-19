@@ -1,39 +1,29 @@
-import React from 'react';
-import { useDispatch } from 'react-redux';
-import { userLogin } from '../actions';
-import * as AuthServices from '../services/AuthServices';
-import { localStorageSetter } from '../utils/localStorage';
-import { Box, TextField, Button, Theme, Typography, Link } from '@mui/material';
+import { resetPassword } from '../services/ResetPasswordServices';
+import { Box, TextField, Button, Theme, Typography } from '@mui/material';
 import { makeStyles, createStyles } from '@mui/styles';
 import { useHistory } from 'react-router-dom';
-import axios from 'axios';
 import * as Yup from 'yup';
 import { useFormik } from 'formik';
 import {
   ErrorNotification,
   SuccessNotification,
 } from '../components/Notifications';
-import { Routes } from '../types';
 import NonAuthNavBar from '../components/Navigation/NonAuthNavBar';
 
 interface LoginCredentials {
   email: string;
-  password: string;
 }
 
-const LoginForm = () => {
-  const dispatch = useDispatch();
+const ResetPasswordForm = () => {
   const history = useHistory();
   const classes = useStyles();
 
   const initial: LoginCredentials = {
     email: '',
-    password: '',
   };
 
   const validation = Yup.object({
     email: Yup.string().required('Obligatorisk'),
-    password: Yup.string().required('Obligatorisk'),
   });
 
   const handleSubmit = async (
@@ -41,26 +31,16 @@ const LoginForm = () => {
     { resetForm }: { resetForm: any },
   ) => {
     try {
-      const loggedInUser = await AuthServices.login({
+      await resetPassword({
         email: values.email,
-        password: values.password,
       });
-      localStorageSetter('token', JSON.stringify(loggedInUser.token));
-      localStorageSetter('userId', JSON.stringify(loggedInUser.id));
-      dispatch(userLogin(loggedInUser));
-      axios.defaults.headers.common[
-        'authorization'
-      ] = `Bearer ${loggedInUser.token}`;
       resetForm();
-      SuccessNotification('Din inloggning lyckades!');
+      SuccessNotification(
+        'Ett nytt lösenord har skickats till din e-post, ifall ett konto existerar för den addressen.',
+      );
       history.push('/');
     } catch (e: any) {
-      // TODO: error handling om du ger fel credentials, meddela om de
-      if (e.code === 401) {
-        ErrorNotification('Fel mail eller lösenord');
-      } else {
-        ErrorNotification('Inloggning misslyckades');
-      }
+      ErrorNotification('Något gick fel när återställningen behandlades.');
     }
   };
 
@@ -76,7 +56,7 @@ const LoginForm = () => {
       <form onSubmit={formik.handleSubmit}>
         <Box className={classes.loginSpread}>
           <Typography textAlign="center" variant={'h4'}>
-            Logga in{' '}
+            Återställ lösenord
           </Typography>
           <Box>
             <Box className={classes.centerAlign}>
@@ -99,29 +79,6 @@ const LoginForm = () => {
                 }}
               />
             </Box>
-            <Box margin={0.5} className={classes.centerAlign}>
-              <TextField
-                id={'password'}
-                type={'password'}
-                name={'password'}
-                label={'Lösenord'}
-                aria-label={'Lösenord'}
-                placeholder={'Lösenord'}
-                value={formik.values.password}
-                onChange={formik.handleChange}
-                error={
-                  formik.touched.password && Boolean(formik.errors.password)
-                }
-                helperText={formik.touched.password && formik.errors.password}
-                className={classes.fields}
-                variant="filled"
-                InputLabelProps={{
-                  classes: {
-                    focused: classes.labelFocused,
-                  },
-                }}
-              />
-            </Box>
           </Box>
           <Box>
             <Box className={classes.centerAlignRow}>
@@ -131,33 +88,11 @@ const LoginForm = () => {
                 type={'submit'}
                 size={'large'}
               >
-                Logga in
+                Återställ lösenord
               </Button>
               <Typography className={classes.helpText} variant={'body2'}>
-                <Link
-                  href={Routes.RESET_PASSWORD}
-                  variant={'inherit'}
-                  color={'secondary'}
-                  underline={'hover'}
-                  m={0.5}
-                  noWrap
-                >
-                  Glömt lösenord?
-                </Link>
-              </Typography>
-              <Typography className={classes.helpText} variant={'body2'}>
-                Inte registerad ännu? Registera dig
-                <Link
-                  href={Routes.SIGNUP}
-                  variant={'inherit'}
-                  color={'secondary'}
-                  underline={'hover'}
-                  m={0.5}
-                  noWrap
-                >
-                  här
-                </Link>
-                .
+                Ett nytt lösenord skickas till den valda e-postaddressen, ifall
+                ett konto existerar för den addressen.
               </Typography>
             </Box>
           </Box>
@@ -214,4 +149,4 @@ const useStyles = makeStyles(
   { index: 1 },
 );
 
-export default LoginForm;
+export default ResetPasswordForm;

@@ -1,4 +1,3 @@
-import React from 'react';
 import { useSelector } from 'react-redux';
 import { BrowserRouter, Route, Switch, Redirect } from 'react-router-dom';
 import PrivateRoute from './components/routing/PrivateRoute';
@@ -18,6 +17,7 @@ import QRPage from './components/Hashing/QRPage';
 import QRvalidation from './components/Hashing/QRvalidation';
 import InstructionsList from './views/Instructions';
 import AdminRoute from './components/routing/AdminRoute';
+import ResetPasswordForm from './views/ResetPasswordPage';
 
 const AppRouter = () => {
   const classes = useStyles();
@@ -38,6 +38,9 @@ const AppRouter = () => {
           </Route>
           <Route path={Routes.EVENT_VALIDATION}>
             <QRvalidation />
+          </Route>
+          <Route path={Routes.RESET_PASSWORD}>
+            <ResetPasswordForm />
           </Route>
 
           {authentication.userIsAutharized ? (

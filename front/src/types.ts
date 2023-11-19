@@ -96,6 +96,7 @@ export enum Routes {
   ADMIN_SUMMARY = '/admin/summary',
   USER_SETTINGS = '/settings',
   INSTRUCTIONS = '/reglemente',
+  RESET_PASSWORD = '/reset',
 }
 
 export enum FieldOfStudy {

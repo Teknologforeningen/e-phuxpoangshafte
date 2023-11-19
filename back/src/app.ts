@@ -8,6 +8,7 @@ import categoryRouter from './routers/category';
 import eventRouter from './routers/event';
 import authRouter from './routers/auth';
 import hashRouter from './routers/hash';
+import resetRouter from './routers/reset';
 import { tokenExtractor } from './utils.ts/middleware';
 
 const app: express.Application = express();
@@ -22,6 +23,7 @@ app.use('/api/categories', categoryRouter);
 app.use('/api/events', eventRouter);
 app.use('/api/auth', authRouter);
 app.use('/api/hash', hashRouter);
+app.use('/api/reset', resetRouter);
 
 app.use(express.static(path.resolve(__dirname, '../../front/build')));
 app.get('*', (req, res) => {
