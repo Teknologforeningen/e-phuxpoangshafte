@@ -10,12 +10,13 @@ import {
   GridRowsProp,
 } from '@material-ui/data-grid';
 import { createStyles, makeStyles } from '@material-ui/styles';
-import { Theme } from '@material-ui/core';
+import { OutlinedInput, Select, Theme } from '@material-ui/core';
 
 const UserTable = () => {
   const classes = useStyles();
   const [events, setEvents] = useState<Event[] | undefined>();
   const [users, setUsers] = useState<User[] | undefined>();
+  const [selectedUsers, setSelectedUsers] = React.useState([]);
   useEffect(() => {
     const getEvents = async () => {
       const response = await EventService.getAllEvents();
@@ -44,6 +45,16 @@ const UserTable = () => {
   const usersNoAdmins = users
     ? users.filter((user: User) => user.role !== UserRole.ADMIN)
     : undefined;
+
+  const handleSelectedUsersChange = (event: { target: { value: any } }) => {
+    const {
+      target: { value },
+    } = event;
+    setSelectedUsers(
+      // On autofill we get a stringified value.
+      typeof value === 'string' ? value.split(',') : value,
+    );
+  };
 
   const rows: GridRowsProp =
     usersNoAdmins && events
@@ -95,15 +106,30 @@ const UserTable = () => {
   };
 
   return (
-    <div style={{ height: 400, width: '100%' }} className={classes.DataGrid}>
-      <div style={{ display: 'flex', height: '100%' }}>
-        <DataGrid
-          rows={[...rows]}
-          columns={columnsWithNames}
-          getCellClassName={cellClassNames}
-        />
+    <>
+      <Select
+        id={'name'}
+        name={'name'}
+        label={'Namn'}
+        aria-label={'Name'}
+        variant={'outlined'}
+        input={<OutlinedInput label="Tag" />}
+        value={selectedUsers}
+        onChange={handleSelectedUsersChange}
+      ></Select>
+      <div
+        style={{ height: '600px', width: '100%' }}
+        className={classes.DataGrid}
+      >
+        <div style={{ display: 'flex', height: '100%' }}>
+          <DataGrid
+            rows={[...rows]}
+            columns={columnsWithNames}
+            getCellClassName={cellClassNames}
+          />
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 
