@@ -1,0 +1,36 @@
+{
+    "name": "Phuxpoangshafte dev container",
+    // Use a Dockerfile to define the container image
+    "build": {
+        "dockerfile": "Dockerfile"
+    },
+	"runArgs": ["--name", "phuxpoangshafte-dev-container"],
+    // Use 'forwardPorts' to make a list of ports inside the container available locally.
+    // "forwardPorts": [],
+
+    // Use 'postCreateCommand' to run commands after the container is created.
+    "postCreateCommand": "sh .devcontainer/package_install.sh",
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                "qufiwefefwoyn.inline-sql-syntax",
+                "VisualStudioExptTeam.vscodeintellicode",
+                "Zignd.html-css-class-completion",
+                "cmstead.js-codeformer",
+                "christian-kohler.path-intellisense",
+                "esbenp.prettier-vscode",
+                "mechatroner.rainbow-csv",
+                "humao.rest-client",
+                "ms-vscode.vscode-typescript-next",
+                "infeng.vscode-react-typescript",
+                "ms-azuretools.vscode-docker"
+            ]
+        }
+    }
+
+    // Configure tool-specific properties.
+    // "customizations": {},
+
+    // Uncomment to connect as root instead. More info: https://aka.ms/dev-containers-non-root.
+    // "remoteUser": "root"
+}
