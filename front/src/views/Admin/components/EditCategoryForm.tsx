@@ -65,6 +65,20 @@ const EditCategoryForm = () => {
     }
   };
 
+  const handleRemove = async (
+    values: NewCategoryAttributes
+  ) => {
+    try {
+      await CategoryService.removeCategory(values);
+      SuccessNotification(`${values.name} har tagits bort!`);
+      formik.resetForm();
+    } catch (e) {
+      console.error({ error: e, message: 'Could not remove the category' });
+      ErrorNotification(`${values.name} kunde inte tas bort!`);
+    }
+  };
+
+
   const formik = useFormik({
     initialValues: initial,
     validationSchema: validation,
@@ -173,6 +187,15 @@ const EditCategoryForm = () => {
             className={classes.submitButton}
           >
             Uppdatera
+          </Button>
+        </Box>
+        <Box display={'flex'} flexDirection={'row'}>
+          <Button
+            variant={'contained'}
+            onClick={() => handleRemove(formik.values)}
+            className={classes.submitButton}
+          >
+            Ta bort
           </Button>
         </Box>
       </Box>

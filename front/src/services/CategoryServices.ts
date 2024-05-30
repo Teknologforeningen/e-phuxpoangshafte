@@ -33,3 +33,11 @@ export const editCategory = async (
   const response = await axios.put(url, updatedCategory);
   return response.data as Category;
 };
+
+export const removeCategory = async (
+  categoryInfo: EditCategoryAttributes,
+): Promise<void> => {
+  const url = `${baseUrl}/${categoryInfo.categoryId}`;
+  await axios.delete(url);
+};
+

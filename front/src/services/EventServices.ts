@@ -44,3 +44,10 @@ export const editEvent = async (
   const response = await axios.put(url, updatedEvent);
   return response.data as Event;
 };
+
+export const removeEvent = async (
+  eventInfo: EditedEventAttributes,
+): Promise<void> => {
+  const url = `${baseUrl}/${eventInfo.eventId}`;
+  await axios.delete(url);
+};

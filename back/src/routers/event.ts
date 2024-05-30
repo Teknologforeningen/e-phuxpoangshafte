@@ -55,4 +55,26 @@ eventRouter.put('/:id', userExtractor, async (req, res) => {
   res.json(updatedEvent);
 });
 
+eventRouter.delete('/:id', userExtractor, async (req, res) => {
+  const authUser = req.user;
+  if (authUser.role !== userRole.ADMIN) {
+    return res
+      .status(401)
+      .json({ error: 'You are not authorized for this page' });
+  }
+  try {
+    const eventId = req.params.id;
+    const eventToRemove = await Event.findByPk(eventId)
+    await eventToRemove.destroy()
+    return res
+      .status(200)
+      .send()
+  } 
+  catch (e) {
+    return res
+      .status(500)
+      .json({ error: 'An uneexpected error occured while deleting the event:\n' + e });
+  }
+  });
+
 export default eventRouter;

@@ -103,6 +103,20 @@ const EditEventForm = () => {
     }
   };
 
+  const handleRemove = async (
+    values: EditedEventAttributes
+  ) => {
+    try {
+      await EventServices.removeEvent(values);
+      SuccessNotification(`${values.name} har tagits bort!`);
+      formik.resetForm();
+    } catch (e) {
+      console.error({ error: e, message: 'Could not remove the event' });
+      ErrorNotification(`${values.name} kunde inte tas bort!`);
+    }
+  };
+
+
   const formik = useFormik({
     initialValues: initial,
     validationSchema: validation,
@@ -330,6 +344,15 @@ const EditEventForm = () => {
             className={classes.submitButton}
           >
             Updatera
+          </Button>
+        </Box>
+        <Box display={'flex'} flexDirection={'row'}>
+          <Button
+            variant={'contained'}
+            onClick={() => handleRemove(formik.values)}
+            className={classes.submitButton}
+          >
+            Ta bort
           </Button>
         </Box>
       </Box>
