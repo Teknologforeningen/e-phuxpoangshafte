@@ -30,7 +30,6 @@ categoryRouter.post('/', userExtractor, async (req, res) => {
 });
 
 categoryRouter.put('/:id', userExtractor, async (req, res) => {
-  console.log('Updating category...');
   const authUser = req.user;
   if (authUser.role !== userRole.ADMIN) {
     return res
@@ -46,5 +45,27 @@ categoryRouter.put('/:id', userExtractor, async (req, res) => {
   const categoryUpdated = await categoryToUpdate.save();
   res.json(categoryUpdated); categoryUpdated;
 });
+
+categoryRouter.delete('/:id', userExtractor, async (req, res) => {
+  const authUser = req.user;
+  if (authUser.role !== userRole.ADMIN) {
+    return res
+      .status(401)
+      .json({ error: 'You are not authorized for this page' });
+  }
+  try {
+    const categoryId = req.params.id;
+    const categoryToRemove = await Category.findByPk(categoryId)
+    await categoryToRemove.destroy()
+    return res
+      .status(200)
+      .send()
+  } 
+  catch (e) {
+    return res
+      .status(500)
+      .json({ error: 'An uneexpected error occured while deleting the category:\n' + e });
+  }
+  });
 
 export default categoryRouter;
