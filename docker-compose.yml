@@ -1,12 +1,10 @@
-version: "3"
-
 services:
   back:
     restart: always
     build:
       context: .
       args:
-        REACT_APP_PHUX_YEAR: 2022
+        REACT_APP_PHUX_YEAR: 2024
     ports:
       - "8000:8000"
     container_name: back_phux
@@ -22,6 +20,7 @@ services:
       - SECRET=kossusmakarbasturmetalkopp2021
     depends_on:
       - db
+
   db:
     container_name: phux-db
     image: postgres:16.1-alpine3.18
