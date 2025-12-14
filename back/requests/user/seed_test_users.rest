@@ -1,0 +1,464 @@
+### Admin user
+POST http://localhost:8000/api/users
+Content-Type: application/json
+
+{
+    "role": "ADMIN",
+    "email": "admin@aalto.fi",
+    "password": "admin123",
+    "firstName": "Admin",
+    "lastName": "User",
+    "fieldOfStudy": "TF",
+    "events": [],
+    "capWithTF": true
+}
+
+### Test User 1
+POST http://localhost:8000/api/users
+Content-Type: application/json
+
+{
+    "role": "BASIC",
+    "email": "test1@aalto.fi",
+    "password": "test123",
+    "firstName": "Anna",
+    "lastName": "Andersson",
+    "fieldOfStudy": "Raksa",
+    "events": [],
+    "capWithTF": true
+}
+
+### Test User 2
+POST http://localhost:8000/api/users
+Content-Type: application/json
+
+{
+    "role": "BASIC",
+    "email": "test2@aalto.fi",
+    "password": "test123",
+    "firstName": "Björn",
+    "lastName": "Bergström",
+    "fieldOfStudy": "Kone",
+    "events": [],
+    "capWithTF": false
+}
+
+### Test User 3
+POST http://localhost:8000/api/users
+Content-Type: application/json
+
+{
+    "role": "BASIC",
+    "email": "test3@aalto.fi",
+    "password": "test123",
+    "firstName": "Clara",
+    "lastName": "Carlsson",
+    "fieldOfStudy": "Sähkö",
+    "events": [],
+    "capWithTF": true
+}
+
+### Test User 4
+POST http://localhost:8000/api/users
+Content-Type: application/json
+
+{
+    "role": "BASIC",
+    "email": "test4@aalto.fi",
+    "password": "test123",
+    "firstName": "David",
+    "lastName": "Danielsson",
+    "fieldOfStudy": "Auto",
+    "events": [],
+    "capWithTF": false
+}
+
+### Test User 5
+POST http://localhost:8000/api/users
+Content-Type: application/json
+
+{
+    "role": "BASIC",
+    "email": "test5@aalto.fi",
+    "password": "test123",
+    "firstName": "Emma",
+    "lastName": "Eriksson",
+    "fieldOfStudy": "Tite",
+    "events": [],
+    "capWithTF": true
+}
+
+### Test User 6
+POST http://localhost:8000/api/users
+Content-Type: application/json
+
+{
+    "role": "BASIC",
+    "email": "test6@aalto.fi",
+    "password": "test123",
+    "firstName": "Fredrik",
+    "lastName": "Forsberg",
+    "fieldOfStudy": "Kemi",
+    "events": [],
+    "capWithTF": false
+}
+
+### Test User 7
+POST http://localhost:8000/api/users
+Content-Type: application/json
+
+{
+    "role": "BASIC",
+    "email": "test7@aalto.fi",
+    "password": "test123",
+    "firstName": "Gustav",
+    "lastName": "Gustafsson",
+    "fieldOfStudy": "Raksa",
+    "events": [],
+    "capWithTF": true
+}
+
+### Test User 8
+POST http://localhost:8000/api/users
+Content-Type: application/json
+
+{
+    "role": "BASIC",
+    "email": "test8@aalto.fi",
+    "password": "test123",
+    "firstName": "Helena",
+    "lastName": "Håkansson",
+    "fieldOfStudy": "Kone",
+    "events": [],
+    "capWithTF": false
+}
+
+### Test User 9
+POST http://localhost:8000/api/users
+Content-Type: application/json
+
+{
+    "role": "BASIC",
+    "email": "test9@aalto.fi",
+    "password": "test123",
+    "firstName": "Ida",
+    "lastName": "Isaksson",
+    "fieldOfStudy": "Sähkö",
+    "events": [],
+    "capWithTF": true
+}
+
+### Test User 10
+POST http://localhost:8000/api/users
+Content-Type: application/json
+
+{
+    "role": "BASIC",
+    "email": "test10@aalto.fi",
+    "password": "test123",
+    "firstName": "Johan",
+    "lastName": "Johansson",
+    "fieldOfStudy": "Auto",
+    "events": [],
+    "capWithTF": false
+}
+
+### Test User 11
+POST http://localhost:8000/api/users
+Content-Type: application/json
+
+{
+    "role": "BASIC",
+    "email": "test11@aalto.fi",
+    "password": "test123",
+    "firstName": "Karin",
+    "lastName": "Karlsson",
+    "fieldOfStudy": "Tite",
+    "events": [],
+    "capWithTF": true
+}
+
+### Test User 12
+POST http://localhost:8000/api/users
+Content-Type: application/json
+
+{
+    "role": "BASIC",
+    "email": "test12@aalto.fi",
+    "password": "test123",
+    "firstName": "Lars",
+    "lastName": "Larsson",
+    "fieldOfStudy": "Kemi",
+    "events": [],
+    "capWithTF": false
+}
+
+### Test User 13
+POST http://localhost:8000/api/users
+Content-Type: application/json
+
+{
+    "role": "BASIC",
+    "email": "test13@aalto.fi",
+    "password": "test123",
+    "firstName": "Maria",
+    "lastName": "Martinsson",
+    "fieldOfStudy": "Raksa",
+    "events": [],
+    "capWithTF": true
+}
+
+### Test User 14
+POST http://localhost:8000/api/users
+Content-Type: application/json
+
+{
+    "role": "BASIC",
+    "email": "test14@aalto.fi",
+    "password": "test123",
+    "firstName": "Nils",
+    "lastName": "Nilsson",
+    "fieldOfStudy": "Kone",
+    "events": [],
+    "capWithTF": false
+}
+
+### Test User 15
+POST http://localhost:8000/api/users
+Content-Type: application/json
+
+{
+    "role": "BASIC",
+    "email": "test15@aalto.fi",
+    "password": "test123",
+    "firstName": "Olga",
+    "lastName": "Olsson",
+    "fieldOfStudy": "Sähkö",
+    "events": [],
+    "capWithTF": true
+}
+
+### Test User 16
+POST http://localhost:8000/api/users
+Content-Type: application/json
+
+{
+    "role": "BASIC",
+    "email": "test16@aalto.fi",
+    "password": "test123",
+    "firstName": "Peter",
+    "lastName": "Pettersson",
+    "fieldOfStudy": "Auto",
+    "events": [],
+    "capWithTF": false
+}
+
+### Test User 17
+POST http://localhost:8000/api/users
+Content-Type: application/json
+
+{
+    "role": "BASIC",
+    "email": "test17@aalto.fi",
+    "password": "test123",
+    "firstName": "Qvintus",
+    "lastName": "Qvist",
+    "fieldOfStudy": "Tite",
+    "events": [],
+    "capWithTF": true
+}
+
+### Test User 18
+POST http://localhost:8000/api/users
+Content-Type: application/json
+
+{
+    "role": "BASIC",
+    "email": "test18@aalto.fi",
+    "password": "test123",
+    "firstName": "Rita",
+    "lastName": "Rydberg",
+    "fieldOfStudy": "Kemi",
+    "events": [],
+    "capWithTF": false
+}
+
+### Test User 19
+POST http://localhost:8000/api/users
+Content-Type: application/json
+
+{
+    "role": "BASIC",
+    "email": "test19@aalto.fi",
+    "password": "test123",
+    "firstName": "Sven",
+    "lastName": "Svensson",
+    "fieldOfStudy": "Raksa",
+    "events": [],
+    "capWithTF": true
+}
+
+### Test User 20
+POST http://localhost:8000/api/users
+Content-Type: application/json
+
+{
+    "role": "BASIC",
+    "email": "test20@aalto.fi",
+    "password": "test123",
+    "firstName": "Tilda",
+    "lastName": "Thurman",
+    "fieldOfStudy": "Kone",
+    "events": [],
+    "capWithTF": false
+}
+
+### Test User 21
+POST http://localhost:8000/api/users
+Content-Type: application/json
+
+{
+    "role": "BASIC",
+    "email": "test21@aalto.fi",
+    "password": "test123",
+    "firstName": "Ulrika",
+    "lastName": "Ullman",
+    "fieldOfStudy": "Sähkö",
+    "events": [],
+    "capWithTF": true
+}
+
+### Test User 22
+POST http://localhost:8000/api/users
+Content-Type: application/json
+
+{
+    "role": "BASIC",
+    "email": "test22@aalto.fi",
+    "password": "test123",
+    "firstName": "Viktor",
+    "lastName": "Vikström",
+    "fieldOfStudy": "Auto",
+    "events": [],
+    "capWithTF": false
+}
+
+### Test User 23
+POST http://localhost:8000/api/users
+Content-Type: application/json
+
+{
+    "role": "BASIC",
+    "email": "test23@aalto.fi",
+    "password": "test123",
+    "firstName": "Wilma",
+    "lastName": "Wallin",
+    "fieldOfStudy": "Tite",
+    "events": [],
+    "capWithTF": true
+}
+
+### Test User 24
+POST http://localhost:8000/api/users
+Content-Type: application/json
+
+{
+    "role": "BASIC",
+    "email": "test24@aalto.fi",
+    "password": "test123",
+    "firstName": "Xerxes",
+    "lastName": "Xander",
+    "fieldOfStudy": "Kemi",
+    "events": [],
+    "capWithTF": false
+}
+
+### Test User 25
+POST http://localhost:8000/api/users
+Content-Type: application/json
+
+{
+    "role": "BASIC",
+    "email": "test25@aalto.fi",
+    "password": "test123",
+    "firstName": "Yvonne",
+    "lastName": "Ytterman",
+    "fieldOfStudy": "Raksa",
+    "events": [],
+    "capWithTF": true
+}
+
+### Test User 26
+POST http://localhost:8000/api/users
+Content-Type: application/json
+
+{
+    "role": "BASIC",
+    "email": "test26@aalto.fi",
+    "password": "test123",
+    "firstName": "Zacharias",
+    "lastName": "Zetterberg",
+    "fieldOfStudy": "Kone",
+    "events": [],
+    "capWithTF": false
+}
+
+### Test User 27
+POST http://localhost:8000/api/users
+Content-Type: application/json
+
+{
+    "role": "BASIC",
+    "email": "test27@aalto.fi",
+    "password": "test123",
+    "firstName": "Åsa",
+    "lastName": "Åström",
+    "fieldOfStudy": "Sähkö",
+    "events": [],
+    "capWithTF": true
+}
+
+### Test User 28
+POST http://localhost:8000/api/users
+Content-Type: application/json
+
+{
+    "role": "BASIC",
+    "email": "test28@aalto.fi",
+    "password": "test123",
+    "firstName": "Ärling",
+    "lastName": "Ärlandsson",
+    "fieldOfStudy": "Auto",
+    "events": [],
+    "capWithTF": false
+}
+
+### Test User 29
+POST http://localhost:8000/api/users
+Content-Type: application/json
+
+{
+    "role": "BASIC",
+    "email": "test29@aalto.fi",
+    "password": "test123",
+    "firstName": "Östen",
+    "lastName": "Österberg",
+    "fieldOfStudy": "Tite",
+    "events": [],
+    "capWithTF": true
+}
+
+### Test User 30
+POST http://localhost:8000/api/users
+Content-Type: application/json
+
+{
+    "role": "BASIC",
+    "email": "test30@aalto.fi",
+    "password": "test123",
+    "firstName": "Albin",
+    "lastName": "Almqvist",
+    "fieldOfStudy": "Kemi",
+    "events": [],
+    "capWithTF": false
+}
