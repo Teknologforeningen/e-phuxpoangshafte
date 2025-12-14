@@ -33,6 +33,10 @@ const UserSummary = () => {
 
   const [users, setUsers] = useState<User[] | undefined>();
   const [userToShow, setUserToShow] = useState<number | undefined>();
+  const [paginationModel, setPaginationModel] = useState({
+    page: 0,
+    pageSize: 10,
+  });
   useEffect(() => {
     const getUsers = async () => {
       const response = await UserService.getAllUsers();
@@ -193,11 +197,13 @@ const UserSummary = () => {
 
   return (
     <>
-      <div className={classes.DataGrid}>
-        <div style={{ display: 'flex', height: '100%' }}>
+      <div className={classes.DataGrid} style={{ height: 700, width: '100%' }}>
           <DataGrid
-            autoHeight
-            paginationModel={{ page: 0, pageSize: 10 }}
+            pagination
+            paginationMode="client"
+            paginationModel={paginationModel}
+            onPaginationModelChange={setPaginationModel}
+            pageSizeOptions={[10, 25, 50]}
             rows={usersWithCompletedPoints}
             columns={columnsWithNames}
             onRowClick={(params, event) => {
@@ -205,7 +211,6 @@ const UserSummary = () => {
             }}
             hideFooterSelectedRowCount={true}
           />
-        </div>
       </div>
       {userToShow && (
         <UserCard
