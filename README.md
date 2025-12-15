@@ -25,6 +25,8 @@ make install
 make run
 ```
 
+Looking for the phux_year variable?? It is set in github secrets, see the ci file! ;)
+
 ## Manual testing
 
 ### REST files & Seeding data

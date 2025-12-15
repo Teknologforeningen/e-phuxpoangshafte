@@ -6,7 +6,7 @@ services:
     build:
       context: .
       args:
-        REACT_APP_PHUX_YEAR: 2026
+        REACT_APP_PHUX_YEAR: ${REACT_APP_PHUX_YEAR}
     ports:
       - "8000:8000"
     container_name: back_phux
