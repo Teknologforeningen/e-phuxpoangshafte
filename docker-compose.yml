@@ -6,7 +6,7 @@ services:
     build:
       context: .
       args:
-        REACT_APP_PHUX_YEAR: 2022
+        REACT_APP_PHUX_YEAR: 2026
     ports:
       - "8000:8000"
     container_name: back_phux
@@ -19,6 +19,11 @@ services:
       - DB_PASSWORD=postgres
       - DB_NAME=phuxdb
       - DB_HOST=db
+      # Alternatives when NODE_ENV != production. Make sure db host points to docker service name if using docker compose
+      - DEV_DB=phuxdb
+      - DEV_USERNAME=postgres
+      - DEV_PASSWORD=postgres
+      - DEV_HOST=phux-db
       - SECRET=kossusmakarbasturmetalkopp2021
     depends_on:
       - db

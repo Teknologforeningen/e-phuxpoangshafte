@@ -159,8 +159,14 @@ userRouter.put(
     const newStatus = req.body.status as EventStatus;
     const userId: number = Number(req.params.userID);
     const eventId: number = Number(req.params.eventID);
+    // Always act on the latest non-cancelled request for this event/user
     const event = await DoneEvents.findOne({
-      where: { userID: userId, eventID: eventId },
+      where: {
+        userID: userId,
+        eventID: eventId,
+        status: { [Op.not]: EventStatus.CANCELLED },
+      },
+      order: [['timeOfSignup', 'DESC']],
     });
 
     console.log('UserID:', userId);

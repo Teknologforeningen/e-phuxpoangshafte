@@ -95,8 +95,9 @@ const EventCard = ({
     (dv: DoneEvent) => dv.eventID === event.id,
   )?.status;
 
+  // Allow re-requesting if the event was cancelled
   const unattendedEvent = !authentication.userInfo.events.find(
-    (dv: DoneEvent) => dv.eventID === event.id,
+    (dv: DoneEvent) => dv.eventID === event.id && dv.status !== EventStatus.CANCELLED,
   );
 
   const statusIcon =

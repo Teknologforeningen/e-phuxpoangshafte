@@ -1,9 +1,32 @@
+# Git
+.git
+.gitignore
+
+# Node
 **/node_modules
-**/.env
+**/.npm
+**/.yarn
+
+# Builds
+**/dist
+**/build
+
+# Database
+db-data/
+
+# Env
+.env
+.env.*
+
+# IDE / tooling
+.vscode
+.vscode-server
+.metals
+
+# OS junk
 .DS_Store
 **/.DS_Store
-.metals
-**/dist
-db/**
-db-data
-**/build
+
+# Python
+__pycache__
+*.log
