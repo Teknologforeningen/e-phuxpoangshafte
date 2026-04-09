@@ -13,6 +13,7 @@ import {
   Category,
 } from '../../types';
 import CategoryProgress from './components/CategoryProgress';
+import TotalPointsSummary from './components/TotalPointsSummary';
 import { mapUserDoneEventsToEvents } from '../../utils/HelperFunctions';
 import _ from 'lodash';
 import {
@@ -28,6 +29,8 @@ import {
 } from '@mui/material';
 import { createStyles, makeStyles } from '@mui/styles';
 
+import { DEFAULT_MINIMUM_POINTS } from '../../utils/constants';
+
 const MemberDashboard = () => {
   const classes = useStyles();
   const [expanded, setExpanded] = useState(false);
@@ -36,7 +39,7 @@ const MemberDashboard = () => {
     CategorySelectors.allCategories,
   );
   const nonEmptyCategories = categoriesState.categories.filter(
-    (category: Category) => category.events.length > 0,
+    (category: Category) => category.events.length > 0 && !category.isGlobalCategory,
   );
   const eventState: EventState = useSelector(EventSelectors.allEvents);
   const events = eventState.events;
@@ -61,9 +64,9 @@ const MemberDashboard = () => {
     (event: DoneEvent) => event.status === EventStatus.COMPLETED,
   );
 
-  const listOfCompletedAndMappedEvents = listOfCompletedEvents
+  const listOfCompletedAndMappedEvents: (Event | undefined)[] = listOfCompletedEvents
     .map((event: DoneEvent) => event.eventID)
-    .map((eventID: Number) =>
+    .map((eventID: number) =>
       eventState.events.find((e: Event) => eventID === e.id),
     );
 
@@ -83,9 +86,9 @@ const MemberDashboard = () => {
   );
 
   const completionAmountPerCategori: { [categoryId: number]: number } =
-    Object.entries(pointsPerCategori).reduce(
+    Object.entries(pointsPerCategori).reduce<{ [categoryId: number]: number }>(
       (prev, [categoryId, categoryPoints]) => {
-        const newReturn = {
+        return {
           ...prev,
           [categoryId]:
             categoryPoints > 0
@@ -97,10 +100,19 @@ const MemberDashboard = () => {
                 : 0
               : 0,
         };
-        return newReturn;
       },
       {},
     );
+
+  const totalCompletedPoints: number = (Object.values(completedPointsPerCategori) as number[]).reduce(
+    (sum: number, pts: number) => sum + pts,
+    0,
+  );
+
+  const totalCategory = categoriesState.categories.find(
+    cat => cat.isGlobalCategory
+  );
+  const totalRequiredPoints = totalCategory?.minPoints && totalCategory.minPoints > 0 ? totalCategory.minPoints : DEFAULT_MINIMUM_POINTS;
 
   const ListOfCategoryProgress: JSX.Element[] = nonEmptyCategories
     ? nonEmptyCategories.map(category => (
@@ -134,6 +146,11 @@ const MemberDashboard = () => {
 
   return (
     <Box maxWidth={600}>
+      <TotalPointsSummary 
+        totalCompletedPoints={totalCompletedPoints} 
+        totalRequiredPoints={totalRequiredPoints} 
+      />
+
       {pendingAmount > 0 ? (
         <Card variant={'outlined'} className={classes.cardLayout}>
           <CardActionArea onClick={handleExpandClick}>

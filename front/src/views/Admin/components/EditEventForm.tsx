@@ -39,13 +39,15 @@ const EditEventForm = () => {
   const classes = useStyles();
   const categories = useSelector(CategorySelector.allCategories);
   const events = useSelector(EventSelector.allEvents).events;
-  const CategoryMenuItems = categories.categories.map((cat: Category) => {
-    return (
-      <MenuItem key={cat.id} value={cat.id}>
-        {cat.name}
-      </MenuItem>
-    );
-  });
+  const CategoryMenuItems = categories.categories
+    .filter((cat: Category) => !cat.isGlobalCategory)
+    .map((cat: Category) => {
+      return (
+        <MenuItem key={cat.id} value={cat.id}>
+          {cat.name}
+        </MenuItem>
+      );
+    });
   const EventMenuItems = events.map((event: Event) => {
     return (
       <MenuItem key={event.id} value={event.id}>

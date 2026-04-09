@@ -24,6 +24,7 @@ categoryRouter.post('/', userExtractor, async (req, res) => {
     name: body.name,
     description: body.description,
     minPoints: body.minPoints,
+    isGlobalCategory: false,
   };
   const category: Category = await Category.create(categoryToAdd);
   res.json(category);

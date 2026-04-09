@@ -9,7 +9,7 @@ interface CategoryTypeCreation extends Optional<CategoryType, 'id'> {}
 
 
 @DefaultScope(() => ({
-  attributes: ['id', 'name', 'description', 'minPoints']
+  attributes: ['id', 'name', 'description', 'minPoints', 'isGlobalCategory']
 }))
 
 @Table({
@@ -27,6 +27,9 @@ class Category extends Model<CategoryType, CategoryTypeCreation> {
 
   @Column({ allowNull: true })
   minPoints: number;
+
+  @Column({ allowNull: false, defaultValue: false })
+  isGlobalCategory: boolean;
 
   @HasMany(() => Event)
   events: Event[]

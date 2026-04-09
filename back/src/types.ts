@@ -20,6 +20,7 @@ export interface Category {
   name: string;
   description: string;
   minPoints: number | null;
+  isGlobalCategory: boolean;
 }
 
 export interface Event {

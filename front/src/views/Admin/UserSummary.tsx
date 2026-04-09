@@ -116,14 +116,18 @@ const UserSummary = () => {
     return userWithCompletedPointsByCategory;
   });
 
+  const baseCategories = categories.filter(category => !category.isGlobalCategory);
+  const totalCategory = categories.find(category => category.isGlobalCategory);
+  const totalMinPoints = totalCategory?.minPoints ?? 300;
+
   const nameColumn: GridColDef = {
     field: 'name',
     headerName: 'Namn',
     description:
       'Användarens hela namn. Grön ifall alla kategorier uppfyller poängkraven.',
     width: 150,
-    cellClassName: params =>
-      categories.every(category => {
+    cellClassName: params => {
+      const catsOk = baseCategories.every(category => {
         const pointsInCategory:
           | {
               categoryId: number;
@@ -134,12 +138,38 @@ const UserSummary = () => {
             p.categoryId === category.id,
         );
         return (pointsInCategory?.points ?? 0) >= (category.minPoints ?? 0);
-      })
-        ? 'all_categories_check'
-        : '',
+      });
+      const totalPoints = params.row.pointsByCategory.reduce(
+        (sum: number, p: { points: number | undefined }) => sum + (p.points ?? 0),
+        0
+      );
+      const totalOk = totalPoints >= totalMinPoints;
+      return catsOk && totalOk ? 'all_categories_check' : '';
+    }
   };
 
-  const categoryColumns: GridColDef[] = categories.map(category => {
+  const totalColumn: GridColDef = {
+    field: 'total',
+    headerName: 'Totala poäng',
+    description: `Totalt insamlade poäng över alla kategorier. Minimikrav är ${totalMinPoints}`,
+    width: 150,
+    valueGetter: params => {
+      const sum = params.row.pointsByCategory.reduce(
+        (acc: number, p: { points: number | undefined }) => acc + (p.points ?? 0),
+        0
+      );
+      return `${sum}`;
+    },
+    cellClassName: params => {
+      const sum = params.row.pointsByCategory.reduce(
+        (acc: number, p: { points: number | undefined }) => acc + (p.points ?? 0),
+        0
+      );
+      return sum >= totalMinPoints ? 'mandatory_done' : 'mandatory_not_done';
+    }
+  };
+
+  const categoryColumns: GridColDef[] = baseCategories.map(category => {
     const categoryColumn: GridColDef = {
       field: `${category.id}`,
       headerName: category.name,
@@ -191,6 +221,7 @@ const UserSummary = () => {
 
   const columnsWithNames = [
     nameColumn,
+    totalColumn,
     ...categoryColumns,
     ...mandatoryEventColumns,
   ];
