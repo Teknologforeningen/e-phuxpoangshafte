@@ -7,20 +7,32 @@ interface Props {
   totalRequiredPoints: number;
 }
 
-const TotalPointsSummary = ({ totalCompletedPoints, totalRequiredPoints }: Props) => {
+const TotalPointsSummary = ({
+  totalCompletedPoints,
+  totalRequiredPoints,
+}: Props) => {
   const classes = useStyles();
 
-  const totalProgressPct = Math.min(
-    (totalCompletedPoints / totalRequiredPoints) * 100,
-    100
-  );
+  const hasValidCompletedPoints = Number.isFinite(totalCompletedPoints);
+  const hasValidRequiredPoints =
+    Number.isFinite(totalRequiredPoints) && totalRequiredPoints > 0;
+  const totalProgressPct =
+    hasValidCompletedPoints && hasValidRequiredPoints
+      ? Math.min(
+          Math.max((totalCompletedPoints / totalRequiredPoints) * 100, 0),
+          100,
+        )
+      : 0;
   const totalGoalReached = totalCompletedPoints >= totalRequiredPoints;
 
   return (
     <Card variant={'outlined'} className={classes.cardLayout}>
       <CardContent>
         <Box className={classes.summaryHeader}>
-          <Typography fontWeight="fontWeightBold" className={classes.summaryTitle}>
+          <Typography
+            fontWeight="fontWeightBold"
+            className={classes.summaryTitle}
+          >
             Totala poäng
           </Typography>
           <Typography
@@ -142,7 +154,7 @@ const useStyles = makeStyles(
         color: '#000',
       },
     }),
-  { index: 1 }
+  { index: 1 },
 );
 
 export default TotalPointsSummary;

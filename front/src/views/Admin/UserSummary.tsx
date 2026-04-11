@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { DEFAULT_MINIMUM_POINTS } from '../../utils/constants';
 import { Theme } from '@mui/material/styles';
 import { makeStyles } from '@mui/styles';
 import {
@@ -116,9 +117,14 @@ const UserSummary = () => {
     return userWithCompletedPointsByCategory;
   });
 
-  const baseCategories = categories.filter(category => !category.isGlobalCategory);
+  const baseCategories = categories.filter(
+    category => !category.isGlobalCategory,
+  );
   const totalCategory = categories.find(category => category.isGlobalCategory);
-  const totalMinPoints = totalCategory?.minPoints ?? 300;
+  const totalMinPoints =
+    totalCategory?.minPoints && totalCategory.minPoints > 0
+      ? totalCategory.minPoints
+      : DEFAULT_MINIMUM_POINTS;
 
   const nameColumn: GridColDef = {
     field: 'name',
@@ -140,12 +146,13 @@ const UserSummary = () => {
         return (pointsInCategory?.points ?? 0) >= (category.minPoints ?? 0);
       });
       const totalPoints = params.row.pointsByCategory.reduce(
-        (sum: number, p: { points: number | undefined }) => sum + (p.points ?? 0),
-        0
+        (sum: number, p: { points: number | undefined }) =>
+          sum + (p.points ?? 0),
+        0,
       );
       const totalOk = totalPoints >= totalMinPoints;
       return catsOk && totalOk ? 'all_categories_check' : '';
-    }
+    },
   };
 
   const totalColumn: GridColDef = {
@@ -155,18 +162,20 @@ const UserSummary = () => {
     width: 150,
     valueGetter: params => {
       const sum = params.row.pointsByCategory.reduce(
-        (acc: number, p: { points: number | undefined }) => acc + (p.points ?? 0),
-        0
+        (acc: number, p: { points: number | undefined }) =>
+          acc + (p.points ?? 0),
+        0,
       );
-      return `${sum}`;
+      return sum;
     },
     cellClassName: params => {
       const sum = params.row.pointsByCategory.reduce(
-        (acc: number, p: { points: number | undefined }) => acc + (p.points ?? 0),
-        0
+        (acc: number, p: { points: number | undefined }) =>
+          acc + (p.points ?? 0),
+        0,
       );
       return sum >= totalMinPoints ? 'mandatory_done' : 'mandatory_not_done';
-    }
+    },
   };
 
   const categoryColumns: GridColDef[] = baseCategories.map(category => {
@@ -229,19 +238,19 @@ const UserSummary = () => {
   return (
     <>
       <div className={classes.DataGrid} style={{ height: 700, width: '100%' }}>
-          <DataGrid
-            pagination
-            paginationMode="client"
-            paginationModel={paginationModel}
-            onPaginationModelChange={setPaginationModel}
-            pageSizeOptions={[10, 25, 50]}
-            rows={usersWithCompletedPoints}
-            columns={columnsWithNames}
-            onRowClick={(params, event) => {
-              openPersonCard(params, event);
-            }}
-            hideFooterSelectedRowCount={true}
-          />
+        <DataGrid
+          pagination
+          paginationMode="client"
+          paginationModel={paginationModel}
+          onPaginationModelChange={setPaginationModel}
+          pageSizeOptions={[10, 25, 50]}
+          rows={usersWithCompletedPoints}
+          columns={columnsWithNames}
+          onRowClick={(params, event) => {
+            openPersonCard(params, event);
+          }}
+          hideFooterSelectedRowCount={true}
+        />
       </div>
       {userToShow && (
         <UserCard
