@@ -45,6 +45,7 @@
     "sequelize-cli-typescript": "^3.2.0-c",
     "sequelize-typescript": "^2.1.0",
     "ts-jest": "^27.0.3",
-    "ts-node": "^10.9.1"
+    "ts-node": "^10.9.1",
+    "umzug": "^3.8.2"
   }
 }
