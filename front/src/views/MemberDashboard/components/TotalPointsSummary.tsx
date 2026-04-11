@@ -23,7 +23,10 @@ const TotalPointsSummary = ({
           100,
         )
       : 0;
-  const totalGoalReached = totalCompletedPoints >= totalRequiredPoints;
+  const totalGoalReached =
+    hasValidCompletedPoints &&
+    hasValidRequiredPoints &&
+    totalCompletedPoints >= totalRequiredPoints;
 
   return (
     <Card variant={'outlined'} className={classes.cardLayout}>

@@ -1,4 +1,3 @@
-import path from 'path';
 import { Umzug, SequelizeStorage } from 'umzug';
 var models = require('./models');
 

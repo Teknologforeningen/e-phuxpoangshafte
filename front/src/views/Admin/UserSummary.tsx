@@ -169,11 +169,7 @@ const UserSummary = () => {
       return sum;
     },
     cellClassName: params => {
-      const sum = params.row.pointsByCategory.reduce(
-        (acc: number, p: { points: number | undefined }) =>
-          acc + (p.points ?? 0),
-        0,
-      );
+      const sum = Number(params.value ?? 0);
       return sum >= totalMinPoints ? 'mandatory_done' : 'mandatory_not_done';
     },
   };

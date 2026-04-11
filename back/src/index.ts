@@ -71,14 +71,10 @@ ensureDatabaseExists().then(async () => {
 
     if (!totalCategory) {
       await CategoryModel.create(globalCategoryValues);
-    } else if (
-      totalCategory.name !== globalCategoryValues.name ||
-      totalCategory.description !== globalCategoryValues.description ||
-      totalCategory.minPoints !== globalCategoryValues.minPoints ||
-      !totalCategory.isGlobalCategory
-    ) {
-      await totalCategory.update(globalCategoryValues);
-      console.log('Ensured seeded global category values are up to date');
+    } else if (!totalCategory.isGlobalCategory) {
+      // Only enforce the flag; leave user-configurable fields (name, minPoints, etc.) untouched
+      await totalCategory.update({ isGlobalCategory: true });
+      console.log('Ensured global category flag is set');
     }
   } catch (error) {
     console.error('Failed to seed default category:', error);
