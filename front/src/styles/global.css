@@ -3,13 +3,22 @@
 
 body {
   margin: 0;
-  font-family: 'Montserrat', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+  font-family:
+    'Montserrat',
+    -apple-system,
+    BlinkMacSystemFont,
+    'Segoe UI',
+    'Roboto',
+    'Oxygen',
+    'Ubuntu',
+    'Cantarell',
+    'Fira Sans',
+    'Droid Sans',
+    'Helvetica Neue',
     sans-serif !important;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-color: #f8fafc; /* Light blue-gray background for better contrast */
-  color: #2D3748;
+  /* background-color and color are controlled by MUI CssBaseline via the active theme */
 }
 
 /* Ensure all AG Grid elements use Montserrat */
@@ -19,7 +28,12 @@ body {
 }
 
 /* MUI Typography Overrides (if needed) */
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   font-family: 'Montserrat', sans-serif !important;
   letter-spacing: -0.02em;
 }

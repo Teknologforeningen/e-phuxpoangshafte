@@ -9,6 +9,7 @@ import {
   List,
   ListItem,
   ListItemText,
+  Switch,
   SwipeableDrawer,
   Toolbar,
   Typography,
@@ -32,8 +33,11 @@ import GavelIcon from '@mui/icons-material/Gavel';
 import SummarizeIcon from '@mui/icons-material/Summarize';
 import CategoryIcon from '@mui/icons-material/Category';
 import TaskAltIcon from '@mui/icons-material/TaskAlt';
+import DarkModeIcon from '@mui/icons-material/DarkMode';
+import LightModeIcon from '@mui/icons-material/LightMode';
 import TFLogoSVG from '../../styles/img/TFlogo';
 import classNames from 'classnames';
+import { useThemeMode } from '../../contexts/ThemeContext';
 
 const NotLoggedInList = () => {
   const classes = useStyles();
@@ -123,6 +127,7 @@ const NavBar = () => {
   const authentication = useSelector(auth);
   const [drawerOpen, toggleDrawer] = useState<boolean>(false);
   const anchor = 'left';
+  const { darkMode, toggleDarkMode } = useThemeMode();
 
   const isBrowser = typeof window !== 'undefined';
   const iOS = isBrowser && /iPad|iPhone|iPod/.test(navigator.userAgent);
@@ -243,6 +248,25 @@ const NavBar = () => {
           {authentication.userIsAutharized && (
             <List>
               <ListItem
+                key={'darkModeToggle'}
+                className={classNames(classes.navItem, classes.darkModeItem)}
+                onClick={toggleDarkMode}
+              >
+                <Box className={classes.navIcon}>
+                  {darkMode ? <LightModeIcon /> : <DarkModeIcon />}
+                </Box>
+                <ListItemText
+                  primary={darkMode ? 'Ljust läge' : 'Mörkt läge'}
+                />
+                <Switch
+                  checked={darkMode}
+                  onChange={toggleDarkMode}
+                  onClick={e => e.stopPropagation()}
+                  size="small"
+                  color="secondary"
+                />
+              </ListItem>
+              <ListItem
                 key={'settings'}
                 component={NavLink}
                 to={Routes.USER_SETTINGS}
@@ -282,25 +306,28 @@ const useStyles = makeStyles(
         display: 'flex',
       },
       navItem: {
-        margin: theme.spacing(0.5, 1),
+        margin: theme.spacing(0.5, 1.5),
         padding: theme.spacing(1, 1.5),
         borderRadius: theme.spacing(1.5),
-        color: '#718096',
+        color: theme.palette.text.secondary,
         textDecoration: 'none',
         transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
         '& .MuiListItemText-primary': {
           fontSize: '0.9rem',
         },
         '&:hover': {
-          backgroundColor: '#f1f5f9',
+          backgroundColor: theme.palette.action.hover,
           color: theme.palette.secondary.main,
           '& $navIcon': {
             color: theme.palette.secondary.main,
           },
         },
       },
+      darkModeItem: {
+        cursor: 'pointer',
+      },
       navItemActive: {
-        backgroundColor: `${theme.palette.secondary.main}12`, // Very soft red tint
+        backgroundColor: `${theme.palette.secondary.main}12`,
         color: theme.palette.secondary.main,
         '& $navIcon': {
           color: theme.palette.secondary.main,
@@ -313,7 +340,7 @@ const useStyles = makeStyles(
         display: 'flex',
         alignItems: 'center',
         marginRight: theme.spacing(1.5),
-        color: '#a0aec0',
+        color: theme.palette.text.disabled,
         transition: 'color 0.2s',
         '& svg': {
           fontSize: '1.25rem',
@@ -323,7 +350,7 @@ const useStyles = makeStyles(
         width: drawerWidth,
         '& .MuiDrawer-paper': {
           width: drawerWidth,
-          borderRight: '1px solid #edf2f7',
+          borderRight: `1px solid ${theme.palette.divider}`,
         },
       },
       categoryLinks: {
