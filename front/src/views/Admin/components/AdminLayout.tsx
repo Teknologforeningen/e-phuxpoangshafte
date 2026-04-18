@@ -1,5 +1,12 @@
 import React, { ReactNode } from 'react';
-import { Box, Card, Container, Divider, Theme, Typography } from '@mui/material';
+import {
+  Box,
+  Card,
+  Container,
+  Divider,
+  Theme,
+  Typography,
+} from '@mui/material';
 import { makeStyles } from '@mui/styles';
 
 interface AdminLayoutProps {
@@ -9,18 +16,31 @@ interface AdminLayoutProps {
   maxWidth?: 'xs' | 'sm' | 'md' | 'lg' | 'xl' | false;
 }
 
-const AdminLayout = ({ children, title, description, maxWidth = 'xl' }: AdminLayoutProps) => {
+const AdminLayout = ({
+  children,
+  title,
+  description,
+  maxWidth = false,
+}: AdminLayoutProps) => {
   const classes = useStyles();
 
   return (
-    <Container maxWidth={maxWidth || 'lg'} className={classes.root}>
+    <Container maxWidth={maxWidth} className={classes.root}>
       <Card className={classes.card} elevation={0}>
         <Box mb={2}>
-          <Typography variant="h5" component="h1" gutterBottom className={classes.title}>
+          <Typography
+            variant="h5"
+            component="h1"
+            gutterBottom
+            className={classes.title}
+          >
             {title}
           </Typography>
           {description && (
-            <Typography variant="body2" sx={{ color: '#718096', maxWidth: '800px' }}>
+            <Typography
+              variant="body2"
+              sx={{ color: '#718096', maxWidth: '800px' }}
+            >
               {description}
             </Typography>
           )}
@@ -52,7 +72,7 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
   content: {
     width: '100%',
-  }
+  },
 }));
 
 export default AdminLayout;

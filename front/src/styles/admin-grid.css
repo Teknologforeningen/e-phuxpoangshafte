@@ -103,3 +103,13 @@
 .ag-theme-material .ag-pinned-left-cols-container {
   border-right: 2px solid #e2e8f0 !important;
 }
+
+/* Clickable rows */
+.ag-theme-material .ag-row {
+  cursor: pointer;
+}
+
+/* Floating filter styling */
+.ag-theme-material .ag-floating-filter-input input {
+  font-size: 12px;
+}
