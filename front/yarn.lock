@@ -3644,10 +3644,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/luxon@npm:^1.27.1":
-  version: 1.27.1
-  resolution: "@types/luxon@npm:1.27.1"
-  checksum: 10c0/2c6d131ceaeb842ba562843075bc470d4eaa3895a45ccd8a5cfbccab2f4e997dc41826064883d1966843f81afeccd324872d8d2a7952bbfbf93ee913de324b91
+"@types/luxon@npm:^2.0.0":
+  version: 2.4.0
+  resolution: "@types/luxon@npm:2.4.0"
+  checksum: 10c0/2686d03827a3799f0374923323148f4d0d07f9e4321551389b2ae285e5085e178cfe908806041ab32bf66534497702b4ae8459d1b4190258af133818d4b846c9
   languageName: node
   linkType: hard
 
@@ -4333,6 +4333,26 @@ __metadata:
     loader-utils: "npm:^2.0.0"
     regex-parser: "npm:^2.2.11"
   checksum: 10c0/6a6e5bb8b670e4e1238c708f6163e92aa2ad0308fe5913de73c89e4cbf41738ee0bcc5552b94d0b7bf8be435ee49b78c6de8a6db7badd80762051e843c8aa14f
+  languageName: node
+  linkType: hard
+
+"ag-grid-community@npm:31.3.1":
+  version: 31.3.1
+  resolution: "ag-grid-community@npm:31.3.1"
+  checksum: 10c0/d0fcbc34542667c42736611e73e09d8215816b738e6793c9d96895cabb0483745ff4d6fea85d9578e2514e001e8c95c380825dc47e2bb0aff536c23b5de6472b
+  languageName: node
+  linkType: hard
+
+"ag-grid-react@npm:31.3.1":
+  version: 31.3.1
+  resolution: "ag-grid-react@npm:31.3.1"
+  dependencies:
+    ag-grid-community: "npm:31.3.1"
+    prop-types: "npm:^15.8.1"
+  peerDependencies:
+    react: ^16.3.0 || ^17.0.0 || ^18.0.0
+    react-dom: ^16.3.0 || ^17.0.0 || ^18.0.0
+  checksum: 10c0/070ea0b86fd315aa21f99bff50f4d39b07c0d7144eb7d2348294e2f63e43d818e08bf90bd9529edf9e41bb10e4a060540304b94728c01b616e40fa047337e078
   languageName: node
   linkType: hard
 
@@ -5190,9 +5210,9 @@ __metadata:
   linkType: hard
 
 "caniuse-lite@npm:^1.0.0, caniuse-lite@npm:^1.0.30001538, caniuse-lite@npm:^1.0.30001541":
-  version: 1.0.30001563
-  resolution: "caniuse-lite@npm:1.0.30001563"
-  checksum: 10c0/a8b367d43e0307ec243d8df8515d563fa3de895e9698eec4539037aed400da81e0df737164da2a6b7104ab6e75b4ea63db0adebcaabe326f2792841980259256
+  version: 1.0.30001787
+  resolution: "caniuse-lite@npm:1.0.30001787"
+  checksum: 10c0/93a6975afbf07f49c9077b348948bbc25b6a82596ccd07b4b6503e48f6f968e1a1e057cc25004db8a2d1d4f35f0c792739e33634edfcefc88ff184c9a2f7a036
   languageName: node
   linkType: hard
 
@@ -7399,24 +7419,28 @@ __metadata:
     "@mui/lab": "npm:^5.0.0-alpha.153"
     "@mui/material": "npm:^5.14.18"
     "@mui/styles": "npm:^5.14.18"
+    "@mui/system": "npm:^5.14.18"
     "@mui/x-data-grid": "npm:^6.18.1"
     "@mui/x-date-pickers": "npm:^6.18.1"
+    "@testing-library/dom": "npm:^7.28.1"
     "@testing-library/jest-dom": "npm:^5.11.4"
     "@testing-library/react": "npm:^11.1.0"
     "@testing-library/user-event": "npm:^12.1.10"
     "@types/jest": "npm:^26.0.15"
     "@types/lodash": "npm:^4.14.172"
-    "@types/luxon": "npm:^1.27.1"
+    "@types/luxon": "npm:^2.0.0"
     "@types/node": "npm:^12.0.0"
     "@types/qrcode.react": "npm:^1.0.2"
     "@types/react": "npm:^18.2.37"
     "@types/react-dom": "npm:^18.2.15"
     "@types/react-router-dom": "npm:^5.1.8"
+    ag-grid-community: "npm:31.3.1"
+    ag-grid-react: "npm:31.3.1"
     axios: "npm:^0.21.1"
     classnames: "npm:^2.3.1"
     formik: "npm:^2.2.9"
     lodash: "npm:^4.17.21"
-    luxon: "npm:^2.0.1"
+    luxon: "npm:^2.5.2"
     qrcode.react: "npm:^3.1.0"
     react: "npm:^18.2.0"
     react-dom: "npm:^18.2.0"
@@ -9868,7 +9892,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"luxon@npm:^2.0.1":
+"luxon@npm:^2.5.2":
   version: 2.5.2
   resolution: "luxon@npm:2.5.2"
   checksum: 10c0/c93b71c4ae74c440982f39832159b9311eca6db1e55d032d30a3f9354e6ceb16d576158c5dc9f847eb15c481557063bd61defdb96ee0953f8df2c57cd91e0b13
