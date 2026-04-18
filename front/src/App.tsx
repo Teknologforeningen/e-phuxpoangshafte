@@ -72,15 +72,12 @@ const App = () => {
       const response = await SiteSettingsServices.getSiteSettings();
       dispatch(initSiteSettings(response));
     };
-    try {
-      getAndSetSiteSettings();
-    } catch (e) {
-      console.error({
-        error: 'Failed to fetch site settings from back end:',
-        e,
-      });
-      ErrorNotification('Ett problem uppstod då inställningarna hämtades.');
-    }
+    getAndSetSiteSettings().catch(e => {
+      console.error('Failed to fetch site settings from back end:', e);
+      ErrorNotification(
+        'Ett problem uppstod då sidans inställningarna hämtades.',
+      );
+    });
   }, [dispatch]);
 
   toast.configure();

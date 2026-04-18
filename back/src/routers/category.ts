@@ -44,7 +44,6 @@ categoryRouter.put('/:id', userExtractor, async (req, res) => {
   categoryToUpdate.minPoints = body.minPoints;
   const categoryUpdated = await categoryToUpdate.save();
   res.json(categoryUpdated);
-  categoryUpdated;
 });
 
 categoryRouter.delete('/:id', userExtractor, async (req, res) => {

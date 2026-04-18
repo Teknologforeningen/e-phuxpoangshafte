@@ -12,10 +12,7 @@ import { Box, CircularProgress, Theme } from '@mui/material';
 import UserSettings from './views/UserSettings';
 import { makeStyles, createStyles } from '@mui/styles';
 import StartPage from './views/StartPage';
-import NavBar, {
-  navBarHeight,
-  drawerWidth,
-} from './components/Navigation/NavBar';
+import NavBar, { navBarHeight } from './components/Navigation/NavBar';
 import QRPage from './components/Hashing/QRPage';
 import QRvalidation from './components/Hashing/QRvalidation';
 import InstructionsList from './views/Instructions';
