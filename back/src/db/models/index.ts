@@ -1,23 +1,35 @@
 import { Sequelize } from 'sequelize-typescript';
 var db: any = {};
 
+const commonConfig = {
+  dialect: 'postgres' as const,
+  models: [__dirname + '/models'],
+  retry: {
+    max: 10,
+    match: [
+      /ECONNRESET/i,
+      /ECONNREFUSED/i,
+      /ETIMEDOUT/i,
+      /SequelizeConnectionError/i,
+    ],
+  },
+};
+
 const sequelize = new Sequelize(
   process.env.NODE_ENV !== 'production'
     ? {
+        ...commonConfig,
         database: process.env.DEV_DB,
-        dialect: 'postgres',
         username: process.env.DEV_USERNAME,
         password: process.env.DEV_PASSWORD,
         host: process.env.DEV_HOST,
-        models: [__dirname + '/models'],
       }
     : {
+        ...commonConfig,
         database: process.env.DB_NAME,
-        dialect: 'postgres',
         username: process.env.DB_USER,
         password: process.env.DB_PASSWORD,
         host: process.env.DB_HOST,
-        models: [__dirname + '/models'],
       },
 );
 
