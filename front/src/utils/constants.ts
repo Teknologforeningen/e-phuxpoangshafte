@@ -1,1 +1,0 @@
-export const DEFAULT_MINIMUM_POINTS = 300;

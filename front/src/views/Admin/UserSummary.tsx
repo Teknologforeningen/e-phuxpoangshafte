@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import { DEFAULT_MINIMUM_POINTS } from '../../utils/constants';
 import { Theme } from '@mui/material/styles';
 import { makeStyles } from '@mui/styles';
 import {
@@ -12,6 +11,7 @@ import { useSelector } from 'react-redux';
 import * as UserService from '../../services/UserServices';
 import * as EventSelector from '../../selectors/EventSelectors';
 import * as CategorySelector from '../../selectors/CategorySelectors';
+import * as SiteSettingsSelectors from '../../selectors/SiteSettingsSelectors';
 import {
   Event,
   User,
@@ -31,6 +31,8 @@ const UserSummary = () => {
   const categories: Category[] = useSelector(
     CategorySelector.allCategoriesOrderedByNameAsc,
   );
+  const siteSettingsState = useSelector(SiteSettingsSelectors.siteSettings);
+  const totalMinPoints = siteSettingsState.settings?.totalMinPoints ?? 0;
 
   const [users, setUsers] = useState<User[] | undefined>();
   const [userToShow, setUserToShow] = useState<number | undefined>();
@@ -117,15 +119,6 @@ const UserSummary = () => {
     return userWithCompletedPointsByCategory;
   });
 
-  const baseCategories = categories.filter(
-    category => !category.isGlobalCategory,
-  );
-  const totalCategory = categories.find(category => category.isGlobalCategory);
-  const totalMinPoints =
-    totalCategory?.minPoints && totalCategory.minPoints > 0
-      ? totalCategory.minPoints
-      : DEFAULT_MINIMUM_POINTS;
-
   const nameColumn: GridColDef = {
     field: 'name',
     headerName: 'Namn',
@@ -133,7 +126,7 @@ const UserSummary = () => {
       'Användarens hela namn. Grön ifall alla kategorier uppfyller poängkraven.',
     width: 150,
     cellClassName: params => {
-      const catsOk = baseCategories.every(category => {
+      const catsOk = categories.every(category => {
         const pointsInCategory:
           | {
               categoryId: number;
@@ -174,7 +167,7 @@ const UserSummary = () => {
     },
   };
 
-  const categoryColumns: GridColDef[] = baseCategories.map(category => {
+  const categoryColumns: GridColDef[] = categories.map(category => {
     const categoryColumn: GridColDef = {
       field: `${category.id}`,
       headerName: category.name,

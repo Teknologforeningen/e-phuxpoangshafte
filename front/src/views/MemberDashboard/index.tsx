@@ -3,6 +3,7 @@ import { useSelector } from 'react-redux';
 import { auth } from '../../selectors/AuthSelectors';
 import * as CategorySelectors from '../../selectors/CategorySelectors';
 import * as EventSelectors from '../../selectors/EventSelectors';
+import * as SiteSettingsSelectors from '../../selectors/SiteSettingsSelectors';
 import {
   AuthState,
   CategoryState,
@@ -11,6 +12,7 @@ import {
   Event,
   EventStatus,
   Category,
+  SiteSettingsState,
 } from '../../types';
 import CategoryProgress from './components/CategoryProgress';
 import TotalPointsSummary from './components/TotalPointsSummary';
@@ -29,8 +31,6 @@ import {
 } from '@mui/material';
 import { createStyles, makeStyles } from '@mui/styles';
 
-import { DEFAULT_MINIMUM_POINTS } from '../../utils/constants';
-
 const MemberDashboard = () => {
   const classes = useStyles();
   const [expanded, setExpanded] = useState(false);
@@ -38,8 +38,11 @@ const MemberDashboard = () => {
   const categoriesState: CategoryState = useSelector(
     CategorySelectors.allCategories,
   );
+  const siteSettingsState: SiteSettingsState = useSelector(
+    SiteSettingsSelectors.siteSettings,
+  );
   const nonEmptyCategories = categoriesState.categories.filter(
-    (category: Category) => category.events.length > 0 && !category.isGlobalCategory,
+    (category: Category) => category.events.length > 0,
   );
   const eventState: EventState = useSelector(EventSelectors.allEvents);
   const events = eventState.events;
@@ -64,11 +67,12 @@ const MemberDashboard = () => {
     (event: DoneEvent) => event.status === EventStatus.COMPLETED,
   );
 
-  const listOfCompletedAndMappedEvents: (Event | undefined)[] = listOfCompletedEvents
-    .map((event: DoneEvent) => event.eventID)
-    .map((eventID: number) =>
-      eventState.events.find((e: Event) => eventID === e.id),
-    );
+  const listOfCompletedAndMappedEvents: (Event | undefined)[] =
+    listOfCompletedEvents
+      .map((event: DoneEvent) => event.eventID)
+      .map((eventID: number) =>
+        eventState.events.find((e: Event) => eventID === e.id),
+      );
 
   const completedEventsGroupedByCategoryId = _.groupBy(
     listOfCompletedAndMappedEvents,
@@ -104,15 +108,11 @@ const MemberDashboard = () => {
       {},
     );
 
-  const totalCompletedPoints: number = (Object.values(completedPointsPerCategori) as number[]).reduce(
-    (sum: number, pts: number) => sum + pts,
-    0,
-  );
+  const totalCompletedPoints: number = (
+    Object.values(completedPointsPerCategori) as number[]
+  ).reduce((sum: number, pts: number) => sum + pts, 0);
 
-  const totalCategory = categoriesState.categories.find(
-    cat => cat.isGlobalCategory
-  );
-  const totalRequiredPoints = totalCategory?.minPoints && totalCategory.minPoints > 0 ? totalCategory.minPoints : DEFAULT_MINIMUM_POINTS;
+  const totalRequiredPoints = siteSettingsState.settings?.totalMinPoints ?? 0;
 
   const ListOfCategoryProgress: JSX.Element[] = nonEmptyCategories
     ? nonEmptyCategories.map(category => (
@@ -146,9 +146,9 @@ const MemberDashboard = () => {
 
   return (
     <Box maxWidth={600}>
-      <TotalPointsSummary 
-        totalCompletedPoints={totalCompletedPoints} 
-        totalRequiredPoints={totalRequiredPoints} 
+      <TotalPointsSummary
+        totalCompletedPoints={totalCompletedPoints}
+        totalRequiredPoints={totalRequiredPoints}
       />
 
       {pendingAmount > 0 ? (

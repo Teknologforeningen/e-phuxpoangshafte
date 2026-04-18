@@ -20,7 +20,11 @@ export interface Category {
   name: string;
   description: string;
   minPoints: number | null;
-  isGlobalCategory: boolean;
+}
+
+export interface SiteSettings {
+  id: number;
+  totalMinPoints: number;
 }
 
 export interface Event {

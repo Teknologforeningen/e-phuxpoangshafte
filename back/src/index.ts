@@ -57,27 +57,14 @@ ensureDatabaseExists().then(async () => {
   await umzug.up();
 
   try {
-    const CategoryModel = models.sequelize.models.Category;
-    const globalCategoryValues = {
-      name: 'Totala poäng',
-      description: 'Sammanlagd poänggräns för alla kategorier.',
-      minPoints: 300,
-      isGlobalCategory: true,
-    };
-
-    let totalCategory = await CategoryModel.findOne({
-      where: { isGlobalCategory: true },
-    });
-
-    if (!totalCategory) {
-      await CategoryModel.create(globalCategoryValues);
-    } else if (!totalCategory.isGlobalCategory) {
-      // Only enforce the flag; leave user-configurable fields (name, minPoints, etc.) untouched
-      await totalCategory.update({ isGlobalCategory: true });
-      console.log('Ensured global category flag is set');
+    const SiteSettingsModel = models.sequelize.models.SiteSettings;
+    const existing = await SiteSettingsModel.findOne();
+    if (!existing) {
+      await SiteSettingsModel.create({ totalMinPoints: 300 });
+      console.log('Default site settings created (totalMinPoints: 300)');
     }
   } catch (error) {
-    console.error('Failed to seed default category:', error);
+    console.error('Failed to seed site settings:', error);
   }
 
   server.listen(PORT, () => {
