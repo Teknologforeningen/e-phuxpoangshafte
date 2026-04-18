@@ -69,18 +69,18 @@ const App = () => {
   // Get site settings from backend
   useEffect(() => {
     const getAndSetSiteSettings = async () => {
-      const response = await SiteSettingsServices.getSiteSettings();
-      dispatch(initSiteSettings(response));
+      try {
+        const response = await SiteSettingsServices.getSiteSettings();
+        dispatch(initSiteSettings(response));
+      } catch (e) {
+        console.error({
+          error: 'Failed to fetch site settings from back end:',
+          e,
+        });
+        ErrorNotification('Ett problem uppstod då inställningarna hämtades.');
+      }
     };
-    try {
-      getAndSetSiteSettings();
-    } catch (e) {
-      console.error({
-        error: 'Failed to fetch site settings from back end:',
-        e,
-      });
-      ErrorNotification('Ett problem uppstod då inställningarna hämtades.');
-    }
+    getAndSetSiteSettings();
   }, [dispatch]);
 
   toast.configure();

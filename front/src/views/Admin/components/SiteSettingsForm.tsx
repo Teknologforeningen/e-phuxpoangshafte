@@ -66,7 +66,14 @@ const SiteSettingsForm = () => {
           aria-label={'Totala minimipoäng'}
           placeholder={'300'}
           value={formik.values.totalMinPoints}
-          onChange={formik.handleChange}
+          onChange={event =>
+            formik.setFieldValue(
+              'totalMinPoints',
+              event.target.value === ''
+                ? undefined
+                : event.target.valueAsNumber,
+            )
+          }
           error={
             formik.touched.totalMinPoints &&
             Boolean(formik.errors.totalMinPoints)

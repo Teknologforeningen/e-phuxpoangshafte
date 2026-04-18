@@ -44,7 +44,6 @@ categoryRouter.put('/:id', userExtractor, async (req, res) => {
   categoryToUpdate.minPoints = body.minPoints;
   const categoryUpdated = await categoryToUpdate.save();
   res.json(categoryUpdated);
-  categoryUpdated;
 });
 
 categoryRouter.delete('/:id', userExtractor, async (req, res) => {
@@ -57,6 +56,9 @@ categoryRouter.delete('/:id', userExtractor, async (req, res) => {
   try {
     const categoryId = req.params.id;
     const categoryToRemove = await Category.findByPk(categoryId);
+    if (!categoryToRemove) {
+      return res.status(404).json({ error: 'Category not found' });
+    }
     await categoryToRemove.destroy();
     return res.status(200).send();
   } catch (e) {
