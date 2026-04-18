@@ -4,10 +4,25 @@ import {
   ColDef,
   ColGroupDef,
   ICellRendererParams,
-  RowDoubleClickedEvent,
+  RowClickedEvent,
+  GridApi,
 } from 'ag-grid-community';
 
-import { Theme, Box, Chip } from '@mui/material';
+import {
+  Theme,
+  Box,
+  Chip,
+  Button,
+  Badge,
+  Drawer,
+  Popover,
+  ToggleButtonGroup,
+  ToggleButton,
+  Typography,
+  Tooltip,
+} from '@mui/material';
+import FilterListIcon from '@mui/icons-material/FilterList';
+import TuneIcon from '@mui/icons-material/Tune';
 import { createStyles, makeStyles } from '@mui/styles';
 import { useSelector } from 'react-redux';
 import { groupBy, orderBy } from 'lodash';
@@ -79,6 +94,36 @@ const AllOkRenderer = (params: ICellRendererParams) => {
   );
 };
 
+const PendingCountRenderer = (params: ICellRendererParams) => {
+  const count = params.value ?? 0;
+  if (count === 0) return null;
+  return (
+    <Badge
+      badgeContent={count}
+      color="warning"
+      sx={{
+        '& .MuiBadge-badge': {
+          fontWeight: 700,
+          fontSize: '0.7rem',
+        },
+      }}
+    >
+      <Chip
+        label="Väntande"
+        size="small"
+        sx={{
+          fontWeight: 700,
+          bgcolor: 'rgba(237, 137, 54, 0.1)',
+          color: '#C05621',
+          borderRadius: '8px',
+          border: 'none',
+          fontSize: '0.75rem',
+        }}
+      />
+    </Badge>
+  );
+};
+
 const UserSummary = () => {
   const classes = useStyles();
   const events: Event[] = useSelector(
@@ -92,6 +137,16 @@ const UserSummary = () => {
 
   const [users, setUsers] = useState<User[] | undefined>();
   const [userToShow, setUserToShow] = useState<number | undefined>();
+  const [showOnlyPending, setShowOnlyPending] = useState(false);
+  const [gridApi, setGridApi] = useState<GridApi | null>(null);
+  const [refreshSeed, setRefreshSeed] = useState(0);
+  const [filterAnchor, setFilterAnchor] = useState<HTMLElement | null>(null);
+  const [filterMode, setFilterMode] = useState<'AND' | 'OR'>('AND');
+  const [activeFilters, setActiveFilters] = useState<string[]>([]);
+
+  const refreshUsers = useCallback(() => {
+    setRefreshSeed(s => s + 1);
+  }, []);
 
   useEffect(() => {
     const getUsers = async () => {
@@ -104,7 +159,7 @@ const UserSummary = () => {
       setUsers(users);
     };
     getUsers();
-  }, []);
+  }, [refreshSeed]);
 
   const usersNoAdmins = useMemo(
     () => users?.filter((user: User) => user.role !== UserRole.ADMIN) || [],
@@ -166,6 +221,9 @@ const UserSummary = () => {
         },
         fieldOfStudy: user.fieldOfStudy,
         total: { points: totalPoints },
+        pendingCount: user.events.filter(e => e.status === EventStatus.PENDING)
+          .length,
+        _user: user,
       };
 
       categories.forEach(category => {
@@ -198,6 +256,28 @@ const UserSummary = () => {
       pinned: 'left',
       cellRenderer: AllOkRenderer,
       comparator: (a: any, b: any) => a.name.localeCompare(b.name),
+      filter: 'agTextColumnFilter',
+      floatingFilter: true,
+      filterValueGetter: (params: any) => params.data?.nameData?.name ?? '',
+    };
+
+    // --- Field of study (info column next to name) ---
+    const fieldOfStudyCol: ColDef = {
+      field: 'fieldOfStudy',
+      headerName: 'Studieriktning',
+      width: 160,
+      filter: 'agTextColumnFilter',
+      floatingFilter: true,
+    };
+
+    // --- Pending requests column ---
+    const pendingCol: ColDef = {
+      field: 'pendingCount',
+      headerName: 'Förfrågningar',
+      headerTooltip: 'Antal väntande poängförfrågningar',
+      width: 150,
+      cellRenderer: PendingCountRenderer,
+      comparator: (a: any, b: any) => (a ?? 0) - (b ?? 0),
     };
 
     // --- ÖVERGRIPANDE group: Studieriktning, Totala poäng ---
@@ -205,12 +285,6 @@ const UserSummary = () => {
       headerName: 'ÖVERGRIPANDE',
       marryChildren: true,
       children: [
-        {
-          field: 'fieldOfStudy',
-          headerName: 'Studieriktning',
-          width: 160,
-          columnGroupShow: 'open',
-        },
         {
           field: 'total',
           headerName: 'Totala poäng',
@@ -277,22 +351,369 @@ const UserSummary = () => {
 
     return [
       nameCol,
+      fieldOfStudyCol,
+      pendingCol,
       overviewGroup,
       ...categoryGroups,
       ...(extraGroup ? [extraGroup] : []),
     ];
   }, [categories, events, totalMinPoints]);
 
-  const onRowDoubleClicked = useCallback((event: RowDoubleClickedEvent) => {
+  const onRowClicked = useCallback((event: RowClickedEvent) => {
     const userId = Number(event.data.id);
     setUserToShow(userId);
   }, []);
 
+  const totalPendingCount = useMemo(
+    () => rowData.reduce((sum, r) => sum + (r.pendingCount ?? 0), 0),
+    [rowData],
+  );
+
+  const isExternalFilterPresent = useCallback(
+    () => showOnlyPending || activeFilters.length > 0,
+    [showOnlyPending, activeFilters],
+  );
+  const doesExternalFilterPass = useCallback(
+    (node: any) => {
+      const data = node.data;
+      if (!data) return false;
+
+      const pendingPass = !showOnlyPending || (data.pendingCount ?? 0) > 0;
+      if (!pendingPass) return false;
+
+      if (activeFilters.length === 0) return true;
+
+      const checks = activeFilters.map(filterKey => {
+        if (filterKey === 'total_ok') {
+          return (data.total?.points ?? 0) >= totalMinPoints;
+        }
+        if (filterKey === 'total_not_ok') {
+          return (data.total?.points ?? 0) < totalMinPoints;
+        }
+        if (filterKey.startsWith('cat_ok_')) {
+          const catId = Number(filterKey.replace('cat_ok_', ''));
+          const cat = categories.find(c => c.id === catId);
+          return (data[`cat_${catId}`]?.points ?? 0) >= (cat?.minPoints ?? 0);
+        }
+        if (filterKey.startsWith('cat_not_ok_')) {
+          const catId = Number(filterKey.replace('cat_not_ok_', ''));
+          const cat = categories.find(c => c.id === catId);
+          return (data[`cat_${catId}`]?.points ?? 0) < (cat?.minPoints ?? 0);
+        }
+        if (filterKey.startsWith('event_done_')) {
+          const eventId = Number(filterKey.replace('event_done_', ''));
+          const user: User = data._user;
+          return user.events.some(
+            e => e.eventID === eventId && e.status === EventStatus.COMPLETED,
+          );
+        }
+        if (filterKey.startsWith('event_not_done_')) {
+          const eventId = Number(filterKey.replace('event_not_done_', ''));
+          const user: User = data._user;
+          return !user.events.some(
+            e => e.eventID === eventId && e.status === EventStatus.COMPLETED,
+          );
+        }
+        return true;
+      });
+
+      return filterMode === 'AND'
+        ? checks.every(Boolean)
+        : checks.some(Boolean);
+    },
+    [showOnlyPending, activeFilters, filterMode, totalMinPoints, categories],
+  );
+
+  useEffect(() => {
+    if (gridApi) {
+      gridApi.onFilterChanged();
+    }
+  }, [showOnlyPending, activeFilters, filterMode, gridApi]);
+
+  const segBtnOk = {
+    textTransform: 'none',
+    fontSize: '0.7rem',
+    fontWeight: 600,
+    px: 1.5,
+    py: 0.25,
+    '&.Mui-selected': {
+      bgcolor: '#2F855A',
+      color: '#fff',
+      '&:hover': { bgcolor: '#276749' },
+    },
+  } as const;
+
+  const segBtnBad = {
+    textTransform: 'none',
+    fontSize: '0.7rem',
+    fontWeight: 600,
+    px: 1.5,
+    py: 0.25,
+    '&.Mui-selected': {
+      bgcolor: '#C53030',
+      color: '#fff',
+      '&:hover': { bgcolor: '#9B2C2C' },
+    },
+  } as const;
+
   return (
     <AdminLayout
       title="Sammanställning"
-      description="Total sammanställning av alla användares poäng dividerat i kategorier."
+      description="Samlad översikt av användare, poäng och förfrågningar."
     >
+      <Box display="flex" alignItems="center" gap={1} mb={1} flexWrap="wrap">
+        <Button
+          variant={showOnlyPending ? 'contained' : 'outlined'}
+          size="small"
+          startIcon={<FilterListIcon />}
+          onClick={() => setShowOnlyPending(prev => !prev)}
+          sx={{
+            textTransform: 'none',
+            fontWeight: 600,
+            borderRadius: '8px',
+            ...(showOnlyPending
+              ? { bgcolor: '#C05621', '&:hover': { bgcolor: '#9C4221' } }
+              : { borderColor: '#e2e8f0', color: '#718096' }),
+          }}
+        >
+          Visa väntande
+          {totalPendingCount > 0 && (
+            <Chip
+              label={totalPendingCount}
+              size="small"
+              sx={{
+                ml: 1,
+                height: 20,
+                fontWeight: 700,
+                fontSize: '0.7rem',
+                bgcolor: showOnlyPending
+                  ? 'rgba(255,255,255,0.25)'
+                  : 'rgba(237, 137, 54, 0.15)',
+                color: showOnlyPending ? '#fff' : '#C05621',
+              }}
+            />
+          )}
+        </Button>
+
+        <Button
+          variant={activeFilters.length > 0 ? 'contained' : 'outlined'}
+          size="small"
+          startIcon={<TuneIcon />}
+          onClick={e => setFilterAnchor(e.currentTarget)}
+          sx={{
+            textTransform: 'none',
+            fontWeight: 600,
+            borderRadius: '8px',
+            ...(activeFilters.length > 0
+              ? { bgcolor: '#3182CE', '&:hover': { bgcolor: '#2B6CB0' } }
+              : { borderColor: '#e2e8f0', color: '#718096' }),
+          }}
+        >
+          Poängfilter
+          {activeFilters.length > 0 && (
+            <Chip
+              label={activeFilters.length}
+              size="small"
+              sx={{
+                ml: 1,
+                height: 20,
+                fontWeight: 700,
+                fontSize: '0.7rem',
+                bgcolor: 'rgba(255,255,255,0.25)',
+                color: '#fff',
+              }}
+            />
+          )}
+        </Button>
+        {activeFilters.length > 0 && (
+          <Button
+            size="small"
+            onClick={() => setActiveFilters([])}
+            sx={{ textTransform: 'none', color: '#718096', fontSize: '0.8rem' }}
+          >
+            Rensa filter
+          </Button>
+        )}
+
+        <Popover
+          open={!!filterAnchor}
+          anchorEl={filterAnchor}
+          onClose={() => setFilterAnchor(null)}
+          anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
+          PaperProps={{
+            sx: { p: 2, minWidth: 300, maxHeight: 480, overflowY: 'auto' },
+          }}
+        >
+          <Box
+            display="flex"
+            alignItems="center"
+            justifyContent="space-between"
+            mb={1}
+          >
+            <Typography variant="subtitle2" fontWeight={700}>
+              Filtrera efter status
+            </Typography>
+            <ToggleButtonGroup
+              value={filterMode}
+              exclusive
+              size="small"
+              onChange={(_, val) => val && setFilterMode(val)}
+              sx={{ ml: 2 }}
+            >
+              <ToggleButton
+                value="AND"
+                sx={{
+                  textTransform: 'none',
+                  fontSize: '0.75rem',
+                  px: 1.5,
+                  py: 0.25,
+                }}
+              >
+                <Tooltip title="Alla valda villkor måste uppfyllas">
+                  <span>OCH</span>
+                </Tooltip>
+              </ToggleButton>
+              <ToggleButton
+                value="OR"
+                sx={{
+                  textTransform: 'none',
+                  fontSize: '0.75rem',
+                  px: 1.5,
+                  py: 0.25,
+                }}
+              >
+                <Tooltip title="Minst ett av villkoren måste uppfyllas">
+                  <span>ELLER</span>
+                </Tooltip>
+              </ToggleButton>
+            </ToggleButtonGroup>
+          </Box>
+
+          <Typography
+            variant="caption"
+            color="textSecondary"
+            fontWeight={600}
+            sx={{ mt: 1, display: 'block' }}
+          >
+            Totala poäng
+          </Typography>
+          <ToggleButtonGroup
+            value={
+              activeFilters.includes('total_ok')
+                ? 'ok'
+                : activeFilters.includes('total_not_ok')
+                  ? 'not_ok'
+                  : null
+            }
+            exclusive
+            size="small"
+            onChange={(_, val) =>
+              setActiveFilters(prev => {
+                const cleaned = prev.filter(
+                  f => f !== 'total_ok' && f !== 'total_not_ok',
+                );
+                if (val === 'ok') return [...cleaned, 'total_ok'];
+                if (val === 'not_ok') return [...cleaned, 'total_not_ok'];
+                return cleaned;
+              })
+            }
+            sx={{ mt: 0.5, display: 'flex' }}
+          >
+            <ToggleButton value="ok" sx={segBtnOk}>
+              ✓ Uppfyllt (≥ {totalMinPoints}p)
+            </ToggleButton>
+            <ToggleButton value="not_ok" sx={segBtnBad}>
+              ✗ Ej uppfyllt
+            </ToggleButton>
+          </ToggleButtonGroup>
+
+          {categories.map(cat => {
+            const catEvents = events.filter(e => e.categoryId === cat.id);
+            if (catEvents.length === 0) return null;
+            const catOkKey = `cat_ok_${cat.id}`;
+            const catNotOkKey = `cat_not_ok_${cat.id}`;
+            return (
+              <Box key={cat.id}>
+                <Typography
+                  variant="caption"
+                  color="textSecondary"
+                  fontWeight={600}
+                  sx={{ mt: 1.5, display: 'block' }}
+                >
+                  {cat.name}
+                </Typography>
+                <ToggleButtonGroup
+                  value={
+                    activeFilters.includes(catOkKey)
+                      ? 'ok'
+                      : activeFilters.includes(catNotOkKey)
+                        ? 'not_ok'
+                        : null
+                  }
+                  exclusive
+                  size="small"
+                  onChange={(_, val) =>
+                    setActiveFilters(prev => {
+                      const cleaned = prev.filter(
+                        f => f !== catOkKey && f !== catNotOkKey,
+                      );
+                      if (val === 'ok') return [...cleaned, catOkKey];
+                      if (val === 'not_ok') return [...cleaned, catNotOkKey];
+                      return cleaned;
+                    })
+                  }
+                  sx={{ mt: 0.5, display: 'flex' }}
+                >
+                  <ToggleButton value="ok" sx={segBtnOk}>
+                    ✓ Uppfyllt (≥ {cat.minPoints ?? 0}p)
+                  </ToggleButton>
+                  <ToggleButton value="not_ok" sx={segBtnBad}>
+                    ✗ Ej uppfyllt
+                  </ToggleButton>
+                </ToggleButtonGroup>
+                {catEvents.map(event => {
+                  const doneKey = `event_done_${event.id}`;
+                  const notDoneKey = `event_not_done_${event.id}`;
+                  return (
+                    <ToggleButtonGroup
+                      key={event.id}
+                      value={
+                        activeFilters.includes(doneKey)
+                          ? 'done'
+                          : activeFilters.includes(notDoneKey)
+                            ? 'not_done'
+                            : null
+                      }
+                      exclusive
+                      size="small"
+                      onChange={(_, val) =>
+                        setActiveFilters(prev => {
+                          const cleaned = prev.filter(
+                            f => f !== doneKey && f !== notDoneKey,
+                          );
+                          if (val === 'done') return [...cleaned, doneKey];
+                          if (val === 'not_done')
+                            return [...cleaned, notDoneKey];
+                          return cleaned;
+                        })
+                      }
+                      sx={{ mt: 0.5, ml: 1, display: 'flex' }}
+                    >
+                      <ToggleButton value="done" sx={segBtnOk}>
+                        ✓ {event.name}
+                        {event.mandatory ? ' ★' : ''}
+                      </ToggleButton>
+                      <ToggleButton value="not_done" sx={segBtnBad}>
+                        ✗ Ogjord
+                      </ToggleButton>
+                    </ToggleButtonGroup>
+                  );
+                })}
+              </Box>
+            );
+          })}
+        </Popover>
+      </Box>
       <Box className={classes.agGridContainer}>
         <div
           className="ag-theme-material"
@@ -307,18 +728,39 @@ const UserSummary = () => {
             animateRows={true}
             pagination={true}
             paginationPageSize={20}
-            onRowDoubleClicked={onRowDoubleClicked}
+            onRowClicked={onRowClicked}
+            onGridReady={params => setGridApi(params.api)}
+            isExternalFilterPresent={isExternalFilterPresent}
+            doesExternalFilterPass={doesExternalFilterPass}
           />
         </div>
       </Box>
 
-      {userToShow && users && (
-        <UserCard
-          user={users.find(user => user.id === userToShow)!}
-          allEvents={events}
-          allCategories={categories}
-          clearUserId={() => setUserToShow(undefined)}
-        />
+      {users && (
+        <Drawer
+          anchor="right"
+          open={!!userToShow}
+          onClose={() => setUserToShow(undefined)}
+          PaperProps={{
+            sx: {
+              width: { xs: '100%', sm: 480 },
+              boxSizing: 'border-box',
+              overflowY: 'auto',
+              top: '60px',
+              height: 'calc(100% - 60px)',
+            },
+          }}
+        >
+          {userToShow && (
+            <UserCard
+              user={users.find(user => user.id === userToShow)!}
+              allEvents={events}
+              allCategories={categories}
+              clearUserId={() => setUserToShow(undefined)}
+              onRefresh={refreshUsers}
+            />
+          )}
+        </Drawer>
       )}
     </AdminLayout>
   );

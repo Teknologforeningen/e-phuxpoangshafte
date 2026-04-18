@@ -12,7 +12,10 @@ import { Box, CircularProgress, Theme } from '@mui/material';
 import UserSettings from './views/UserSettings';
 import { makeStyles, createStyles } from '@mui/styles';
 import StartPage from './views/StartPage';
-import NavBar, { navBarHeight, drawerWidth } from './components/Navigation/NavBar';
+import NavBar, {
+  navBarHeight,
+  drawerWidth,
+} from './components/Navigation/NavBar';
 import QRPage from './components/Hashing/QRPage';
 import QRvalidation from './components/Hashing/QRvalidation';
 import InstructionsList from './views/Instructions';
@@ -99,10 +102,7 @@ const useStyles = makeStyles((theme: Theme) =>
       marginTop: navBarHeight + 5,
       padding: theme.spacing(0, 2),
       flex: '1 1 0',
-      // Leave space for permanent drawer on md+ screens
-      [theme.breakpoints.up('md')]: {
-        marginLeft: drawerWidth,
-      },
+      minWidth: 0,
       [theme.breakpoints.down('md')]: {
         marginTop: navBarHeight + 5,
       },

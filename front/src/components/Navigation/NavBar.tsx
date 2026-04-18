@@ -29,9 +29,7 @@ import LogOutButton from '../routing/LogoutButton';
 import SettingsIcon from '@mui/icons-material/Settings';
 import HomeIcon from '@mui/icons-material/Home';
 import GavelIcon from '@mui/icons-material/Gavel';
-import PeopleIcon from '@mui/icons-material/People';
 import SummarizeIcon from '@mui/icons-material/Summarize';
-import AssignmentIcon from '@mui/icons-material/Assignment';
 import CategoryIcon from '@mui/icons-material/Category';
 import TaskAltIcon from '@mui/icons-material/TaskAlt';
 import TFLogoSVG from '../../styles/img/TFlogo';
@@ -66,15 +64,17 @@ const AdminList = () => {
   const location = useLocation();
 
   const adminLinks = [
-    { label: 'Användartabell', path: Routes.ADMIN, icon: <PeopleIcon /> },
-    { label: 'Sammanställning', path: Routes.ADMIN_SUMMARY, icon: <SummarizeIcon /> },
-    { label: 'Förfrågningar', path: Routes.ADMIN_REQUESTS, icon: <AssignmentIcon /> },
-    { label: 'Kategorier och poäng', path: Routes.ADMIN_ADDMORE, icon: <CategoryIcon /> },
+    { label: 'Sammanställning', path: Routes.ADMIN, icon: <SummarizeIcon /> },
+    {
+      label: 'Kategorier och poäng',
+      path: Routes.ADMIN_ADDMORE,
+      icon: <CategoryIcon />,
+    },
   ];
 
   return (
     <List>
-      {adminLinks.map((link) => (
+      {adminLinks.map(link => (
         <ListItem
           key={link.path}
           component={NavLink}
@@ -150,7 +150,9 @@ const NavBar = () => {
                 [classes.navItemActive]: location.pathname === path,
               })}
             >
-              <Box className={classes.navIcon}><TaskAltIcon /></Box>
+              <Box className={classes.navIcon}>
+                <TaskAltIcon />
+              </Box>
               <ListItemText primary={cat.name} />
             </ListItem>
           );
@@ -203,7 +205,9 @@ const NavBar = () => {
                     [classes.navItemActive]: location.pathname === Routes.ROOT,
                   })}
                 >
-                  <Box className={classes.navIcon}><HomeIcon /></Box>
+                  <Box className={classes.navIcon}>
+                    <HomeIcon />
+                  </Box>
                   <ListItemText primary={'Hem'} />
                 </ListItem>
                 <ListItem
@@ -211,10 +215,13 @@ const NavBar = () => {
                   component={NavLink}
                   to={Routes.INSTRUCTIONS}
                   className={classNames(classes.navItem, {
-                    [classes.navItemActive]: location.pathname === Routes.INSTRUCTIONS,
+                    [classes.navItemActive]:
+                      location.pathname === Routes.INSTRUCTIONS,
                   })}
                 >
-                  <Box className={classes.navIcon}><GavelIcon /></Box>
+                  <Box className={classes.navIcon}>
+                    <GavelIcon />
+                  </Box>
                   <ListItemText primary={'Reglemente'} />
                 </ListItem>
               </List>
@@ -240,10 +247,13 @@ const NavBar = () => {
                 component={NavLink}
                 to={Routes.USER_SETTINGS}
                 className={classNames(classes.navItem, {
-                  [classes.navItemActive]: location.pathname === Routes.USER_SETTINGS,
+                  [classes.navItemActive]:
+                    location.pathname === Routes.USER_SETTINGS,
                 })}
               >
-                <Box className={classes.navIcon}><SettingsIcon /></Box>
+                <Box className={classes.navIcon}>
+                  <SettingsIcon />
+                </Box>
                 <ListItemText primary={'Inställningar'} />
               </ListItem>
               <ListItem
@@ -283,7 +293,7 @@ const useStyles = makeStyles(
           color: theme.palette.secondary.main,
           '& $navIcon': {
             color: theme.palette.secondary.main,
-          }
+          },
         },
       },
       navItemActive: {
@@ -294,7 +304,7 @@ const useStyles = makeStyles(
         },
         '& .MuiTypography-root': {
           fontWeight: 700,
-        }
+        },
       },
       navIcon: {
         display: 'flex',
@@ -304,14 +314,14 @@ const useStyles = makeStyles(
         transition: 'color 0.2s',
         '& svg': {
           fontSize: '1.25rem',
-        }
+        },
       },
       sideBar: {
         width: drawerWidth,
         '& .MuiDrawer-paper': {
           width: drawerWidth,
           borderRight: '1px solid #edf2f7',
-        }
+        },
       },
       categoryLinks: {
         color: theme.palette.primary.contrastText,
