@@ -124,6 +124,32 @@ const PendingCountRenderer = (params: ICellRendererParams) => {
   );
 };
 
+const segBtnOk = {
+  textTransform: 'none',
+  fontSize: '0.7rem',
+  fontWeight: 600,
+  px: 1.5,
+  py: 0.25,
+  '&.Mui-selected': {
+    bgcolor: '#2F855A',
+    color: '#fff',
+    '&:hover': { bgcolor: '#276749' },
+  },
+} as const;
+
+const segBtnBad = {
+  textTransform: 'none',
+  fontSize: '0.7rem',
+  fontWeight: 600,
+  px: 1.5,
+  py: 0.25,
+  '&.Mui-selected': {
+    bgcolor: '#C53030',
+    color: '#fff',
+    '&:hover': { bgcolor: '#9B2C2C' },
+  },
+} as const;
+
 const UserSummary = () => {
   const classes = useStyles();
   const events: Event[] = useSelector(
@@ -430,32 +456,6 @@ const UserSummary = () => {
     }
   }, [showOnlyPending, activeFilters, filterMode, gridApi]);
 
-  const segBtnOk = {
-    textTransform: 'none',
-    fontSize: '0.7rem',
-    fontWeight: 600,
-    px: 1.5,
-    py: 0.25,
-    '&.Mui-selected': {
-      bgcolor: '#2F855A',
-      color: '#fff',
-      '&:hover': { bgcolor: '#276749' },
-    },
-  } as const;
-
-  const segBtnBad = {
-    textTransform: 'none',
-    fontSize: '0.7rem',
-    fontWeight: 600,
-    px: 1.5,
-    py: 0.25,
-    '&.Mui-selected': {
-      bgcolor: '#C53030',
-      color: '#fff',
-      '&:hover': { bgcolor: '#9B2C2C' },
-    },
-  } as const;
-
   return (
     <AdminLayout
       title="Sammanställning"
@@ -725,7 +725,6 @@ const UserSummary = () => {
             headerHeight={48}
             groupHeaderHeight={48}
             defaultColDef={{ resizable: true, sortable: true }}
-            animateRows={true}
             pagination={true}
             paginationPageSize={20}
             onRowClicked={onRowClicked}
