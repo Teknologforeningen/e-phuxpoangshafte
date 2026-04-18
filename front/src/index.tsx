@@ -9,6 +9,7 @@ import { StylesProvider, jssPreset } from '@mui/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import * as Themes from './styles/themes';
 import '@mui/lab/themeAugmentation';
+import { ThemeModeProvider, useThemeMode } from './contexts/ThemeContext';
 
 import 'ag-grid-community/styles/ag-grid.css';
 import 'ag-grid-community/styles/ag-theme-material.css';
@@ -22,16 +23,26 @@ const jss = create({
   insertionPoint: document.getElementById('insertion-point')!,
 });
 
-ReactDOM.render(
-  <Provider store={store}>
+const AppWithTheme: React.FC = () => {
+  const { darkMode } = useThemeMode();
+  const activeTheme = darkMode ? Themes.darkTheme : Themes.lightTheme;
+  return (
     <StylesProvider jss={jss}>
-      <ThemeProvider theme={Themes.theme}>
+      <ThemeProvider theme={activeTheme}>
         <CssBaseline />
         <Router>
           <App />
         </Router>
       </ThemeProvider>
     </StylesProvider>
+  );
+};
+
+ReactDOM.render(
+  <Provider store={store}>
+    <ThemeModeProvider>
+      <AppWithTheme />
+    </ThemeModeProvider>
   </Provider>,
   document.getElementById('root'),
 );
