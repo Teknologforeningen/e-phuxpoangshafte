@@ -1,12 +1,15 @@
-import React, { useEffect, useState } from 'react';
-import { Box, Button, Typography } from '@mui/material';
+import React, { useEffect, useState, useMemo, useCallback } from 'react';
+import { Box, IconButton, Tooltip } from '@mui/material';
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import CancelIcon from '@mui/icons-material/Cancel';
+
+import { AgGridReact } from 'ag-grid-react';
+import { ColDef, ICellRendererParams } from 'ag-grid-community';
 
 import { User, DoneEvent, Event, EventStatus } from '../../types';
 
 import * as UserService from '../../services/UserServices';
 import * as EventSelector from '../../selectors/EventSelectors';
-import { ensure } from '../../utils/HelperFunctions';
-import Togglable from '../../components/UI/Togglable';
 import {
   ErrorNotification,
   InfoNotification,
@@ -14,9 +17,55 @@ import {
 } from '../../components/Notifications';
 import { orderBy } from 'lodash';
 import { useSelector } from 'react-redux';
+import AdminLayout from './components/AdminLayout';
 
-const EventRequest = ({ user, event }: { user: User; event: Event }) => {
-  const acceptPoint = async () => {
+interface PendingRequest {
+  id: string; // userId_eventId
+  user: User;
+  event: Event;
+  doneEvent: DoneEvent;
+}
+
+const RequestPage = () => {
+  const [users, setUsers] = useState<User[]>([]);
+  const [refreshSeed, setRefreshSeed] = useState(0); // Quick way to trigger refetches
+  const events: Event[] = useSelector(
+    EventSelector.allEventsOrderedByStartTime,
+  );
+
+  useEffect(() => {
+    const getUsers = async () => {
+      const response = await UserService.getAllUsers();
+      setUsers(response);
+    };
+    getUsers();
+  }, [refreshSeed]);
+
+  const rowData = useMemo(() => {
+    if (!users || !events) return [];
+
+    let pending: PendingRequest[] = [];
+    users.forEach(user => {
+      user.events
+        .filter(e => e.status === EventStatus.PENDING)
+        .forEach(doneEvent => {
+          const matchingEvent = events.find(ev => ev.id === doneEvent.eventID);
+          if (matchingEvent) {
+            pending.push({
+              id: `${user.id}_${matchingEvent.id}`,
+              user,
+              event: matchingEvent,
+              doneEvent,
+            });
+          }
+        });
+    });
+
+    // Order by signup time descending (newest requests first)
+    return orderBy(pending, ['doneEvent.timeOfSignup'], ['desc']);
+  }, [users, events]);
+
+  const handleApprove = useCallback(async (user: User, event: Event) => {
     try {
       await UserService.updateUserEventStatus(
         user,
@@ -24,8 +73,9 @@ const EventRequest = ({ user, event }: { user: User; event: Event }) => {
         EventStatus.COMPLETED,
       );
       SuccessNotification(
-        `${event.name} för ${user.firstName} ${user.lastName} har godkännts!`,
+        `${event.name} för ${user.firstName} ${user.lastName} har godkänts!`,
       );
+      setRefreshSeed(s => s + 1);
     } catch (error) {
       console.error({
         error,
@@ -35,13 +85,19 @@ const EventRequest = ({ user, event }: { user: User; event: Event }) => {
         `${event.name} för ${user.firstName} ${user.lastName} kunde inte godkännas!`,
       );
     }
-  };
-  const declinePoint = () => {
+  }, []);
+
+  const handleDecline = useCallback(async (user: User, event: Event) => {
     try {
-      UserService.updateUserEventStatus(user, event.id, EventStatus.CANCELLED);
-      InfoNotification(
-        `${event.name} för ${user.firstName} ${user.lastName} har förkastas`,
+      await UserService.updateUserEventStatus(
+        user,
+        event.id,
+        EventStatus.CANCELLED,
       );
+      InfoNotification(
+        `${event.name} för ${user.firstName} ${user.lastName} har förkastats`,
+      );
+      setRefreshSeed(s => s + 1);
     } catch (error) {
       console.error({
         error,
@@ -51,96 +107,113 @@ const EventRequest = ({ user, event }: { user: User; event: Event }) => {
         `${event.name} för ${user.firstName} ${user.lastName} kunde inte förkastas!`,
       );
     }
-  };
+  }, []);
 
-  return (
-    <Box>
-      {event.name}
-      <Button variant={'contained'} onClick={acceptPoint}>
-        Godkänn
-      </Button>
-      <Button variant={'contained'} onClick={declinePoint}>
-        Förkasta
-      </Button>
-    </Box>
-  );
-};
+  const ActionsRenderer = useCallback(
+    (params: ICellRendererParams) => {
+      const req: PendingRequest = params.data;
+      if (!req) return null;
 
-const UserRequests = ({ user, events }: { user: User; events: Event[] }) => {
-  const userEvents = user.events.map((dv: DoneEvent) =>
-    ensure(events.find((event: Event) => event.id === dv.eventID)),
-  );
-  const userEventsOrderedByStartDate = orderBy(userEvents, 'startTime', 'desc');
-  const eventsWithRequests = userEventsOrderedByStartDate.map((event: Event) =>
-    event ? (
-      <EventRequest
-        key={`user${user.id}+event${event.id}`}
-        user={user}
-        event={event}
-      />
-    ) : (
-      <></>
-    ),
-  );
-  return (
-    <Box>
-      <Typography variant="h6">
-        {user.firstName + ' ' + user.lastName}
-      </Typography>
-      <Box>
-        <Togglable
-          buttonLabelOpen={'Visa förfrågningar'}
-          buttonLabelClose={'Stäng'}
-        >
-          {eventsWithRequests}
-        </Togglable>
-      </Box>
-    </Box>
-  );
-};
-
-const RequestPage = () => {
-  const [users, setUsers] = useState<User[] | undefined>();
-  const events: Event[] = useSelector(EventSelector.allEvents).events;
-  useEffect(() => {
-    const getUsers = async () => {
-      const response = await UserService.getAllUsers();
-      const users = orderBy(
-        response,
-        ['lastName', 'firstName'],
-        ['asc', 'asc'],
+      return (
+        <Box display="flex" gap={1} alignItems="center" height="100%">
+          <Tooltip title="Godkänn poäng">
+            <IconButton
+              color="success"
+              size="small"
+              onClick={() => handleApprove(req.user, req.event)}
+            >
+              <CheckCircleIcon />
+            </IconButton>
+          </Tooltip>
+          <Tooltip title="Förkasta poäng">
+            <IconButton
+              color="error"
+              size="small"
+              onClick={() => handleDecline(req.user, req.event)}
+            >
+              <CancelIcon />
+            </IconButton>
+          </Tooltip>
+        </Box>
       );
-      setUsers(users);
-    };
-    getUsers();
-  }, [users]);
-
-  if (!users || !events) {
-    return <React.Fragment></React.Fragment>;
-  }
-
-  const usersFilteredEvents = users.map((user: User) => {
-    const filteredUser = {
-      ...user,
-      events: user.events.filter(
-        (doneEvent: DoneEvent) => doneEvent.status === EventStatus.PENDING,
-      ),
-    };
-    return filteredUser;
-  });
-  const usersWithRequests = usersFilteredEvents.filter(
-    (user: User) => user.events.length > 0,
+    },
+    [handleApprove, handleDecline],
   );
 
-  const userRequests = usersWithRequests.map((user: User) => {
-    return <UserRequests key={user.id} user={user} events={events} />;
-  });
+  const columnDefs = useMemo<ColDef[]>(
+    () => [
+      {
+        field: 'user.firstName',
+        headerName: 'Användare',
+        valueGetter: p => `${p.data.user.firstName} ${p.data.user.lastName}`,
+        filter: 'agTextColumnFilter',
+        floatingFilter: true,
+        minWidth: 200,
+      },
+      {
+        field: 'event.name',
+        headerName: 'Evenemang/Poäng',
+        filter: 'agTextColumnFilter',
+        floatingFilter: true,
+        minWidth: 200,
+      },
+      {
+        field: 'event.points',
+        headerName: 'Poäng',
+        width: 100,
+      },
+      {
+        field: 'doneEvent.timeOfSignup',
+        headerName: 'Ansökt den',
+        valueFormatter: p =>
+          new Date(p.value).toLocaleDateString('sv-SE', {
+            year: 'numeric',
+            month: 'short',
+            day: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit',
+          }),
+        minWidth: 180,
+      },
+      {
+        headerName: 'Åtgärder',
+        cellRenderer: ActionsRenderer,
+        pinned: 'right',
+        lockPinned: true,
+        width: 120,
+        suppressMenu: true,
+        sortable: false,
+      },
+    ],
+    [ActionsRenderer],
+  );
+
+  if (!users) return null;
 
   return (
-    <Box>
-      <Typography variant="h5">Ansökta underskrifter</Typography>
-      {userRequests}
-    </Box>
+    <AdminLayout
+      title="Ansökta underskrifter"
+      description="Hantera och godkänn poängförfrågningar snabbt genom listan nedan."
+    >
+      <Box width="100%" mt={2}>
+        <div
+          className="ag-theme-material"
+          style={{ height: '700px', width: '100%' }}
+        >
+          <AgGridReact
+            rowData={rowData}
+            columnDefs={columnDefs}
+            headerHeight={48}
+            groupHeaderHeight={48}
+            defaultColDef={{ resizable: true, sortable: true }}
+            animateRows={true}
+            pagination={true}
+            paginationPageSize={20}
+            rowHeight={52}
+          />
+        </div>
+      </Box>
+    </AdminLayout>
   );
 };
 

@@ -1,0 +1,105 @@
+/* Premium AG Grid Overrides for the Admin Dashboard */
+
+.ag-theme-material {
+  --ag-font-family: 'Montserrat', sans-serif !important;
+  --ag-font-size: 13px;
+  --ag-header-height: 44px;
+  --ag-header-column-separator-display: block;
+  --ag-header-column-separator-color: #f1f5f9;
+  --ag-header-background-color: #f8fafc;
+  --ag-header-foreground-color: #718096;
+  --ag-header-cell-hover-background-color: #f1f5f9;
+  --ag-border-color: #edf2f7;
+  --ag-secondary-foreground-color: #a0aec0;
+  --ag-selected-row-background-color: #fef2f2;
+  --ag-row-hover-color: #f7fafc;
+  --ag-font-weight-bold: 600;
+  --ag-input-focus-border-color: #b20738;
+}
+
+.ag-theme-material .ag-header-cell-label {
+  justify-content: flex-start;
+  font-weight: 600;
+  text-transform: none;
+  letter-spacing: 0.01em;
+}
+
+.ag-theme-material .ag-header-cell::after {
+  height: 60% !important;
+  top: 20% !important;
+  border-right-color: #e2e8f0 !important;
+}
+
+.ag-theme-material .ag-row {
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.ag-theme-material .ag-cell {
+  display: flex;
+  align-items: center;
+  color: #4a5568;
+  padding-left: 16px;
+  padding-right: 16px;
+}
+
+/* Pagination controls polish */
+.ag-theme-material .ag-paging-panel {
+  border-top: 1px solid #edf2f7;
+  background-color: #fff;
+  color: #718096;
+  font-size: 13px;
+  height: 48px;
+  border-bottom-left-radius: 20px;
+  border-bottom-right-radius: 20px;
+}
+
+/* Scrollbars - refined and slim */
+.ag-body-viewport::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+.ag-body-viewport::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.ag-body-viewport::-webkit-scrollbar-thumb {
+  background: #e2e8f0;
+  border-radius: 10px;
+}
+
+.ag-body-viewport::-webkit-scrollbar-thumb:hover {
+  background: #cbd5e0;
+}
+
+/* Grouped column header row styling */
+.ag-theme-material .ag-header-group-cell {
+  background-color: #edf2f7;
+  font-weight: 700;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #4a5568;
+  border-right: 2px solid #e2e8f0 !important;
+}
+
+.ag-theme-material .ag-header-group-cell-label {
+  justify-content: center;
+}
+
+/* Separator between groups at the child header level */
+.ag-theme-material .ag-header-group-cell:not(:last-child)::after {
+  content: '';
+  position: absolute;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: #e2e8f0;
+}
+
+/* Pinned left column styling */
+.ag-theme-material .ag-pinned-left-header,
+.ag-theme-material .ag-pinned-left-cols-container {
+  border-right: 2px solid #e2e8f0 !important;
+}

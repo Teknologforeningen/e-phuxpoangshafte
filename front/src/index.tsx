@@ -10,6 +10,10 @@ import CssBaseline from '@mui/material/CssBaseline';
 import * as Themes from './styles/themes';
 import '@mui/lab/themeAugmentation';
 
+import 'ag-grid-community/styles/ag-grid.css';
+import 'ag-grid-community/styles/ag-theme-material.css';
+import './styles/global.css';
+import './styles/admin-grid.css';
 import { create } from 'jss';
 
 const jss = create({

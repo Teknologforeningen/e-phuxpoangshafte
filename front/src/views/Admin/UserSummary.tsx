@@ -1,13 +1,17 @@
-import React, { useEffect, useState } from 'react';
-import { Theme } from '@mui/material/styles';
-import { makeStyles } from '@mui/styles';
+import React, { useEffect, useState, useMemo, useCallback } from 'react';
+import { AgGridReact } from 'ag-grid-react';
 import {
-  DataGrid,
-  GridRowParams,
-  GridColDef,
-  MuiEvent,
-} from '@mui/x-data-grid';
+  ColDef,
+  ColGroupDef,
+  ICellRendererParams,
+  RowDoubleClickedEvent,
+} from 'ag-grid-community';
+
+import { Theme, Box, Chip } from '@mui/material';
+import { createStyles, makeStyles } from '@mui/styles';
 import { useSelector } from 'react-redux';
+import { groupBy, orderBy } from 'lodash';
+
 import * as UserService from '../../services/UserServices';
 import * as EventSelector from '../../selectors/EventSelectors';
 import * as CategorySelector from '../../selectors/CategorySelectors';
@@ -20,8 +24,60 @@ import {
   Category,
   CombinedEvent,
 } from '../../types';
-import { groupBy, orderBy } from 'lodash';
 import UserCard from './components/UserCard';
+import AdminLayout from './components/AdminLayout';
+
+const PointStatusRenderer = (params: ICellRendererParams) => {
+  const { value, colDef } = params;
+  if (!colDef || value === undefined) return null;
+
+  const points = Number(value.points ?? 0);
+  const minPoints = Number(colDef.cellRendererParams?.minPoints ?? 0);
+  const isOk = points >= minPoints;
+
+  return (
+    <Chip
+      label={points.toString()}
+      size="small"
+      sx={{
+        fontWeight: 700,
+        bgcolor: isOk ? 'rgba(72, 187, 120, 0.1)' : 'rgba(245, 101, 101, 0.1)',
+        color: isOk ? '#2F855A' : '#C53030',
+        borderRadius: '8px',
+        border: 'none',
+        fontSize: '0.75rem',
+      }}
+    />
+  );
+};
+
+const MandatoryRenderer = (params: ICellRendererParams) => {
+  const isDone = params.value === true;
+  return (
+    <Chip
+      label={isDone ? 'Gjord' : 'Ogjort'}
+      size="small"
+      sx={{
+        fontWeight: 700,
+        bgcolor: isDone ? 'rgba(72, 187, 120, 0.1)' : '#f8fafc',
+        color: isDone ? '#2F855A' : '#718096',
+        borderRadius: '8px',
+        border: isDone ? 'none' : '1px solid #edf2f7',
+        fontSize: '0.75rem',
+      }}
+    />
+  );
+};
+
+const AllOkRenderer = (params: ICellRendererParams) => {
+  const val = params.value;
+  return (
+    <Box display="flex" alignItems="center" gap={1}>
+      {val.allOk && <span style={{ color: '#436436', fontSize: 18 }}>●</span>}
+      <span>{val.name}</span>
+    </Box>
+  );
+};
 
 const UserSummary = () => {
   const classes = useStyles();
@@ -36,10 +92,7 @@ const UserSummary = () => {
 
   const [users, setUsers] = useState<User[] | undefined>();
   const [userToShow, setUserToShow] = useState<number | undefined>();
-  const [paginationModel, setPaginationModel] = useState({
-    page: 0,
-    pageSize: 10,
-  });
+
   useEffect(() => {
     const getUsers = async () => {
       const response = await UserService.getAllUsers();
@@ -53,195 +106,213 @@ const UserSummary = () => {
     getUsers();
   }, []);
 
-  if (!events || !users || !categories) {
-    return (
-      <div>
-        <p>loading...</p>
-      </div>
-    );
-  }
-
-  const openPersonCard = (
-    params: GridRowParams,
-    event: MuiEvent<React.SyntheticEvent<Element, globalThis.Event>>,
-  ) => {
-    const userId = Number(params.row.id);
-    setUserToShow(userId);
-  };
-
-  const usersNoAdmins = users.filter(
-    (user: User) => user.role !== UserRole.ADMIN,
+  const usersNoAdmins = useMemo(
+    () => users?.filter((user: User) => user.role !== UserRole.ADMIN) || [],
+    [users],
   );
 
-  const getPointsByCategoryFromCompletedEvents = (
-    completedEvents: CombinedEvent[],
-  ) => {
-    const completedEventsGroupedByCategoryId = groupBy(
-      completedEvents,
-      'categoryId',
-    );
-    const pointsByCategoryId = Object.entries(
-      completedEventsGroupedByCategoryId,
-    ).map(([categoryId, events]) => {
-      const sumOfEventPoints = events.reduce(
-        (a, b) => (b.points ? a + b.points : a),
-        0,
+  const rowData = useMemo(() => {
+    if (!usersNoAdmins.length || !events.length || !categories.length)
+      return [];
+
+    return usersNoAdmins.map(user => {
+      const completedEvents = user.events.filter(
+        event => event.status === EventStatus.COMPLETED,
       );
-      return { categoryId: Number(categoryId), points: sumOfEventPoints };
-    });
-    return pointsByCategoryId;
-  };
+      const completedEventsCombinedWithEventInfo: CombinedEvent[] =
+        completedEvents.map(doneEvent => {
+          const eventInfo = events.find(
+            event => event.id === doneEvent.eventID,
+          )!;
+          return { ...doneEvent, ...eventInfo };
+        });
 
-  const usersWithCompletedPoints = usersNoAdmins.map(user => {
-    const completedEvents = user.events.filter(
-      event => event.status === EventStatus.COMPLETED,
-    );
-    const completedEventsCombinedWithEventInfo: CombinedEvent[] =
-      completedEvents.map(doneEvent => {
-        const eventInfo = events.find(event => event.id === doneEvent.eventID)!; //ok för vi vet att de måst finnas en event som matchar doneEvent.eventID
-        return {
-          ...doneEvent,
-          ...eventInfo,
-        };
-      });
-    const mandatoryEvents = completedEventsCombinedWithEventInfo.filter(
-      event => event.mandatory,
-    );
-    const pointsByCategoryId = getPointsByCategoryFromCompletedEvents(
-      completedEventsCombinedWithEventInfo,
-    );
-    const userWithCompletedPointsByCategory = {
-      id: user.id!, //user must have an Id at this point
-      name: user.firstName + ' ' + user.lastName,
-      pointsByCategory: pointsByCategoryId,
-      mandatoryEvents: mandatoryEvents,
-    };
-    return userWithCompletedPointsByCategory;
-  });
+      const mandatoryEvents = completedEventsCombinedWithEventInfo.filter(
+        event => event.mandatory,
+      );
 
-  const nameColumn: GridColDef = {
-    field: 'name',
-    headerName: 'Namn',
-    description:
-      'Användarens hela namn. Grön ifall alla kategorier uppfyller poängkraven.',
-    width: 150,
-    cellClassName: params => {
-      const catsOk = categories.every(category => {
-        const pointsInCategory:
-          | {
-              categoryId: number;
-              points: number | undefined;
-            }
-          | undefined = params.row.pointsByCategory.find(
-          (p: { categoryId: number; points: number | undefined }) =>
-            p.categoryId === category.id,
-        );
-        return (pointsInCategory?.points ?? 0) >= (category.minPoints ?? 0);
-      });
-      const totalPoints = params.row.pointsByCategory.reduce(
-        (sum: number, p: { points: number | undefined }) =>
-          sum + (p.points ?? 0),
+      const groupedByCat = groupBy(
+        completedEventsCombinedWithEventInfo,
+        'categoryId',
+      );
+      const pointsByCategoryId = Object.entries(groupedByCat).map(
+        ([categoryId, catEvents]) => {
+          const sumOfEventPoints = catEvents.reduce(
+            (a, b) => (b.points ? a + b.points : a),
+            0,
+          );
+          return { categoryId: Number(categoryId), points: sumOfEventPoints };
+        },
+      );
+
+      const totalPoints = pointsByCategoryId.reduce(
+        (sum, p) => sum + (p.points ?? 0),
         0,
       );
       const totalOk = totalPoints >= totalMinPoints;
-      return catsOk && totalOk ? 'all_categories_check' : '';
-    },
-  };
 
-  const totalColumn: GridColDef = {
-    field: 'total',
-    headerName: 'Totala poäng',
-    description: `Totalt insamlade poäng över alla kategorier. Minimikrav är ${totalMinPoints}`,
-    width: 150,
-    valueGetter: params => {
-      const sum = params.row.pointsByCategory.reduce(
-        (acc: number, p: { points: number | undefined }) =>
-          acc + (p.points ?? 0),
-        0,
-      );
-      return sum;
-    },
-    cellClassName: params => {
-      const sum = Number(params.value ?? 0);
-      return sum >= totalMinPoints ? 'mandatory_done' : 'mandatory_not_done';
-    },
-  };
+      const catsOk = categories.every(category => {
+        const pointsInCategory = pointsByCategoryId.find(
+          p => p.categoryId === category.id,
+        );
+        return (pointsInCategory?.points ?? 0) >= (category.minPoints ?? 0);
+      });
 
-  const categoryColumns: GridColDef[] = categories.map(category => {
-    const categoryColumn: GridColDef = {
-      field: `${category.id}`,
-      headerName: category.name,
-      description: `${category.description}. Minimipoängmänden är ${category.minPoints}`,
-      width: 180,
-      valueGetter: params =>
-        `${
-          params.row.pointsByCategory.find(
-            (p: { categoryId: number; points: number }) =>
-              p.categoryId === category.id,
-          )?.points ?? 0
-        }`,
-      cellClassName: params =>
-        (params.row.pointsByCategory.find(
-          (p: { categoryId: number; points: number }) =>
-            p.categoryId === category.id,
-        )?.points ?? 0) >= (category.minPoints ?? 0)
-          ? 'mandatory_done'
-          : 'mandatory_not_done',
-    };
-    return categoryColumn;
-  });
-
-  const mandatoryEventColumns: GridColDef[] = events
-    .filter(event => event.mandatory)
-    .map(event => {
-      const categoryColumn: GridColDef = {
-        field: `event_${event.id}`,
-        headerName: event.name,
-        description: `${event.description}.`,
-        width: 180,
-        valueGetter: params =>
-          `${
-            params.row.mandatoryEvents.find(
-              (mandatoryId: { id: number }) => mandatoryId.id === event.id,
-            )
-              ? 'Gjort'
-              : 'Ogjort'
-          }`,
-        cellClassName: params =>
-          params.row.mandatoryEvents.find(
-            (mandatoryId: { id: number }) => mandatoryId.id === event.id,
-          )
-            ? 'mandatory_done'
-            : 'mandatory_not_done',
+      const row: any = {
+        id: user.id!,
+        nameData: {
+          name: user.firstName + ' ' + user.lastName,
+          allOk: catsOk && totalOk,
+        },
+        fieldOfStudy: user.fieldOfStudy,
+        total: { points: totalPoints },
       };
-      return categoryColumn;
+
+      categories.forEach(category => {
+        const found = pointsByCategoryId.find(
+          p => p.categoryId === category.id,
+        );
+        row[`cat_${category.id}`] = { points: found?.points ?? 0 };
+      });
+
+      events
+        .filter(e => e.mandatory)
+        .forEach(event => {
+          row[`event_${event.id}`] = mandatoryEvents.some(
+            me => me.id === event.id,
+          );
+        });
+
+      return row;
+    });
+  }, [usersNoAdmins, events, categories, totalMinPoints]);
+
+  const columnDefs: (ColDef | ColGroupDef)[] = useMemo(() => {
+    const mandatoryEvents = events.filter(e => e.mandatory);
+
+    // --- Pinned name column (standalone, outside groups) ---
+    const nameCol: ColDef = {
+      field: 'nameData',
+      headerName: 'Namn',
+      width: 200,
+      pinned: 'left',
+      cellRenderer: AllOkRenderer,
+      comparator: (a: any, b: any) => a.name.localeCompare(b.name),
+    };
+
+    // --- ÖVERGRIPANDE group: Studieriktning, Totala poäng ---
+    const overviewGroup: ColGroupDef = {
+      headerName: 'ÖVERGRIPANDE',
+      marryChildren: true,
+      children: [
+        {
+          field: 'fieldOfStudy',
+          headerName: 'Studieriktning',
+          width: 160,
+          columnGroupShow: 'open',
+        },
+        {
+          field: 'total',
+          headerName: 'Totala poäng',
+          headerTooltip: `Totalt insamlade poäng över alla kategorier. Minimikrav är ${totalMinPoints}`,
+          width: 150,
+          cellRenderer: PointStatusRenderer,
+          cellRendererParams: { minPoints: totalMinPoints },
+          comparator: (a: any, b: any) => (a.points ?? 0) - (b.points ?? 0),
+        },
+      ],
+    };
+
+    // --- Per-category groups: category points + mandatory events from that category ---
+    const categoryGroups: ColGroupDef[] = categories.map(category => {
+      const catMandatoryEvents = mandatoryEvents.filter(
+        e => e.categoryId === category.id,
+      );
+      const children: ColDef[] = [
+        {
+          field: `cat_${category.id}`,
+          headerName: 'Kategori Poäng',
+          headerTooltip: `${category.description}. Minimipoängmänden är ${category.minPoints}`,
+          width: 160,
+          cellRenderer: PointStatusRenderer,
+          cellRendererParams: { minPoints: category.minPoints ?? 0 },
+          comparator: (a: any, b: any) => (a.points ?? 0) - (b.points ?? 0),
+        },
+        ...catMandatoryEvents.map(event => ({
+          field: `event_${event.id}`,
+          headerName: event.name,
+          headerTooltip: event.description,
+          width: 160,
+          cellRenderer: MandatoryRenderer,
+          columnGroupShow: 'open' as const,
+        })),
+      ];
+      return {
+        headerName: category.name,
+        marryChildren: true,
+        children,
+      };
     });
 
-  const columnsWithNames = [
-    nameColumn,
-    totalColumn,
-    ...categoryColumns,
-    ...mandatoryEventColumns,
-  ];
+    // --- ÖVRIGA KRAV: mandatory events not belonging to any known category ---
+    const categoryIds = new Set(categories.map(c => c.id));
+    const leftoverMandatory = mandatoryEvents.filter(
+      e => !categoryIds.has(e.categoryId),
+    );
+    const extraGroup: ColGroupDef | null =
+      leftoverMandatory.length > 0
+        ? {
+            headerName: 'ÖVRIGA KRAV',
+            marryChildren: true,
+            children: leftoverMandatory.map(event => ({
+              field: `event_${event.id}`,
+              headerName: event.name,
+              headerTooltip: event.description,
+              width: 160,
+              cellRenderer: MandatoryRenderer,
+              columnGroupShow: 'open' as const,
+            })),
+          }
+        : null;
+
+    return [
+      nameCol,
+      overviewGroup,
+      ...categoryGroups,
+      ...(extraGroup ? [extraGroup] : []),
+    ];
+  }, [categories, events, totalMinPoints]);
+
+  const onRowDoubleClicked = useCallback((event: RowDoubleClickedEvent) => {
+    const userId = Number(event.data.id);
+    setUserToShow(userId);
+  }, []);
 
   return (
-    <>
-      <div className={classes.DataGrid} style={{ height: 700, width: '100%' }}>
-        <DataGrid
-          pagination
-          paginationMode="client"
-          paginationModel={paginationModel}
-          onPaginationModelChange={setPaginationModel}
-          pageSizeOptions={[10, 25, 50]}
-          rows={usersWithCompletedPoints}
-          columns={columnsWithNames}
-          onRowClick={(params, event) => {
-            openPersonCard(params, event);
-          }}
-          hideFooterSelectedRowCount={true}
-        />
-      </div>
-      {userToShow && (
+    <AdminLayout
+      title="Sammanställning"
+      description="Total sammanställning av alla användares poäng dividerat i kategorier."
+    >
+      <Box className={classes.agGridContainer}>
+        <div
+          className="ag-theme-material"
+          style={{ height: '700px', width: '100%' }}
+        >
+          <AgGridReact
+            rowData={rowData}
+            columnDefs={columnDefs}
+            headerHeight={48}
+            groupHeaderHeight={48}
+            defaultColDef={{ resizable: true, sortable: true }}
+            animateRows={true}
+            pagination={true}
+            paginationPageSize={20}
+            onRowDoubleClicked={onRowDoubleClicked}
+          />
+        </div>
+      </Box>
+
+      {userToShow && users && (
         <UserCard
           user={users.find(user => user.id === userToShow)!}
           allEvents={events}
@@ -249,31 +320,20 @@ const UserSummary = () => {
           clearUserId={() => setUserToShow(undefined)}
         />
       )}
-    </>
+    </AdminLayout>
   );
 };
 
-const useStyles = makeStyles((theme: Theme) => ({
-  DataGrid: {
-    width: '100%',
-    '& .NOSTATUS': {
-      backgroundColor: '#004777',
+const useStyles = makeStyles((theme: Theme) =>
+  createStyles({
+    agGridContainer: {
+      width: '100%',
+      marginTop: theme.spacing(2),
+      '& .ag-theme-material': {
+        '--ag-material-primary-color': theme.palette.primary.main,
+      },
     },
-    '& .PENDING': {
-      backgroundColor: '#FF9F1C',
-    },
-    '& .COMPLETED': {
-      backgroundColor: '#436436',
-    },
-  },
-  '@global': {
-    '.mandatory_not_done': {
-      backgroundColor: theme.palette.secondary.light,
-    },
-    '.all_categories_check': {
-      backgroundColor: theme.palette.success.main,
-    },
-  },
-}));
+  }),
+);
 
 export default UserSummary;
