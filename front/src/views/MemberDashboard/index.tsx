@@ -3,6 +3,7 @@ import { useSelector } from 'react-redux';
 import { auth } from '../../selectors/AuthSelectors';
 import * as CategorySelectors from '../../selectors/CategorySelectors';
 import * as EventSelectors from '../../selectors/EventSelectors';
+import * as SiteSettingsSelectors from '../../selectors/SiteSettingsSelectors';
 import {
   AuthState,
   CategoryState,
@@ -11,8 +12,10 @@ import {
   Event,
   EventStatus,
   Category,
+  SiteSettingsState,
 } from '../../types';
 import CategoryProgress from './components/CategoryProgress';
+import TotalPointsSummary from './components/TotalPointsSummary';
 import { mapUserDoneEventsToEvents } from '../../utils/HelperFunctions';
 import _ from 'lodash';
 import {
@@ -34,6 +37,9 @@ const MemberDashboard = () => {
   const authentication: AuthState = useSelector(auth);
   const categoriesState: CategoryState = useSelector(
     CategorySelectors.allCategories,
+  );
+  const siteSettingsState: SiteSettingsState = useSelector(
+    SiteSettingsSelectors.siteSettings,
   );
   const nonEmptyCategories = categoriesState.categories.filter(
     (category: Category) => category.events.length > 0,
@@ -61,11 +67,12 @@ const MemberDashboard = () => {
     (event: DoneEvent) => event.status === EventStatus.COMPLETED,
   );
 
-  const listOfCompletedAndMappedEvents = listOfCompletedEvents
-    .map((event: DoneEvent) => event.eventID)
-    .map((eventID: Number) =>
-      eventState.events.find((e: Event) => eventID === e.id),
-    );
+  const listOfCompletedAndMappedEvents: (Event | undefined)[] =
+    listOfCompletedEvents
+      .map((event: DoneEvent) => event.eventID)
+      .map((eventID: number) =>
+        eventState.events.find((e: Event) => eventID === e.id),
+      );
 
   const completedEventsGroupedByCategoryId = _.groupBy(
     listOfCompletedAndMappedEvents,
@@ -83,9 +90,9 @@ const MemberDashboard = () => {
   );
 
   const completionAmountPerCategori: { [categoryId: number]: number } =
-    Object.entries(pointsPerCategori).reduce(
+    Object.entries(pointsPerCategori).reduce<{ [categoryId: number]: number }>(
       (prev, [categoryId, categoryPoints]) => {
-        const newReturn = {
+        return {
           ...prev,
           [categoryId]:
             categoryPoints > 0
@@ -97,10 +104,15 @@ const MemberDashboard = () => {
                 : 0
               : 0,
         };
-        return newReturn;
       },
       {},
     );
+
+  const totalCompletedPoints: number = (
+    Object.values(completedPointsPerCategori) as number[]
+  ).reduce((sum: number, pts: number) => sum + pts, 0);
+
+  const totalRequiredPoints = siteSettingsState.settings?.totalMinPoints ?? 0;
 
   const ListOfCategoryProgress: JSX.Element[] = nonEmptyCategories
     ? nonEmptyCategories.map(category => (
@@ -134,6 +146,11 @@ const MemberDashboard = () => {
 
   return (
     <Box maxWidth={600}>
+      <TotalPointsSummary
+        totalCompletedPoints={totalCompletedPoints}
+        totalRequiredPoints={totalRequiredPoints}
+      />
+
       {pendingAmount > 0 ? (
         <Card variant={'outlined'} className={classes.cardLayout}>
           <CardActionArea onClick={handleExpandClick}>

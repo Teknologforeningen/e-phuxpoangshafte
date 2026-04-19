@@ -103,9 +103,7 @@ const EditEventForm = () => {
     }
   };
 
-  const handleRemove = async (
-    values: EditedEventAttributes
-  ) => {
+  const handleRemove = async (values: EditedEventAttributes) => {
     try {
       await EventServices.removeEvent(values);
       SuccessNotification(`${values.name} har tagits bort!`);
@@ -115,7 +113,6 @@ const EditEventForm = () => {
       ErrorNotification(`${values.name} kunde inte tas bort!`);
     }
   };
-
 
   const formik = useFormik({
     initialValues: initial,

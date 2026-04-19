@@ -78,6 +78,16 @@ export interface DoneEvent {
   userID: number;
 }
 
+export interface SiteSettings {
+  id: number;
+  totalMinPoints: number;
+}
+
+export interface SiteSettingsState {
+  isFetched: boolean;
+  settings: SiteSettings | null;
+}
+
 export type CombinedEvent = DoneEvent & Event;
 
 export enum Routes {

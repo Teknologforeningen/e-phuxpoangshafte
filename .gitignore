@@ -6,3 +6,4 @@
 **/dist
 db/**
 db-data
+**/.yarn/install-state*

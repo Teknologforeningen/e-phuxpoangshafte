@@ -4,6 +4,7 @@ import NewCategoryForm from './components/NewCategoryForm';
 import NewEventForm from './components/NewEventForm';
 import EditEventForm from './components/EditEventForm';
 import EditCategoryForm from './components/EditCategoryForm';
+import SiteSettingsForm from './components/SiteSettingsForm';
 import { makeStyles } from '@mui/styles';
 
 //TabPanel taken directly from Mui documenation
@@ -55,12 +56,15 @@ const NewCatAndEventPage = () => {
         <Tabs
           value={value}
           onChange={handleChange}
+          variant="scrollable"
+          scrollButtons="auto"
           aria-label="simple tabs example"
         >
           <Tab label="Lägg till kategori" {...a11yProps(0)} />
           <Tab label="Lägg till poäng" {...a11yProps(1)} />
           <Tab label="Ändra/Ta bort kategori" {...a11yProps(2)} />
           <Tab label="Ändra/Ta bort poäng" {...a11yProps(3)} />
+          <Tab label="Inställningar" {...a11yProps(4)} />
         </Tabs>
       </AppBar>
       <TabPanel value={value} index={0}>
@@ -74,6 +78,9 @@ const NewCatAndEventPage = () => {
       </TabPanel>
       <TabPanel value={value} index={3}>
         <EditEventForm />
+      </TabPanel>
+      <TabPanel value={value} index={4}>
+        <SiteSettingsForm />
       </TabPanel>
     </div>
   );

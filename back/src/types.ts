@@ -22,6 +22,11 @@ export interface Category {
   minPoints: number | null;
 }
 
+export interface SiteSettings {
+  id: number;
+  totalMinPoints: number;
+}
+
 export interface Event {
   id: number;
   name: string;

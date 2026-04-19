@@ -5,12 +5,14 @@ import { Box } from '@mui/material';
 import {
   initCategories,
   initEvents,
+  initSiteSettings,
   userLogin,
   changeAutharizedStatus,
 } from './actions';
 import * as CategoryServices from './services/CategoryServices';
 import * as EventServices from './services/EventServices';
 import * as UserServices from './services/UserServices';
+import * as SiteSettingsServices from './services/SiteSettingsServices';
 import { User } from './types';
 import AppRouter from './AppRouter';
 import axios from 'axios';
@@ -62,6 +64,23 @@ const App = () => {
       console.error({ error: 'Failed to fetch events from back end:', e });
       ErrorNotification('Ett problem uppstod då poängen hämtades.');
     }
+  }, [dispatch]);
+
+  // Get site settings from backend
+  useEffect(() => {
+    const getAndSetSiteSettings = async () => {
+      try {
+        const response = await SiteSettingsServices.getSiteSettings();
+        dispatch(initSiteSettings(response));
+      } catch (e) {
+        console.error({
+          error: 'Failed to fetch site settings from back end:',
+          e,
+        });
+        ErrorNotification('Ett problem uppstod då inställningarna hämtades.');
+      }
+    };
+    getAndSetSiteSettings();
   }, [dispatch]);
 
   toast.configure();

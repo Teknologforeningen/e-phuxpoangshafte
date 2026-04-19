@@ -1,7 +1,7 @@
 import React from 'react';
 import { Box, Card, CardContent, Tooltip, Typography } from '@mui/material';
 import { Category, Event } from '../../../types';
-import { Done, DoneAll, InfoOutlined as InfoIcon } from '@mui/icons-material/';
+import { InfoOutlined as InfoIcon } from '@mui/icons-material/';
 import { createStyles, makeStyles } from '@mui/styles';
 import { Theme } from '@mui/material/styles';
 import classnames from 'classnames';
@@ -37,9 +37,9 @@ const CategoryProgress = (props: Props) => {
     requiredAmount > 0 ? (
       currentAmount > 0 ? (
         progress >= (currentAmount / requiredAmount) * 100 ? (
-          <DoneAll color={'success'} />
+          <Typography className={classes.badgeSuccess}>✓ Klart</Typography>
         ) : (
-          <Done color={'warning'} />
+          <Typography className={classes.badgePending}>Pågående</Typography>
         )
       ) : (
         <></>
@@ -177,6 +177,23 @@ const useStyles = makeStyles((theme: Theme) =>
       display: 'flex',
       flexDirection: 'row',
       justifyContent: 'space-between',
+      alignItems: 'center',
+    },
+    badgeSuccess: {
+      backgroundColor: theme.palette.success.main,
+      color: '#fff',
+      borderRadius: '12px',
+      padding: '2px 10px',
+      fontSize: '10pt',
+      fontWeight: 'bold',
+    },
+    badgePending: {
+      backgroundColor: theme.palette.warning.main,
+      color: '#fff',
+      borderRadius: '12px',
+      padding: '2px 10px',
+      fontSize: '10pt',
+      fontWeight: 'bold',
     },
     smallInfoIcon: {
       fontSize: 'small',

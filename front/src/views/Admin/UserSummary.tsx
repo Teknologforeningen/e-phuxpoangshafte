@@ -11,6 +11,7 @@ import { useSelector } from 'react-redux';
 import * as UserService from '../../services/UserServices';
 import * as EventSelector from '../../selectors/EventSelectors';
 import * as CategorySelector from '../../selectors/CategorySelectors';
+import * as SiteSettingsSelectors from '../../selectors/SiteSettingsSelectors';
 import {
   Event,
   User,
@@ -30,6 +31,8 @@ const UserSummary = () => {
   const categories: Category[] = useSelector(
     CategorySelector.allCategoriesOrderedByNameAsc,
   );
+  const siteSettingsState = useSelector(SiteSettingsSelectors.siteSettings);
+  const totalMinPoints = siteSettingsState.settings?.totalMinPoints ?? 0;
 
   const [users, setUsers] = useState<User[] | undefined>();
   const [userToShow, setUserToShow] = useState<number | undefined>();
@@ -122,8 +125,8 @@ const UserSummary = () => {
     description:
       'Användarens hela namn. Grön ifall alla kategorier uppfyller poängkraven.',
     width: 150,
-    cellClassName: params =>
-      categories.every(category => {
+    cellClassName: params => {
+      const catsOk = categories.every(category => {
         const pointsInCategory:
           | {
               categoryId: number;
@@ -134,9 +137,34 @@ const UserSummary = () => {
             p.categoryId === category.id,
         );
         return (pointsInCategory?.points ?? 0) >= (category.minPoints ?? 0);
-      })
-        ? 'all_categories_check'
-        : '',
+      });
+      const totalPoints = params.row.pointsByCategory.reduce(
+        (sum: number, p: { points: number | undefined }) =>
+          sum + (p.points ?? 0),
+        0,
+      );
+      const totalOk = totalPoints >= totalMinPoints;
+      return catsOk && totalOk ? 'all_categories_check' : '';
+    },
+  };
+
+  const totalColumn: GridColDef = {
+    field: 'total',
+    headerName: 'Totala poäng',
+    description: `Totalt insamlade poäng över alla kategorier. Minimikrav är ${totalMinPoints}`,
+    width: 150,
+    valueGetter: params => {
+      const sum = params.row.pointsByCategory.reduce(
+        (acc: number, p: { points: number | undefined }) =>
+          acc + (p.points ?? 0),
+        0,
+      );
+      return sum;
+    },
+    cellClassName: params => {
+      const sum = Number(params.value ?? 0);
+      return sum >= totalMinPoints ? 'mandatory_done' : 'mandatory_not_done';
+    },
   };
 
   const categoryColumns: GridColDef[] = categories.map(category => {
@@ -191,6 +219,7 @@ const UserSummary = () => {
 
   const columnsWithNames = [
     nameColumn,
+    totalColumn,
     ...categoryColumns,
     ...mandatoryEventColumns,
   ];
@@ -198,19 +227,19 @@ const UserSummary = () => {
   return (
     <>
       <div className={classes.DataGrid} style={{ height: 700, width: '100%' }}>
-          <DataGrid
-            pagination
-            paginationMode="client"
-            paginationModel={paginationModel}
-            onPaginationModelChange={setPaginationModel}
-            pageSizeOptions={[10, 25, 50]}
-            rows={usersWithCompletedPoints}
-            columns={columnsWithNames}
-            onRowClick={(params, event) => {
-              openPersonCard(params, event);
-            }}
-            hideFooterSelectedRowCount={true}
-          />
+        <DataGrid
+          pagination
+          paginationMode="client"
+          paginationModel={paginationModel}
+          onPaginationModelChange={setPaginationModel}
+          pageSizeOptions={[10, 25, 50]}
+          rows={usersWithCompletedPoints}
+          columns={columnsWithNames}
+          onRowClick={(params, event) => {
+            openPersonCard(params, event);
+          }}
+          hideFooterSelectedRowCount={true}
+        />
       </div>
       {userToShow && (
         <UserCard
