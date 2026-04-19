@@ -71,7 +71,7 @@ const SiteSettingsForm = () => {
               'totalMinPoints',
               event.target.value === ''
                 ? undefined
-                : event.target.valueAsNumber,
+                : (event.target as HTMLInputElement).valueAsNumber,
             )
           }
           error={
