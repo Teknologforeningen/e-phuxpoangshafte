@@ -282,12 +282,15 @@ const useStyles = makeStyles(
         display: 'flex',
       },
       navItem: {
-        margin: theme.spacing(0.5, 1.5),
-        padding: theme.spacing(1, 2),
-        borderRadius: theme.spacing(1.5), // More rounded "pill"
+        margin: theme.spacing(0.5, 1),
+        padding: theme.spacing(1, 1.5),
+        borderRadius: theme.spacing(1.5),
         color: '#718096',
         textDecoration: 'none',
         transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
+        '& .MuiListItemText-primary': {
+          fontSize: '0.9rem',
+        },
         '&:hover': {
           backgroundColor: '#f1f5f9',
           color: theme.palette.secondary.main,
