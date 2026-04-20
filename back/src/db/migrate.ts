@@ -1,5 +1,6 @@
 import { Umzug, SequelizeStorage } from 'umzug';
-const models = require('./models');
+import models = require('./models');
+import logger from '../utils.ts/logger';
 
 const sequelize = models.sequelize;
 
@@ -9,7 +10,7 @@ export const umzug = new Umzug({
   },
   context: sequelize.getQueryInterface(),
   storage: new SequelizeStorage({ sequelize }),
-  logger: console,
+  logger,
 });
 
 export type Migration = typeof umzug._types.migration;

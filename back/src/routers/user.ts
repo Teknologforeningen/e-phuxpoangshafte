@@ -12,6 +12,7 @@ import {
 } from '../types';
 import { userExtractor } from '../utils.ts/middleware';
 import { Op } from 'sequelize';
+import logger from '../utils.ts/logger';
 
 userRouter.get('/', userExtractor, async (req, res) => {
   const authUser = req.user;
@@ -96,20 +97,20 @@ userRouter.delete('/:userID', userExtractor, async (req, res) => {
       .status(401)
       .json({ error: 'You are not authorized for this page' });
   }
-  user.$remove;
-  return res.status(204);
+  await user.destroy();
+  return res.status(204).send();
 });
 
 userRouter.get('/:userID/done_events/', userExtractor, async (req, res) => {
   const authUser = req.user;
-  const userId = req.params.userid;
+  const userId = req.params.userID;
   if (!(authUser.id !== userId || authUser.role !== userRole.ADMIN)) {
     return res
       .status(401)
       .json({ error: 'You are not authorized for this page' });
   }
-  const done_events = await DoneEvents.findAll({ where: { userID: userId } });
-  res.status(200).json(done_events);
+  const doneEvents = await DoneEvents.findAll({ where: { userID: userId } });
+  res.status(200).json(doneEvents);
 });
 
 userRouter.post(
@@ -129,8 +130,8 @@ userRouter.post(
     });
     if (allDoneEvents) {
       const completed = allDoneEvents
-        .filter(doneEvent => doneEvent.userID === userId)
-        .map(doneEvent => doneEvent.eventID)
+        .filter(de => de.userID === userId)
+        .map(de => de.eventID)
         .includes(eventId);
       if (completed) {
         return res.status(400).json({
@@ -145,7 +146,7 @@ userRouter.post(
       userID: userId,
       eventID: eventId,
     };
-    console.log(doneEvent);
+    logger.info(doneEvent);
     const addedDoneEvent = await DoneEvents.create(doneEvent);
     res.status(200).json(addedDoneEvent);
   },
@@ -169,8 +170,8 @@ userRouter.put(
       order: [['timeOfSignup', 'DESC']],
     });
 
-    console.log('UserID:', userId);
-    console.log('EventID:', eventId);
+    logger.info('UserID:', userId);
+    logger.info('EventID:', eventId);
     if (!event) {
       res.status(404).send({ error: "Couldn't find the event for this user" });
     }
@@ -178,7 +179,7 @@ userRouter.put(
     switch (newStatus) {
       case EventStatus.CANCELLED: {
         if (!(authUser.id !== userId || authUser.role !== userRole.ADMIN)) {
-          console.log(
+          logger.info(
             'User does not have permission to updated the event of this user to cancelled',
           );
           return res
@@ -191,7 +192,7 @@ userRouter.put(
       }
       case EventStatus.CONFIRMED: {
         if (authUser.role !== userRole.ADMIN) {
-          console.log(
+          logger.info(
             'User does not have permission to updated the event of this user to confirmed',
           );
           return res
@@ -205,7 +206,7 @@ userRouter.put(
       case EventStatus.COMPLETED: {
         if (!(authUser.id !== userId || authUser.role !== userRole.ADMIN)) {
           // TODO: currently possible to complete points for yourself
-          console.log(
+          logger.info(
             'User does not have permission to updated the event of this user to completed',
           );
           return res
@@ -227,7 +228,7 @@ userRouter.delete(
   '/done_events/duplicates',
   userExtractor,
   async (req, res) => {
-    console.log('Running removal of duplicates');
+    logger.info('Running removal of duplicates');
     const authUser = req.user;
     if (authUser.role !== userRole.ADMIN) {
       return res
