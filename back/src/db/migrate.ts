@@ -1,5 +1,5 @@
 import { Umzug, SequelizeStorage } from 'umzug';
-var models = require('./models');
+const models = require('./models');
 
 const sequelize = models.sequelize;
 

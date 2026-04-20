@@ -1,8 +1,9 @@
+import { Router } from 'express';
 import { userExtractor } from '../utils.ts/middleware';
 import SiteSettings from '../db/models/models/siteSettings.model';
 import { userRole } from '../types';
 
-const siteSettingsRouter = require('express').Router();
+const siteSettingsRouter = Router();
 
 siteSettingsRouter.get('/', async (_req, res) => {
   const settings = await SiteSettings.findOne();

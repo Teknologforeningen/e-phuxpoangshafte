@@ -1,5 +1,5 @@
 import { Sequelize } from 'sequelize-typescript';
-var db: any = {};
+const db: any = {};
 
 const commonConfig = {
   dialect: 'postgres' as const,

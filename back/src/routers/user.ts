@@ -1,6 +1,6 @@
-import express from 'express';
+import { Router } from 'express';
 
-const userRouter = require('express').Router();
+const userRouter = Router();
 import bcrypt from 'bcrypt';
 import User from '../db/models/models/users.model';
 import DoneEvents from '../db/models/models/doneEvent.model';
@@ -204,7 +204,7 @@ userRouter.put(
       }
       case EventStatus.COMPLETED: {
         if (!(authUser.id !== userId || authUser.role !== userRole.ADMIN)) {
-          //TODO: currently possible to complete points for yourself
+          // TODO: currently possible to complete points for yourself
           console.log(
             'User does not have permission to updated the event of this user to completed',
           );
@@ -237,10 +237,10 @@ userRouter.delete(
     let doneEvents = await DoneEvents.findAll({
       where: { status: { [Op.not]: String(EventStatus.CANCELLED) } },
     });
-    let ids_to_remove = <number[]>[];
+    const idsToRemove = [] as number[];
     for (const currentEvent of doneEvents) {
       const doneEventClone = doneEvents.filter(
-        doneEvent => !ids_to_remove.includes(doneEvent.id),
+        doneEvent => !idsToRemove.includes(doneEvent.id),
       );
       let duplicates = doneEventClone.filter(
         doneEvent =>
@@ -258,23 +258,23 @@ userRouter.delete(
         } else {
           duplicates.shift();
         }
-        duplicates.forEach(duplicate => ids_to_remove.push(duplicate.id));
+        duplicates.forEach(duplicate => idsToRemove.push(duplicate.id));
       }
     }
-    if (ids_to_remove.length > 0) {
-      ids_to_remove.forEach(async (id: number) => {
+    if (idsToRemove.length > 0) {
+      idsToRemove.forEach(async (id: number) => {
         const doneEventToDelete = await DoneEvents.findByPk(id);
         const deleted = await doneEventToDelete.destroy();
         Promise.resolve(deleted);
       });
       // Unclear if this row does anything or if the for loop is generated at init and this only slows it down
       doneEvents = doneEvents.filter(
-        doneEvent => !ids_to_remove.includes(doneEvent.id),
+        doneEvent => !idsToRemove.includes(doneEvent.id),
       );
     }
     return res
       .status(200)
-      .json({ removedAmount: ids_to_remove.length, removed: ids_to_remove });
+      .json({ removedAmount: idsToRemove.length, removed: idsToRemove });
   },
 );
 

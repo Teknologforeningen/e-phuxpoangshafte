@@ -2,7 +2,7 @@ import app from './app';
 import http from 'http';
 import { Client } from 'pg';
 import { umzug } from './db/migrate';
-var models = require('./db/models');
+const models = require('./db/models');
 
 const server = http.createServer(app);
 
