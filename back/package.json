@@ -7,6 +7,8 @@
     "test": "cross-env NODE_ENV=test jest --verbose --runInBand --detectOpenHandles --watch",
     "start:test": "cross-env NODE_ENV=test node index.ts",
     "build-ts": "tsc --build tsconfig.json",
+    "typecheck": "tsc --noEmit -p tsconfig.json",
+    "lint": "tslint -c tslint.json -p tsconfig.json",
     "start": "yarn run serve",
     "serve": "node dist/index.js",
     "dev": "NODE_ENV=development ts-node-dev src/index.ts"

@@ -1,0 +1,28 @@
+name: Docker Smoke Test
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+      - prod
+
+jobs:
+  docker-build:
+    name: Build Docker image
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          push: false
+          # Use a dummy year value; the build arg is only cosmetic in the UI
+          build-args: REACT_APP_PHUX_YEAR=2024
+          # Keep the image in the build cache but don't export it
+          outputs: type=cacheonly
