@@ -23,7 +23,6 @@ import {
   Category,
   EventStatus,
   CombinedEvent,
-  DoneEvent,
 } from '../../../types';
 import { groupBy } from 'lodash';
 import { getPointsByCategoryFromCompletedEvents } from '../../../utils/admin';
