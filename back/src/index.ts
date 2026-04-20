@@ -2,7 +2,8 @@ import app from './app';
 import http from 'http';
 import { Client } from 'pg';
 import { umzug } from './db/migrate';
-var models = require('./db/models');
+import models = require('./db/models');
+import logger from './utils.ts/logger';
 
 const server = http.createServer(app);
 
@@ -21,7 +22,7 @@ async function ensureDatabaseExists() {
   if (!dbName) return;
 
   if (!SAFE_DB_NAME_RE.test(dbName)) {
-    console.error(`Refusing to create database: invalid name "${dbName}"`);
+    logger.error(`Refusing to create database: invalid name "${dbName}"`);
     return;
   }
 
@@ -39,12 +40,12 @@ async function ensureDatabaseExists() {
       [dbName],
     );
     if (res.rowCount === 0) {
-      console.log(`Database "${dbName}" not found, creating it...`);
+      logger.info(`Database "${dbName}" not found, creating it...`);
       await client.query(`CREATE DATABASE "${dbName}";`);
-      console.log(`Database "${dbName}" created successfully.`);
+      logger.info(`Database "${dbName}" created successfully.`);
     }
   } catch (error) {
-    console.error('Error ensuring database exists:', error);
+    logger.error('Error ensuring database exists:', error);
   } finally {
     await client.end();
   }
@@ -61,13 +62,13 @@ ensureDatabaseExists().then(async () => {
     const existing = await SiteSettingsModel.findOne();
     if (!existing) {
       await SiteSettingsModel.create({ totalMinPoints: 300 });
-      console.log('Default site settings created (totalMinPoints: 300)');
+      logger.info('Default site settings created (totalMinPoints: 300)');
     }
   } catch (error) {
-    console.error('Failed to seed site settings:', error);
+    logger.error('Failed to seed site settings:', error);
   }
 
   server.listen(PORT, () => {
-    console.log(`API listening on port ${PORT}`);
+    logger.info(`API listening on port ${PORT}`);
   });
 });

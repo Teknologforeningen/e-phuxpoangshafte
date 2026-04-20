@@ -23,9 +23,15 @@ import { useLocation } from 'react-router-dom';
 import * as CategorySelector from '../../selectors/CategorySelectors';
 import { auth } from '../../selectors/AuthSelectors';
 import { Category, Routes, UserRole } from '../../types';
+import { NavLink } from 'react-router-dom';
 
 import LogOutButton from '../routing/LogoutButton';
 import SettingsIcon from '@mui/icons-material/Settings';
+import HomeIcon from '@mui/icons-material/Home';
+import GavelIcon from '@mui/icons-material/Gavel';
+import SummarizeIcon from '@mui/icons-material/Summarize';
+import CategoryIcon from '@mui/icons-material/Category';
+import TaskAltIcon from '@mui/icons-material/TaskAlt';
 import TFLogoSVG from '../../styles/img/TFlogo';
 import classNames from 'classnames';
 
@@ -55,52 +61,32 @@ const NotLoggedInList = () => {
 
 const AdminList = () => {
   const classes = useStyles();
+  const location = useLocation();
+
+  const adminLinks = [
+    { label: 'Sammanställning', path: Routes.ADMIN, icon: <SummarizeIcon /> },
+    {
+      label: 'Kategorier och poäng',
+      path: Routes.ADMIN_ADDMORE,
+      icon: <CategoryIcon />,
+    },
+  ];
+
   return (
     <List>
-      <Link key={'admin-link'} href={Routes.ADMIN} variant={'inherit'}>
-        <ListItem key={'admin'}>
-          <ListItemText
-            primary={'Användartabell'}
-            className={classes.categoryLinks}
-          />
+      {adminLinks.map(link => (
+        <ListItem
+          key={link.path}
+          component={NavLink}
+          to={link.path}
+          className={classNames(classes.navItem, {
+            [classes.navItemActive]: location.pathname === link.path,
+          })}
+        >
+          <Box className={classes.navIcon}>{link.icon}</Box>
+          <ListItemText primary={link.label} />
         </ListItem>
-      </Link>
-      <Link
-        key={'admin-summary'}
-        href={Routes.ADMIN_SUMMARY}
-        variant={'inherit'}
-      >
-        <ListItem key={'admin_summary'}>
-          <ListItemText
-            primary={'Sammanställning'}
-            className={classes.categoryLinks}
-          />
-        </ListItem>
-      </Link>
-      <Link
-        key={'requests-link'}
-        href={Routes.ADMIN_REQUESTS}
-        variant={'inherit'}
-      >
-        <ListItem key={'requests'}>
-          <ListItemText
-            primary={'Förfrågningar'}
-            className={classes.categoryLinks}
-          />
-        </ListItem>
-      </Link>
-      <Link
-        key={'addmore-link'}
-        href={Routes.ADMIN_ADDMORE}
-        variant={'inherit'}
-      >
-        <ListItem key={'addmore'}>
-          <ListItemText
-            primary={'Kategorier och poäng'}
-            className={classes.categoryLinks}
-          />
-        </ListItem>
-      </Link>
+      ))}
     </List>
   );
 };
@@ -153,20 +139,24 @@ const NavBar = () => {
   const ListOfCategories: JSX.Element[] = !!categoriesState.categories.length
     ? categoriesState.categories
         .filter(cat => cat.events && cat.events.length > 0)
-        .map(cat => (
-          <Link
-            key={`${cat.id}-link`}
-            href={Routes.CATEGORY + `/${cat.id}`}
-            variant={'inherit'}
-          >
-            <ListItem key={`${cat.name}-name`}>
-              <ListItemText
-                primary={cat.name}
-                className={classes.categoryLinks}
-              />
+        .map(cat => {
+          const path = Routes.CATEGORY + `/${cat.id}`;
+          return (
+            <ListItem
+              key={cat.id}
+              component={NavLink}
+              to={path}
+              className={classNames(classes.navItem, {
+                [classes.navItemActive]: location.pathname === path,
+              })}
+            >
+              <Box className={classes.navIcon}>
+                <TaskAltIcon />
+              </Box>
+              <ListItemText primary={cat.name} />
             </ListItem>
-          </Link>
-        ))
+          );
+        })
     : [<></>];
 
   return (
@@ -207,21 +197,32 @@ const NavBar = () => {
           {authentication.userIsAutharized ? (
             <Box textAlign="center">
               <List>
-                <ListItem key="home">
-                  <Link key={'home-link'} href={Routes.ROOT}>
-                    <ListItemText
-                      primary={'Hem'}
-                      className={classes.categoryLinks}
-                    />
-                  </Link>
+                <ListItem
+                  key="home"
+                  component={NavLink}
+                  to={Routes.ROOT}
+                  className={classNames(classes.navItem, {
+                    [classes.navItemActive]: location.pathname === Routes.ROOT,
+                  })}
+                >
+                  <Box className={classes.navIcon}>
+                    <HomeIcon />
+                  </Box>
+                  <ListItemText primary={'Hem'} />
                 </ListItem>
-                <ListItem key="instructions">
-                  <Link key={'instructions-link'} href={Routes.INSTRUCTIONS}>
-                    <ListItemText
-                      primary={'Reglemente'}
-                      className={classes.categoryLinks}
-                    />
-                  </Link>
+                <ListItem
+                  key="instructions"
+                  component={NavLink}
+                  to={Routes.INSTRUCTIONS}
+                  className={classNames(classes.navItem, {
+                    [classes.navItemActive]:
+                      location.pathname === Routes.INSTRUCTIONS,
+                  })}
+                >
+                  <Box className={classes.navIcon}>
+                    <GavelIcon />
+                  </Box>
+                  <ListItemText primary={'Reglemente'} />
                 </ListItem>
               </List>
               <Divider />
@@ -241,22 +242,19 @@ const NavBar = () => {
 
           {authentication.userIsAutharized && (
             <List>
-              <ListItem key={'settings'}>
-                <Link
-                  key={'settings-link'}
-                  href={Routes.USER_SETTINGS}
-                  className={classes.flex}
-                >
-                  <SettingsIcon
-                    className={classNames(
-                      classes.settingsIcon,
-                      classes.iconListItem,
-                    )}
-                  />
-                  <Typography className={classes.settingsIcon}>
-                    Inställningar
-                  </Typography>
-                </Link>
+              <ListItem
+                key={'settings'}
+                component={NavLink}
+                to={Routes.USER_SETTINGS}
+                className={classNames(classes.navItem, {
+                  [classes.navItemActive]:
+                    location.pathname === Routes.USER_SETTINGS,
+                })}
+              >
+                <Box className={classes.navIcon}>
+                  <SettingsIcon />
+                </Box>
+                <ListItemText primary={'Inställningar'} />
               </ListItem>
               <ListItem
                 key={'logout'}
@@ -283,8 +281,50 @@ const useStyles = makeStyles(
       flex: {
         display: 'flex',
       },
+      navItem: {
+        margin: theme.spacing(0.5, 1),
+        padding: theme.spacing(1, 1.5),
+        borderRadius: theme.spacing(1.5),
+        color: '#718096',
+        textDecoration: 'none',
+        transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
+        '& .MuiListItemText-primary': {
+          fontSize: '0.9rem',
+        },
+        '&:hover': {
+          backgroundColor: '#f1f5f9',
+          color: theme.palette.secondary.main,
+          '& $navIcon': {
+            color: theme.palette.secondary.main,
+          },
+        },
+      },
+      navItemActive: {
+        backgroundColor: `${theme.palette.secondary.main}12`, // Very soft red tint
+        color: theme.palette.secondary.main,
+        '& $navIcon': {
+          color: theme.palette.secondary.main,
+        },
+        '& .MuiTypography-root': {
+          fontWeight: 700,
+        },
+      },
+      navIcon: {
+        display: 'flex',
+        alignItems: 'center',
+        marginRight: theme.spacing(1.5),
+        color: '#a0aec0',
+        transition: 'color 0.2s',
+        '& svg': {
+          fontSize: '1.25rem',
+        },
+      },
       sideBar: {
-        color: theme.palette.primary.contrastText,
+        width: drawerWidth,
+        '& .MuiDrawer-paper': {
+          width: drawerWidth,
+          borderRight: '1px solid #edf2f7',
+        },
       },
       categoryLinks: {
         color: theme.palette.primary.contrastText,
@@ -294,12 +334,14 @@ const useStyles = makeStyles(
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'space-between',
+        paddingBottom: theme.spacing(2),
       },
       navbar: {
         backgroundColor: theme.palette.secondary.main,
-        color: theme.palette.primary.main,
+        color: '#fff',
         zIndex: theme.zIndex.drawer + 1,
         height: navBarHeight,
+        boxShadow: '0 1px 3px 0 rgba(0,0,0,0.1)',
       },
       navBarSpacer: {
         width: '100%',
@@ -309,11 +351,11 @@ const useStyles = makeStyles(
         marginRight: theme.spacing(5),
       },
       topPadding: {
-        paddingTop: navBarHeight + 5,
+        paddingTop: navBarHeight + 10,
       },
       logo: {
         fill: 'white',
-        width: 42,
+        width: 36,
       },
       settingsIcon: {
         color: theme.palette.primary.contrastText,

@@ -1,3 +1,5 @@
+import { DateTime } from 'luxon';
+
 export interface AuthState {
   userIsAutharized: boolean | null;
   userInfo?: User;
@@ -44,8 +46,8 @@ export interface Event {
   id: number;
   name: string;
   description: string;
-  startTime: luxon.DateTime;
-  endTime: luxon.DateTime;
+  startTime: DateTime;
+  endTime: DateTime;
   points?: number;
   userLimit?: number;
   categoryId: number;

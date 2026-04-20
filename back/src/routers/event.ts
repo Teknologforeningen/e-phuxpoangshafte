@@ -1,10 +1,9 @@
-import express from 'express';
+import { Router } from 'express';
 
-const eventRouter = require('express').Router();
+const eventRouter = Router();
 import Event from '../db/models/models/event.model';
 import { userExtractor } from '../utils.ts/middleware';
 import { Event as EventType, userRole } from '../types';
-
 
 eventRouter.get('/', async (req, res) => {
   const events = await Event.findAll();
@@ -64,17 +63,14 @@ eventRouter.delete('/:id', userExtractor, async (req, res) => {
   }
   try {
     const eventId = req.params.id;
-    const eventToRemove = await Event.findByPk(eventId)
-    await eventToRemove.destroy()
-    return res
-      .status(200)
-      .send()
-  } 
-  catch (e) {
-    return res
-      .status(500)
-      .json({ error: 'An uneexpected error occured while deleting the event:\n' + e });
+    const eventToRemove = await Event.findByPk(eventId);
+    await eventToRemove.destroy();
+    return res.status(200).send();
+  } catch (e) {
+    return res.status(500).json({
+      error: 'An uneexpected error occured while deleting the event:\n' + e,
+    });
   }
-  });
+});
 
 export default eventRouter;

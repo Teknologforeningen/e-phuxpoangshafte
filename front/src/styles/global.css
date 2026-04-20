@@ -1,0 +1,25 @@
+/* Global Design Overrides */
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&display=swap');
+
+body {
+  margin: 0;
+  font-family: 'Montserrat', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif !important;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: #f8fafc; /* Light blue-gray background for better contrast */
+  color: #2D3748;
+}
+
+/* Ensure all AG Grid elements use Montserrat */
+.ag-root-wrapper,
+.ag-theme-material {
+  font-family: 'Montserrat', sans-serif !important;
+}
+
+/* MUI Typography Overrides (if needed) */
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Montserrat', sans-serif !important;
+  letter-spacing: -0.02em;
+}

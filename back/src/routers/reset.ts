@@ -19,7 +19,8 @@ const mailTransporter: Transporter = (() => {
   } as SMTPTransport.Options);
 })();
 
-const resetRouter = require('express').Router();
+import { Router } from 'express';
+const resetRouter = Router();
 
 resetRouter.post('/', async (req, res) => {
   const email = req.body.email.toLowerCase();
