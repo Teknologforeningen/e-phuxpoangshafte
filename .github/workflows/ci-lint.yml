@@ -9,7 +9,7 @@ on:
 
 jobs:
   backend-lint:
-    name: Backend – type check & lint
+    name: Backend - type check & lint
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -34,7 +34,7 @@ jobs:
         run: yarn lint
 
   frontend-typecheck:
-    name: Frontend – type check
+    name: Frontend - type check
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
