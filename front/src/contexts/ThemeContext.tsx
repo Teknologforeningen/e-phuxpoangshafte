@@ -40,6 +40,11 @@ export const ThemeModeProvider: React.FC<{ children: React.ReactNode }> = ({
     });
   }, []);
 
+  // Keep data-theme on <body> in sync so CSS selectors (e.g. AG Grid overrides) can target it
+  useEffect(() => {
+    document.body.setAttribute('data-theme', darkMode ? 'dark' : 'light');
+  }, [darkMode]);
+
   // Follow system preference changes only when the user hasn't set their own preference
   useEffect(() => {
     if (localStorageGetter(THEME_STORAGE_KEY) !== null) return;

@@ -265,7 +265,7 @@ const UserCard = (props: Props) => {
                   <Typography variant="body2" fontWeight={600}>
                     {event.name}
                   </Typography>
-                  <Typography variant="caption" color="#718096">
+                  <Typography variant="caption" color="text.secondary">
                     {event.points ? `${event.points} poäng` : 'Obligatorisk'}
                     {' · '}
                     {new Date(doneEvent.timeOfSignup).toLocaleDateString(

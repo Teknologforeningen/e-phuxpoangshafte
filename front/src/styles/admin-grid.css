@@ -113,3 +113,76 @@
 .ag-theme-material .ag-floating-filter-input input {
   font-size: 12px;
 }
+
+/* ─────────────────────────────────────────────
+   DARK MODE OVERRIDES
+   Applied when <body data-theme="dark"> is set
+   ───────────────────────────────────────────── */
+[data-theme='dark'] .ag-theme-material {
+  --ag-background-color: #1e293b;
+  --ag-foreground-color: #e2e8f0;
+  --ag-font-family: 'Montserrat', sans-serif;
+  --ag-header-height: 44px;
+  --ag-header-background-color: #0f172a;
+  --ag-header-foreground-color: #94a3b8;
+  --ag-header-column-separator-color: #334155;
+  --ag-header-cell-hover-background-color: #1e293b;
+  --ag-border-color: #334155;
+  --ag-secondary-foreground-color: #64748b;
+  --ag-selected-row-background-color: rgba(178, 7, 56, 0.18);
+  --ag-row-hover-color: #273549;
+  --ag-odd-row-background-color: #1e293b;
+  --ag-input-focus-border-color: #b20738;
+}
+
+[data-theme='dark'] .ag-theme-material .ag-header-cell::after {
+  border-right-color: #334155 !important;
+}
+
+[data-theme='dark'] .ag-theme-material .ag-row {
+  border-bottom: 1px solid #334155;
+}
+
+[data-theme='dark'] .ag-theme-material .ag-cell {
+  color: #cbd5e1;
+}
+
+[data-theme='dark'] .ag-theme-material .ag-paging-panel {
+  border-top: 1px solid #334155;
+  background-color: #1e293b;
+  color: #94a3b8;
+}
+
+[data-theme='dark'] .ag-body-viewport::-webkit-scrollbar-thumb {
+  background: #475569;
+}
+
+[data-theme='dark'] .ag-body-viewport::-webkit-scrollbar-thumb:hover {
+  background: #64748b;
+}
+
+[data-theme='dark'] .ag-theme-material .ag-header-group-cell {
+  background-color: #0f172a;
+  color: #94a3b8;
+  border-right: 2px solid #334155 !important;
+}
+
+[data-theme='dark']
+  .ag-theme-material
+  .ag-header-group-cell:not(:last-child)::after {
+  background: #334155;
+}
+
+[data-theme='dark'] .ag-theme-material .ag-pinned-left-header,
+[data-theme='dark'] .ag-theme-material .ag-pinned-left-cols-container {
+  border-right: 2px solid #334155 !important;
+}
+
+[data-theme='dark'] .ag-theme-material .ag-floating-filter-input input {
+  color: #e2e8f0;
+  background-color: transparent;
+}
+
+[data-theme='dark'] .ag-theme-material .ag-header-cell-label {
+  color: #94a3b8;
+}
