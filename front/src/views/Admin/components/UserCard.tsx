@@ -227,6 +227,32 @@ const UserCard = (props: Props) => {
           </IconButton>
         </Box>
 
+        <Box sx={{ mb: 2, display: 'flex', flexWrap: 'wrap', gap: 1 }}>
+          <Chip
+            label={user.fieldOfStudy}
+            size="small"
+            sx={{ fontWeight: 600, fontSize: '0.75rem' }}
+          />
+          <Chip
+            label={user.capWithTF ? 'Mössa med TF' : 'Tar inte mössa med TF'}
+            size="small"
+            sx={{
+              fontWeight: 600,
+              fontSize: '0.75rem',
+              bgcolor: user.capWithTF
+                ? 'rgba(72, 187, 120, 0.1)'
+                : 'rgba(245, 101, 101, 0.1)',
+              color: user.capWithTF ? '#2F855A' : '#C53030',
+            }}
+          />
+          <Chip
+            label={user.email}
+            size="small"
+            variant="outlined"
+            sx={{ fontWeight: 500, fontSize: '0.75rem', color: '#718096' }}
+          />
+        </Box>
+
         {pendingWithInfo.length > 0 && (
           <Box sx={{ mb: 2 }}>
             <Box display="flex" alignItems="center" gap={1} mb={1}>

@@ -173,7 +173,9 @@ const UserSummary = () => {
   const [filterMode, setFilterMode] = useState<'AND' | 'OR'>('AND');
   const [activeFilters, setActiveFilters] = useState<string[]>([]);
   const [selectedFields, setSelectedFields] = useState<string[]>([]);
-  const [filterCapWithTF, setFilterCapWithTF] = useState<'with' | 'without' | null>('with');
+  const [filterCapWithTF, setFilterCapWithTF] = useState<
+    'with' | 'without' | null
+  >('with');
 
   const refreshUsers = useCallback(() => {
     setRefreshSeed(s => s + 1);
@@ -388,7 +390,10 @@ const UserSummary = () => {
 
   const isExternalFilterPresent = useCallback(
     () =>
-      showOnlyPending || activeFilters.length > 0 || selectedFields.length > 0 || filterCapWithTF !== null,
+      showOnlyPending ||
+      activeFilters.length > 0 ||
+      selectedFields.length > 0 ||
+      filterCapWithTF !== null,
     [showOnlyPending, activeFilters, selectedFields, filterCapWithTF],
   );
   const doesExternalFilterPass = useCallback(
@@ -472,7 +477,14 @@ const UserSummary = () => {
     if (gridApi) {
       gridApi.onFilterChanged();
     }
-  }, [showOnlyPending, activeFilters, filterMode, selectedFields, filterCapWithTF, gridApi]);
+  }, [
+    showOnlyPending,
+    activeFilters,
+    filterMode,
+    selectedFields,
+    filterCapWithTF,
+    gridApi,
+  ]);
 
   return (
     <AdminLayout
