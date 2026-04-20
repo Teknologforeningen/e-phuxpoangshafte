@@ -169,7 +169,7 @@ const useStyles = makeStyles((theme: Theme) =>
       fontSize: '12pt',
     },
     subtitle: {
-      color: '#454545',
+      color: theme.palette.text.secondary,
       fontSize: '10pt',
     },
     evenlySpacedBox: {
