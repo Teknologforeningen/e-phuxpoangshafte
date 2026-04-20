@@ -20,9 +20,12 @@ import {
   ToggleButton,
   Typography,
   Tooltip,
+  Autocomplete,
+  TextField,
 } from '@mui/material';
 import FilterListIcon from '@mui/icons-material/FilterList';
 import TuneIcon from '@mui/icons-material/Tune';
+
 import { createStyles, makeStyles } from '@mui/styles';
 import { useSelector } from 'react-redux';
 import { groupBy, orderBy } from 'lodash';
@@ -169,6 +172,8 @@ const UserSummary = () => {
   const [filterAnchor, setFilterAnchor] = useState<HTMLElement | null>(null);
   const [filterMode, setFilterMode] = useState<'AND' | 'OR'>('AND');
   const [activeFilters, setActiveFilters] = useState<string[]>([]);
+  const [selectedFields, setSelectedFields] = useState<string[]>([]);
+  const [filterCapWithTF, setFilterCapWithTF] = useState<'with' | 'without' | null>('with');
 
   const refreshUsers = useCallback(() => {
     setRefreshSeed(s => s + 1);
@@ -274,7 +279,7 @@ const UserSummary = () => {
   const columnDefs: (ColDef | ColGroupDef)[] = useMemo(() => {
     const mandatoryEvents = events.filter(e => e.mandatory);
 
-    // --- Pinned name column (standalone, outside groups) ---
+    // --- Standalone columns: Name, field of study, pending requests, total points ---
     const nameCol: ColDef = {
       field: 'nameData',
       headerName: 'Namn',
@@ -282,21 +287,15 @@ const UserSummary = () => {
       pinned: 'left',
       cellRenderer: AllOkRenderer,
       comparator: (a: any, b: any) => a.name.localeCompare(b.name),
-      filter: 'agTextColumnFilter',
-      floatingFilter: true,
       filterValueGetter: (params: any) => params.data?.nameData?.name ?? '',
+      filter: 'agTextColumnFilter',
     };
-
-    // --- Field of study (info column next to name) ---
     const fieldOfStudyCol: ColDef = {
       field: 'fieldOfStudy',
       headerName: 'Studieriktning',
       width: 160,
-      filter: 'agTextColumnFilter',
-      floatingFilter: true,
+      filter: 'agSetColumnFilter',
     };
-
-    // --- Pending requests column ---
     const pendingCol: ColDef = {
       field: 'pendingCount',
       headerName: 'Förfrågningar',
@@ -304,26 +303,19 @@ const UserSummary = () => {
       width: 150,
       cellRenderer: PendingCountRenderer,
       comparator: (a: any, b: any) => (a ?? 0) - (b ?? 0),
+      filter: 'agNumberColumnFilter',
+    };
+    const totalCol: ColDef = {
+      field: 'total',
+      headerName: 'Totala poäng',
+      headerTooltip: `Totalt insamlade poäng över alla kategorier. Minimikrav är ${totalMinPoints}`,
+      width: 150,
+      cellRenderer: PointStatusRenderer,
+      cellRendererParams: { minPoints: totalMinPoints },
+      comparator: (a: any, b: any) => (a.points ?? 0) - (b.points ?? 0),
     };
 
-    // --- ÖVERGRIPANDE group: Studieriktning, Totala poäng ---
-    const overviewGroup: ColGroupDef = {
-      headerName: 'ÖVERGRIPANDE',
-      marryChildren: true,
-      children: [
-        {
-          field: 'total',
-          headerName: 'Totala poäng',
-          headerTooltip: `Totalt insamlade poäng över alla kategorier. Minimikrav är ${totalMinPoints}`,
-          width: 150,
-          cellRenderer: PointStatusRenderer,
-          cellRendererParams: { minPoints: totalMinPoints },
-          comparator: (a: any, b: any) => (a.points ?? 0) - (b.points ?? 0),
-        },
-      ],
-    };
-
-    // --- Per-category groups: category points + mandatory events from that category ---
+    // --- Per-category groups: category points +  andatory events from that category ---
     const categoryGroups: ColGroupDef[] = categories.map(category => {
       const catMandatoryEvents = mandatoryEvents.filter(
         e => e.categoryId === category.id,
@@ -376,10 +368,9 @@ const UserSummary = () => {
         : null;
 
     return [
-      nameCol,
-      fieldOfStudyCol,
-      pendingCol,
-      overviewGroup,
+      {
+        children: [nameCol, fieldOfStudyCol, pendingCol, totalCol],
+      } as ColGroupDef,
       ...categoryGroups,
       ...(extraGroup ? [extraGroup] : []),
     ];
@@ -396,8 +387,9 @@ const UserSummary = () => {
   );
 
   const isExternalFilterPresent = useCallback(
-    () => showOnlyPending || activeFilters.length > 0,
-    [showOnlyPending, activeFilters],
+    () =>
+      showOnlyPending || activeFilters.length > 0 || selectedFields.length > 0 || filterCapWithTF !== null,
+    [showOnlyPending, activeFilters, selectedFields, filterCapWithTF],
   );
   const doesExternalFilterPass = useCallback(
     (node: any) => {
@@ -406,6 +398,16 @@ const UserSummary = () => {
 
       const pendingPass = !showOnlyPending || (data.pendingCount ?? 0) > 0;
       if (!pendingPass) return false;
+
+      if (filterCapWithTF !== null) {
+        const user: User = data._user;
+        if (filterCapWithTF === 'with' && !user.capWithTF) return false;
+        if (filterCapWithTF === 'without' && user.capWithTF) return false;
+      }
+
+      if (selectedFields.length > 0) {
+        if (!selectedFields.includes(data.fieldOfStudy ?? '')) return false;
+      }
 
       if (activeFilters.length === 0) return true;
 
@@ -447,14 +449,30 @@ const UserSummary = () => {
         ? checks.every(Boolean)
         : checks.some(Boolean);
     },
-    [showOnlyPending, activeFilters, filterMode, totalMinPoints, categories],
+    [
+      showOnlyPending,
+      activeFilters,
+      filterMode,
+      totalMinPoints,
+      categories,
+      selectedFields,
+      filterCapWithTF,
+    ],
+  );
+
+  const fieldOfStudyOptions = useMemo(
+    () =>
+      Array.from(
+        new Set(rowData.map(r => r.fieldOfStudy as string).filter(Boolean)),
+      ).sort(),
+    [rowData],
   );
 
   useEffect(() => {
     if (gridApi) {
       gridApi.onFilterChanged();
     }
-  }, [showOnlyPending, activeFilters, filterMode, gridApi]);
+  }, [showOnlyPending, activeFilters, filterMode, selectedFields, filterCapWithTF, gridApi]);
 
   return (
     <AdminLayout
@@ -534,6 +552,41 @@ const UserSummary = () => {
             Rensa filter
           </Button>
         )}
+
+        <ToggleButtonGroup
+          value={filterCapWithTF}
+          exclusive
+          size="small"
+          onChange={(_, val) => setFilterCapWithTF(val)}
+        >
+          <ToggleButton value="with" sx={segBtnOk}>
+            Tar mössa med TF
+          </ToggleButton>
+          <ToggleButton value="without" sx={segBtnBad}>
+            Tar inte mössa med TF
+          </ToggleButton>
+        </ToggleButtonGroup>
+
+        <Autocomplete
+          multiple
+          size="small"
+          options={fieldOfStudyOptions}
+          value={selectedFields}
+          onChange={(_, val) => setSelectedFields(val)}
+          renderInput={params => (
+            <TextField
+              {...params}
+              placeholder={selectedFields.length === 0 ? 'Studieriktning' : ''}
+              variant="outlined"
+              size="small"
+            />
+          )}
+          sx={{ minWidth: 200, maxWidth: 400 }}
+          ChipProps={{
+            size: 'small',
+            sx: { fontWeight: 600, fontSize: '0.75rem' },
+          }}
+        />
 
         <Popover
           open={!!filterAnchor}

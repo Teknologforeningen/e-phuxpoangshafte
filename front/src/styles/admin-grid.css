@@ -108,8 +108,3 @@
 .ag-theme-material .ag-row {
   cursor: pointer;
 }
-
-/* Floating filter styling */
-.ag-theme-material .ag-floating-filter-input input {
-  font-size: 12px;
-}
