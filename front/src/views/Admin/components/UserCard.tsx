@@ -13,6 +13,10 @@ import {
   Chip,
   Tooltip,
   Divider,
+  Dialog,
+  DialogTitle,
+  DialogActions,
+  Button,
 } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import { Theme } from '@mui/material/styles';
@@ -32,6 +36,7 @@ import {
   KeyboardArrowUp,
   CheckCircle,
   Cancel,
+  AddCircleOutline,
 } from '@mui/icons-material';
 import * as UserService from '../../../services/UserServices';
 import {
@@ -51,6 +56,7 @@ const UserCard = (props: Props) => {
   const classes = useStyles();
   const { user, allEvents, allCategories, clearUserId, onRefresh } = props;
   const [openCategoryRows, setOpenCategoryRows] = useState<string[]>([]);
+  const [confirmEvent, setConfirmEvent] = useState<Event | null>(null);
 
   const eventsByCategoryId = groupBy(allEvents, 'categoryId');
 
@@ -102,6 +108,28 @@ const UserCard = (props: Props) => {
     [user, onRefresh],
   );
 
+  const handleAddPoints = useCallback(
+    async (event: Event) => {
+      try {
+        await UserService.addDoneEvent(user.id!, event.id);
+        await UserService.updateUserEventStatus(
+          user,
+          event.id,
+          EventStatus.COMPLETED,
+        );
+        SuccessNotification(
+          `${event.name} för ${user.firstName} ${user.lastName} har lagts till!`,
+        );
+        onRefresh?.();
+      } catch {
+        ErrorNotification(`${event.name} kunde inte läggas till!`);
+      } finally {
+        setConfirmEvent(null);
+      }
+    },
+    [user, onRefresh],
+  );
+
   const completedEvents = user.events.filter(
     event => event.status === EventStatus.COMPLETED,
   );
@@ -129,10 +157,23 @@ const UserCard = (props: Props) => {
       <TableRow className={classes.tableHeader}>
         <TableCell className={classes.firstTh}>{event.name}</TableCell>
         <TableCell align="right">
-          {usersEventsIncludeEvent ? 'Gjort' : 'Ogjort'}
-          {usersEventsIncludeEvent && event.points
-            ? `, ${event.points} poäng`
-            : ''}
+          <Box display="flex" alignItems="center" justifyContent="flex-end" gap={0.5}>
+            {!usersEventsIncludeEvent && (
+              <Tooltip title="Lägg till poäng">
+                <IconButton
+                  size="small"
+                  sx={{ color: '#2F855A' }}
+                  onClick={() => setConfirmEvent(event)}
+                >
+                  <AddCircleOutline fontSize="small" />
+                </IconButton>
+              </Tooltip>
+            )}
+            {usersEventsIncludeEvent ? 'Gjort' : 'Ogjort'}
+            {usersEventsIncludeEvent && event.points
+              ? `, ${event.points} poäng`
+              : ''}
+          </Box>
         </TableCell>
       </TableRow>
     );
@@ -331,6 +372,26 @@ const UserCard = (props: Props) => {
         {Object.entries(eventsByCategoryId).map(([categoryId, events]) =>
           renderCategory(categoryId, events),
         )}
+
+        <Dialog
+          open={confirmEvent !== null}
+          onClose={() => setConfirmEvent(null)}
+        >
+          <DialogTitle>
+            Markera <strong>{confirmEvent?.name}</strong> som gjort för{' '}
+            {user.firstName} {user.lastName}?
+          </DialogTitle>
+          <DialogActions>
+            <Button onClick={() => setConfirmEvent(null)}>Avbryt</Button>
+            <Button
+              variant="contained"
+              color="success"
+              onClick={() => confirmEvent && handleAddPoints(confirmEvent)}
+            >
+              Bekräfta
+            </Button>
+          </DialogActions>
+        </Dialog>
       </CardContent>
     </Card>
   );
