@@ -253,11 +253,8 @@ const NavBar = () => {
                 onClick={toggleDarkMode}
               >
                 <Box className={classes.navIcon}>
-                  {darkMode ? <LightModeIcon /> : <DarkModeIcon />}
+                  {darkMode ? <DarkModeIcon /> : <LightModeIcon />}
                 </Box>
-                <ListItemText
-                  primary={darkMode ? 'Ljust läge' : 'Mörkt läge'}
-                />
                 <Switch
                   checked={darkMode}
                   onChange={toggleDarkMode}
