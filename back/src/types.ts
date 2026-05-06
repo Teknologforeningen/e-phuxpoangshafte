@@ -11,7 +11,7 @@ export interface User {
   firstName: string;
   lastName: string;
   fieldOfStudy: string;
-  events: Array<Event['id']>;
+  events: Event['id'][];
   capWithTF: boolean;
 }
 

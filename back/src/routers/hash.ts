@@ -1,6 +1,6 @@
-import express, { Request, Response } from 'express';
+import express, { Request, Response, Router } from 'express';
 
-const hashRouter = require('express').Router();
+const hashRouter = Router();
 import cors from 'cors';
 import hashGenerator from '../utils.ts/hashGenerator';
 
@@ -9,7 +9,7 @@ app.use(cors());
 app.use(express.json());
 app.use(express.static('public'));
 
-//credits to https://github.com/Hajoppi for the implementation of this and hashGenerator
+// credits to https://github.com/Hajoppi for the implementation of this and hashGenerator
 
 const generateKey = (eventId: string) => {
   return hashGenerator(eventId);

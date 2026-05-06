@@ -10,7 +10,7 @@ type Options = {
 };
 
 const padZeroes = (value: string, digits = 16) => {
-  var fill = '0'.repeat(digits);
+  const fill = '0'.repeat(digits);
   return (fill + value).slice(-digits);
 };
 

@@ -1,7 +1,8 @@
 import express from 'express';
 import cors from 'cors';
-require('dotenv').config();
-const path = require('path');
+import dotenv from 'dotenv';
+import path from 'path';
+dotenv.config();
 
 import userRouter from './routers/user';
 import categoryRouter from './routers/category';

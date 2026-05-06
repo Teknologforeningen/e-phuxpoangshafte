@@ -1,6 +1,13 @@
 import jwt from 'jsonwebtoken';
 import User from '../db/models/models/users.model';
 
+declare module 'express-serve-static-core' {
+  interface Request {
+    user?: User | null;
+    token?: string | null;
+  }
+}
+
 export const tokenExtractor = (req, _res, next) => {
   const authorization = req.get('authorization');
   req.token =

@@ -1,4 +1,4 @@
-export const basicUser = { 
+export const basicUser = {
   "role": "basic",
   "email": "john.doe@aalto.fi",
   "password": "hunter2",
@@ -8,7 +8,7 @@ export const basicUser = {
   "capWithTF": true
 }
 
-export const adminUser = { 
+export const adminUser = {
   "role": "admin",
   "email": "phuxivator@tf.fi",
   "password": "naritet4ever",

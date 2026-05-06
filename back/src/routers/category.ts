@@ -1,7 +1,7 @@
-import express from 'express';
+import { Router } from 'express';
 import { userExtractor } from '../utils.ts/middleware';
 
-const categoryRouter = require('express').Router();
+const categoryRouter = Router();
 import Category from '../db/models/models/category.model';
 
 import { Category as CategoryType, userRole } from '../types';
