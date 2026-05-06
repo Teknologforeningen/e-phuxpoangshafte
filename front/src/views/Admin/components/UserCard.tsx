@@ -37,6 +37,7 @@ import {
   CheckCircle,
   Cancel,
   AddCircleOutline,
+  RemoveCircleOutline,
 } from '@mui/icons-material';
 import * as UserService from '../../../services/UserServices';
 import {
@@ -57,6 +58,7 @@ const UserCard = (props: Props) => {
   const { user, allEvents, allCategories, clearUserId, onRefresh } = props;
   const [openCategoryRows, setOpenCategoryRows] = useState<string[]>([]);
   const [confirmEvent, setConfirmEvent] = useState<Event | null>(null);
+  const [removeEvent, setRemoveEvent] = useState<Event | null>(null);
 
   const eventsByCategoryId = groupBy(allEvents, 'categoryId');
 
@@ -130,6 +132,27 @@ const UserCard = (props: Props) => {
     [user, onRefresh],
   );
 
+  const handleRemovePoints = useCallback(
+    async (event: Event) => {
+      try {
+        await UserService.updateUserEventStatus(
+          user,
+          event.id,
+          EventStatus.CANCELLED,
+        );
+        InfoNotification(
+          `${event.name} för ${user.firstName} ${user.lastName} har tagits bort`,
+        );
+        onRefresh?.();
+      } catch {
+        ErrorNotification(`${event.name} kunde inte tas bort!`);
+      } finally {
+        setRemoveEvent(null);
+      }
+    },
+    [user, onRefresh],
+  );
+
   const completedEvents = user.events.filter(
     event => event.status === EventStatus.COMPLETED,
   );
@@ -166,6 +189,17 @@ const UserCard = (props: Props) => {
                   onClick={() => setConfirmEvent(event)}
                 >
                   <AddCircleOutline fontSize="small" />
+                </IconButton>
+              </Tooltip>
+            )}
+            {usersEventsIncludeEvent && (
+              <Tooltip title="Ta bort poäng">
+                <IconButton
+                  size="small"
+                  sx={{ color: '#C53030' }}
+                  onClick={() => setRemoveEvent(event)}
+                >
+                  <RemoveCircleOutline fontSize="small" />
                 </IconButton>
               </Tooltip>
             )}
@@ -389,6 +423,26 @@ const UserCard = (props: Props) => {
               onClick={() => confirmEvent && handleAddPoints(confirmEvent)}
             >
               Bekräfta
+            </Button>
+          </DialogActions>
+        </Dialog>
+
+        <Dialog
+          open={removeEvent !== null}
+          onClose={() => setRemoveEvent(null)}
+        >
+          <DialogTitle>
+            Ta bort <strong>{removeEvent?.name}</strong> för{' '}
+            {user.firstName} {user.lastName}?
+          </DialogTitle>
+          <DialogActions>
+            <Button onClick={() => setRemoveEvent(null)}>Avbryt</Button>
+            <Button
+              variant="contained"
+              color="error"
+              onClick={() => removeEvent && handleRemovePoints(removeEvent)}
+            >
+              Ta bort
             </Button>
           </DialogActions>
         </Dialog>
