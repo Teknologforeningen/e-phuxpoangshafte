@@ -13,7 +13,7 @@ const StartPage = () => {
         Teknologföreningens phuxpoängskort
       </Typography>
       <Typography textAlign={'center'} variant={'h6'}>
-        Phux {process.env.REACT_APP_PHUX_YEAR ?? 2025}
+        Phux {process.env.REACT_APP_PHUX_YEAR ?? 2026}
       </Typography>
       <Box className={classes.buttonWrapper}>
         <Link href={Routes.SIGNUP} variant={'inherit'} underline={'none'}>
