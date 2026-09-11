@@ -92,7 +92,7 @@ const useStyles = makeStyles(
         fontSize: '12pt',
       },
       summarySubtitle: {
-        color: '#454545',
+        color: theme.palette.text.secondary,
         fontSize: '10pt',
         marginBottom: theme.spacing(1),
       },
@@ -149,12 +149,12 @@ const useStyles = makeStyles(
       totalBarLabelLeft: {
         fontWeight: 'bold',
         fontSize: '1rem',
-        color: '#000', // ensure contrast
+        color: theme.palette.text.primary,
       },
       totalBarLabelRight: {
         fontWeight: 'bold',
         fontSize: '1rem',
-        color: '#000',
+        color: theme.palette.text.primary,
       },
     }),
   { index: 1 },

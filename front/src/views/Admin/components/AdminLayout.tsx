@@ -39,7 +39,8 @@ const AdminLayout = ({
           {description && (
             <Typography
               variant="body2"
-              sx={{ color: '#718096', maxWidth: '800px' }}
+              color="text.secondary"
+              sx={{ maxWidth: '800px' }}
             >
               {description}
             </Typography>
@@ -60,14 +61,14 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
   card: {
     padding: theme.spacing(4),
-    paddingTop: theme.spacing(3), // Slightly less at the top of card
-    borderRadius: theme.spacing(3), // More rounded corners
-    backgroundColor: '#ffffff',
-    boxShadow: '0 4px 20px 0 rgba(0,0,0,0.05)', // Subtle, premium shadow
+    paddingTop: theme.spacing(3),
+    borderRadius: theme.spacing(3),
+    backgroundColor: theme.palette.background.paper,
+    boxShadow: '0 4px 20px 0 rgba(0,0,0,0.05)',
   },
   title: {
     fontWeight: 800,
-    color: '#1a202c', // Solid dark color for visibility
+    color: theme.palette.text.primary,
     letterSpacing: '-0.025em',
   },
   content: {

@@ -113,7 +113,7 @@ const useStyles = makeStyles((theme: Theme) => ({
       fontWeight: 600,
       textTransform: 'none',
       fontSize: '0.95rem',
-      color: '#718096',
+      color: theme.palette.text.secondary,
       '&.Mui-selected': {
         color: theme.palette.secondary.main,
       },
