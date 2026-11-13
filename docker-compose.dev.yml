@@ -1,0 +1,18 @@
+services:
+  back:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+      args:
+        REACT_APP_PHUX_YEAR: ${REACT_APP_PHUX_YEAR}
+    develop:
+      watch:
+        - action: sync
+          path: back/src
+          target: /app/back/src
+          ignore:
+            - node_modules/
+        - action: rebuild
+          path: back/package.json
+        - action: rebuild
+          path: back/yarn.lock

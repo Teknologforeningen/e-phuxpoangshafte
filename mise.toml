@@ -1,0 +1,204 @@
+# =============================================================================
+# mise.toml - Development environment configuration for E-Phuxpoangshaefte
+# =============================================================================
+# Usage:
+#   mise install          # Install all tools
+#   mise run install      # Install project dependencies
+#   mise run dev          # Start both frontend and backend
+#   mise tasks            # List all available tasks
+
+# -- Tools --------------------------------------------------------------------
+[tools]
+node = "18.16.0"
+fnox = "1.23.1"
+yarn = "latest"
+docker-compose = "latest"
+docker-cli = "latest"
+
+# -- Plugins ------------------------------------------------------------------
+[plugins]
+fnox-env = "https://github.com/jdx/mise-env-fnox"
+
+# -- Environment Variables ----------------------------------------------------
+# Non-secret development defaults. Secrets are managed by fnox (see fnox.toml).
+# These are also kept in back/.env.template and front/.env.template for reference.
+[env]
+NODE_ENV = "development"
+API_PORT = "8000"
+
+# fnox age decryption: point to your SSH private key
+# Each developer must have their SSH public key listed as a recipient in fnox.toml
+FNOX_AGE_KEY_FILE = "~/.ssh/id_ed25519"
+
+# Development database defaults (non-secret, same as docker-compose.yml)
+DEV_DB = "phuxdb"
+DEV_USERNAME = "postgres"
+DEV_PASSWORD = "postgres"
+DEV_HOST = "localhost"
+
+# Frontend
+REACT_APP_PHUX_YEAR = "2026"
+
+# Load secrets from fnox when available
+# NOTE: The plugin docs say tools=true should work, but the current plugin
+# version (1.0.0) doesn't implement it. We must use fnox_bin with the direct
+# install path. Using the shim path causes an infinite loop.
+# After running `mise install`, get your path with: mise where fnox
+_.fnox-env = { fnox_bin = "/Users/christian.segercrantz/.local/share/mise/installs/fnox/1.23.1/fnox" }
+
+# -- Tasks: Setup -------------------------------------------------------------
+[tasks.install]
+alias = "i"
+description = "Install all project dependencies (backend + frontend)"
+depends = ["install:back", "install:front"]
+run = "echo 'All dependencies installed'"
+
+[tasks."install:back"]
+description = "Install backend dependencies"
+sources = ["back/package.json", "back/yarn.lock", "back/.yarnrc.yml"]
+run = "yarn --cwd back"
+
+[tasks."install:front"]
+description = "Install frontend dependencies"
+sources = ["front/package.json", "front/yarn.lock", "front/.yarnrc.yml"]
+run = "yarn --cwd front"
+
+# -- Tasks: Development -------------------------------------------------------
+[tasks.dev]
+alias = "d"
+description = "Start both backend and frontend dev servers with hot-reload"
+run = [
+  { tasks = ["dev:back", "dev:front"] },
+]
+
+[tasks."dev:back"]
+description = "Start backend dev server with ts-node-dev"
+env = { NODE_ENV = "development" }
+depends = ["install:back"]
+run = "yarn --cwd back run dev"
+
+[tasks."dev:front"]
+description = "Start frontend React dev server with hot-reload"
+depends = ["install:front"]
+# CRA derives allowedHosts from the LAN IP when `proxy` is set and crashes on
+# networks that hand out a public address, so skip the host check in dev.
+env = { DANGEROUSLY_DISABLE_HOST_CHECK = "true" }
+run = "yarn --cwd front start"
+
+# -- Tasks: Build --------------------------------------------------------------
+[tasks.build]
+alias = "b"
+description = "Build both backend and frontend for production"
+depends = ["build:back", "build:front"]
+
+[tasks."build:back"]
+description = "Compile backend TypeScript"
+sources = ["back/src/**/*", "back/tsconfig.json", "back/package.json"]
+outputs = ["back/dist/**/*"]
+run = "yarn --cwd back build-ts"
+
+[tasks."build:front"]
+description = "Build frontend React app for production"
+sources = ["front/src/**/*", "front/public/**/*", "front/tsconfig.json", "front/package.json"]
+outputs = ["front/build/**/*"]
+env = { NODE_ENV = "production" }
+run = "yarn --cwd front build"
+
+# -- Tasks: Testing ------------------------------------------------------------
+[tasks.test]
+alias = "t"
+description = "Run all tests"
+depends = ["test:back", "test:front"]
+
+[tasks."test:back"]
+description = "Run backend tests with Jest"
+env = { NODE_ENV = "test" }
+run = "yarn --cwd back test --watchAll=false"
+
+[tasks."test:front"]
+description = "Run frontend tests"
+run = "yarn --cwd front test --watchAll=false"
+
+# -- Tasks: Serve (production) ------------------------------------------------
+[tasks.serve]
+description = "Serve the built backend (production)"
+run = "yarn --cwd back serve"
+
+# -- Tasks: Docker -------------------------------------------------------------
+[tasks."docker:up"]
+alias = "up"
+description = "Start all services with docker-compose (backend + database)"
+run = "docker compose up -d"
+
+[tasks."docker:down"]
+alias = "down"
+description = "Stop all docker-compose services"
+run = "docker compose down"
+
+[tasks."docker:logs"]
+description = "Follow docker-compose logs"
+run = "docker compose logs -f"
+
+[tasks."docker:build"]
+description = "Build the Docker image"
+sources = ["Dockerfile", "back/**/*", "front/**/*"]
+run = "docker compose build"
+
+[tasks."docker:watch"]
+alias = "watch"
+description = "Start dev environment with file watching and hot-reload"
+depends = "install"
+run = "docker compose -f docker-compose.yml -f docker-compose.dev.yml watch"
+
+[tasks."docker:db"]
+description = "Start only the database container"
+run = "docker compose up -d db"
+
+[tasks."docker:db:reset"]
+description = "Stop the database, wipe all data, and restart fresh"
+run = [
+  "docker compose down db",
+  "rm -rf db-data",
+  "docker compose up -d db",
+  "echo 'Waiting for PostgreSQL to be ready...'",
+  "until docker exec phux-db pg_isready -U postgres > /dev/null 2>&1; do sleep 1; done",
+  "echo 'Database is ready.'",
+]
+
+# -- Tasks: Seed ---------------------------------------------------------------
+[tasks.seed]
+description = "Seed the database with realistic dev data (categories, events, users)"
+depends = ["docker:db"]
+run = "bash back/requests/seed_dev.sh"
+
+[tasks."docker:reset_and_seed"]
+description = "Reset the database and seed with realistic dev data"
+depends = ["docker:db:reset"]
+run = "mise run dev && mise run seed"
+
+
+# -- Tasks: Utility ------------------------------------------------------------
+[tasks.clean]
+description = "Remove build artifacts and node_modules"
+run = [
+  "rm -rf back/dist front/build",
+  "rm -rf back/node_modules front/node_modules",
+]
+
+[tasks.lint]
+description = "Lint backend code with tslint"
+sources = ["back/src/**/*.ts"]
+run = "yarn --cwd back tslint -c back/tslint.json 'back/src/**/*.ts'"
+
+# -- Tasks: Secrets (fnox) ----------------------------------------------------
+[tasks."secrets:set"]
+description = "Set a secret in fnox (usage: mise run secrets:set KEY value)"
+run = "fnox set \"$1\" \"$2\""
+
+[tasks."secrets:list"]
+description = "List all fnox secrets"
+run = "fnox list"
+
+[tasks."secrets:get"]
+description = "Get a secret from fnox (usage: mise run secrets:get KEY)"
+run = "fnox get \"$1\""
