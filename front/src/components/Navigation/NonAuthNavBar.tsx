@@ -3,6 +3,7 @@ import { createStyles, makeStyles } from '@mui/styles';
 import React from 'react';
 import TFLogoSVG from '../../styles/img/TFlogo';
 import { Routes } from '../../types';
+import { accentText } from '../../styles/themes';
 import { navBarHeight } from './NavBar';
 
 const NonAuthNavBar = () => {
@@ -26,7 +27,7 @@ const useStyles = makeStyles(
         justifyContent: '',
         height: navBarHeight,
         width: navBarHeight,
-        fill: theme.palette.secondary.main,
+        fill: accentText(theme),
       },
     }),
   { index: 1 },

@@ -14,6 +14,7 @@ import * as UserService from '../services/UserServices';
 import { FieldOfStudy, NewUser, Routes } from '../types';
 import * as Yup from 'yup';
 import NonAuthNavBar from '../components/Navigation/NonAuthNavBar';
+import { accentText } from '../styles/themes';
 import { makeStyles, createStyles } from '@mui/styles';
 import {
   ErrorNotification,
@@ -270,7 +271,7 @@ const SignupPage = () => {
               <Link
                 href={Routes.LOGIN}
                 variant={'inherit'}
-                color={'secondary'}
+                sx={{ color: accentText }}
                 underline={'hover'}
                 m={0.5}
                 noWrap
@@ -320,7 +321,7 @@ const useStyles = makeStyles(
       },
       submitButton: {
         backgroundColor: theme.palette.secondary.main,
-        color: theme.palette.primary.main,
+        color: theme.palette.secondary.contrastText,
         width: '100%',
         maxWidth: '290px',
         padding: theme.spacing(2, 0),
@@ -328,7 +329,7 @@ const useStyles = makeStyles(
         borderRadius: 0,
       },
       labelFocused: {
-        color: `${theme.palette.common.black} !important`,
+        color: `${theme.palette.text.primary} !important`,
       },
     }),
   { index: 1 },

@@ -329,7 +329,7 @@ const useStyles = makeStyles(
       },
       submitButton: {
         backgroundColor: theme.palette.secondary.main,
-        color: theme.palette.primary.main,
+        color: theme.palette.secondary.contrastText,
         width: '100%',
         maxWidth: '290px',
         padding: theme.spacing(2, 0),
@@ -337,7 +337,7 @@ const useStyles = makeStyles(
         borderRadius: 0,
       },
       labelFocused: {
-        color: `${theme.palette.common.black} !important`,
+        color: `${theme.palette.text.primary} !important`,
       },
     }),
   { index: 1 },

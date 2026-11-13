@@ -3,61 +3,68 @@ import React, {
   useCallback,
   useContext,
   useEffect,
+  useMemo,
   useState,
 } from 'react';
+import { useMediaQuery } from '@mui/material';
 import { localStorageGetter, localStorageSetter } from '../utils/localStorage';
 
-const THEME_STORAGE_KEY = 'darkMode';
+// Also read by the inline script in public/index.html
+export const THEME_STORAGE_KEY = 'themeMode';
+
+export const THEME_MODES = ['light', 'system', 'dark'] as const;
+export type ThemeMode = typeof THEME_MODES[number];
+export type ResolvedThemeMode = Exclude<ThemeMode, 'system'>;
 
 interface ThemeContextType {
-  darkMode: boolean;
-  toggleDarkMode: () => void;
+  mode: ThemeMode;
+  resolvedMode: ResolvedThemeMode;
+  setMode: (mode: ThemeMode) => void;
 }
 
 const ThemeContext = createContext<ThemeContextType>({
-  darkMode: false,
-  toggleDarkMode: () => {},
+  mode: 'system',
+  resolvedMode: 'light',
+  setMode: () => {},
 });
 
 export const useThemeMode = () => useContext(ThemeContext);
 
-const getSystemDarkMode = (): boolean =>
-  window.matchMedia?.('(prefers-color-scheme: dark)').matches ?? false;
+const readStoredMode = (): ThemeMode => {
+  const stored = localStorageGetter(THEME_STORAGE_KEY);
+  return THEME_MODES.includes(stored as ThemeMode)
+    ? (stored as ThemeMode)
+    : 'system';
+};
 
 export const ThemeModeProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
-  const [darkMode, setDarkMode] = useState<boolean>(() => {
-    const stored = localStorageGetter(THEME_STORAGE_KEY);
-    return stored !== null ? stored === 'true' : getSystemDarkMode();
+  const [mode, setModeState] = useState<ThemeMode>(readStoredMode);
+  const systemPrefersDark = useMediaQuery('(prefers-color-scheme: dark)', {
+    noSsr: true,
   });
+  const resolvedMode: ResolvedThemeMode =
+    mode === 'system' ? (systemPrefersDark ? 'dark' : 'light') : mode;
 
-  const toggleDarkMode = useCallback(() => {
-    setDarkMode(prev => {
-      const next = !prev;
-      localStorageSetter(THEME_STORAGE_KEY, String(next));
-      return next;
-    });
+  const setMode = useCallback((next: ThemeMode) => {
+    setModeState(next);
+    localStorageSetter(THEME_STORAGE_KEY, next);
   }, []);
 
-  // Keep data-theme on <body> in sync so CSS selectors (e.g. AG Grid overrides) can target it
   useEffect(() => {
-    document.body.setAttribute('data-theme', darkMode ? 'dark' : 'light');
-  }, [darkMode]);
+    // Lets plain CSS (e.g. the AG Grid overrides) target the active theme
+    document.body.setAttribute('data-theme', resolvedMode);
+    // Native scrollbars, form controls and the pre-render canvas
+    document.documentElement.style.colorScheme = resolvedMode;
+  }, [resolvedMode]);
 
-  // Follow system preference changes only when the user hasn't set their own preference
-  useEffect(() => {
-    if (localStorageGetter(THEME_STORAGE_KEY) !== null) return;
-
-    const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
-    const handler = (e: MediaQueryListEvent) => setDarkMode(e.matches);
-    mediaQuery.addEventListener('change', handler);
-    return () => mediaQuery.removeEventListener('change', handler);
-  }, []);
+  const value = useMemo(
+    () => ({ mode, resolvedMode, setMode }),
+    [mode, resolvedMode, setMode],
+  );
 
   return (
-    <ThemeContext.Provider value={{ darkMode, toggleDarkMode }}>
-      {children}
-    </ThemeContext.Provider>
+    <ThemeContext.Provider value={value}>{children}</ThemeContext.Provider>
   );
 };

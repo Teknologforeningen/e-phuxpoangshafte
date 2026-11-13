@@ -14,6 +14,7 @@ import {
   SuccessNotification,
 } from '../components/Notifications';
 import { Routes } from '../types';
+import { accentText } from '../styles/themes';
 import NonAuthNavBar from '../components/Navigation/NonAuthNavBar';
 
 interface LoginCredentials {
@@ -137,7 +138,7 @@ const LoginForm = () => {
                 <Link
                   href={Routes.RESET_PASSWORD}
                   variant={'inherit'}
-                  color={'secondary'}
+                  sx={{ color: accentText }}
                   underline={'hover'}
                   m={0.5}
                   noWrap
@@ -150,7 +151,7 @@ const LoginForm = () => {
                 <Link
                   href={Routes.SIGNUP}
                   variant={'inherit'}
-                  color={'secondary'}
+                  sx={{ color: accentText }}
                   underline={'hover'}
                   m={0.5}
                   noWrap
@@ -200,7 +201,7 @@ const useStyles = makeStyles(
       },
       submitButton: {
         backgroundColor: theme.palette.secondary.main,
-        color: theme.palette.primary.main,
+        color: theme.palette.secondary.contrastText,
         width: '100%',
         maxWidth: '290px',
         padding: theme.spacing(2, 0),
@@ -208,7 +209,7 @@ const useStyles = makeStyles(
         borderRadius: 0,
       },
       labelFocused: {
-        color: `${theme.palette.common.black} !important`,
+        color: `${theme.palette.text.primary} !important`,
       },
     }),
   { index: 1 },

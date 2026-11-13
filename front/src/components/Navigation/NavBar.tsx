@@ -9,14 +9,15 @@ import {
   List,
   ListItem,
   ListItemText,
-  Switch,
   SwipeableDrawer,
+  ToggleButton,
+  ToggleButtonGroup,
   Toolbar,
   Typography,
   useMediaQuery,
 } from '@mui/material';
 import { Theme } from '@mui/material/styles';
-import * as Themes from '../../styles/themes';
+import { accentText } from '../../styles/themes';
 import { createStyles, makeStyles } from '@mui/styles';
 import { useSelector } from 'react-redux';
 import { useLocation } from 'react-router-dom';
@@ -35,9 +36,24 @@ import CategoryIcon from '@mui/icons-material/Category';
 import TaskAltIcon from '@mui/icons-material/TaskAlt';
 import DarkModeIcon from '@mui/icons-material/DarkMode';
 import LightModeIcon from '@mui/icons-material/LightMode';
+import SettingsBrightnessIcon from '@mui/icons-material/SettingsBrightness';
 import TFLogoSVG from '../../styles/img/TFlogo';
 import classNames from 'classnames';
-import { useThemeMode } from '../../contexts/ThemeContext';
+import { ThemeMode, useThemeMode } from '../../contexts/ThemeContext';
+
+const themeModeOptions: {
+  value: ThemeMode;
+  label: string;
+  icon: JSX.Element;
+}[] = [
+  { value: 'light', label: 'Ljust tema', icon: <LightModeIcon /> },
+  {
+    value: 'system',
+    label: 'Följ systemets tema',
+    icon: <SettingsBrightnessIcon />,
+  },
+  { value: 'dark', label: 'Mörkt tema', icon: <DarkModeIcon /> },
+];
 
 const NotLoggedInList = () => {
   const classes = useStyles();
@@ -127,11 +143,11 @@ const NavBar = () => {
   const authentication = useSelector(auth);
   const [drawerOpen, toggleDrawer] = useState<boolean>(false);
   const anchor = 'left';
-  const { darkMode, toggleDarkMode } = useThemeMode();
+  const { mode, setMode } = useThemeMode();
 
   const isBrowser = typeof window !== 'undefined';
   const iOS = isBrowser && /iPad|iPhone|iPod/.test(navigator.userAgent);
-  const isMdUp = useMediaQuery(Themes.theme.breakpoints.up('md'));
+  const isMdUp = useMediaQuery((theme: Theme) => theme.breakpoints.up('md'));
 
   const location = useLocation();
 
@@ -247,21 +263,28 @@ const NavBar = () => {
 
           {authentication.userIsAutharized && (
             <List>
-              <ListItem
-                key={'darkModeToggle'}
-                className={classNames(classes.navItem, classes.darkModeItem)}
-                onClick={toggleDarkMode}
-              >
-                <Box className={classes.navIcon}>
-                  {darkMode ? <DarkModeIcon /> : <LightModeIcon />}
-                </Box>
-                <Switch
-                  checked={darkMode}
-                  onChange={toggleDarkMode}
-                  onClick={e => e.stopPropagation()}
+              <ListItem key={'themeMode'} className={classes.themeModeItem}>
+                <ToggleButtonGroup
+                  exclusive
+                  fullWidth
                   size="small"
-                  color="secondary"
-                />
+                  value={mode}
+                  aria-label="Färgtema"
+                  onChange={(_, next: ThemeMode | null) =>
+                    next && setMode(next)
+                  }
+                >
+                  {themeModeOptions.map(option => (
+                    <ToggleButton
+                      key={option.value}
+                      value={option.value}
+                      aria-label={option.label}
+                      title={option.label}
+                    >
+                      {option.icon}
+                    </ToggleButton>
+                  ))}
+                </ToggleButtonGroup>
               </ListItem>
               <ListItem
                 key={'settings'}
@@ -314,20 +337,23 @@ const useStyles = makeStyles(
         },
         '&:hover': {
           backgroundColor: theme.palette.action.hover,
-          color: theme.palette.secondary.main,
+          color: accentText(theme),
           '& $navIcon': {
-            color: theme.palette.secondary.main,
+            color: accentText(theme),
           },
         },
       },
-      darkModeItem: {
-        cursor: 'pointer',
+      themeModeItem: {
+        padding: theme.spacing(0.5, 1.5),
+        '& svg': {
+          fontSize: '1.25rem',
+        },
       },
       navItemActive: {
-        backgroundColor: `${theme.palette.secondary.main}12`,
-        color: theme.palette.secondary.main,
+        backgroundColor: `${accentText(theme)}12`,
+        color: accentText(theme),
         '& $navIcon': {
-          color: theme.palette.secondary.main,
+          color: accentText(theme),
         },
         '& .MuiTypography-root': {
           fontWeight: 700,

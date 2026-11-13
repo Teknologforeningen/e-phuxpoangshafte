@@ -45,6 +45,7 @@ import {
 } from '../../types';
 import UserCard from './components/UserCard';
 import AdminLayout from './components/AdminLayout';
+import { errorText, successText, warningText } from '../../styles/themes';
 
 const PointStatusRenderer = (params: ICellRendererParams) => {
   const { value, colDef } = params;
@@ -61,7 +62,7 @@ const PointStatusRenderer = (params: ICellRendererParams) => {
       sx={{
         fontWeight: 700,
         bgcolor: isOk ? 'rgba(72, 187, 120, 0.1)' : 'rgba(245, 101, 101, 0.1)',
-        color: isOk ? '#2F855A' : '#C53030',
+        color: isOk ? successText : errorText,
         borderRadius: '8px',
         border: 'none',
         fontSize: '0.75rem',
@@ -82,7 +83,7 @@ const MandatoryRenderer = (params: ICellRendererParams) => {
         bgcolor: isDone
           ? 'rgba(72, 187, 120, 0.1)'
           : theme.palette.action.hover,
-        color: isDone ? '#2F855A' : theme.palette.text.secondary,
+        color: isDone ? successText : 'text.secondary',
         borderRadius: '8px',
         border: isDone ? 'none' : `1px solid ${theme.palette.divider}`,
         fontSize: '0.75rem',
@@ -95,7 +96,11 @@ const AllOkRenderer = (params: ICellRendererParams) => {
   const val = params.value;
   return (
     <Box display="flex" alignItems="center" gap={1}>
-      {val.allOk && <span style={{ color: '#436436', fontSize: 18 }}>●</span>}
+      {val.allOk && (
+        <Box component="span" sx={{ color: successText, fontSize: 18 }}>
+          ●
+        </Box>
+      )}
       <span>{val.name}</span>
     </Box>
   );
@@ -121,7 +126,7 @@ const PendingCountRenderer = (params: ICellRendererParams) => {
         sx={{
           fontWeight: 700,
           bgcolor: 'rgba(237, 137, 54, 0.1)',
-          color: '#C05621',
+          color: warningText,
           borderRadius: '8px',
           border: 'none',
           fontSize: '0.75rem',
@@ -527,7 +532,7 @@ const UserSummary = () => {
                 bgcolor: showOnlyPending
                   ? 'rgba(255,255,255,0.25)'
                   : 'rgba(237, 137, 54, 0.15)',
-                color: showOnlyPending ? '#fff' : '#C05621',
+                color: showOnlyPending ? '#fff' : warningText,
               }}
             />
           )}

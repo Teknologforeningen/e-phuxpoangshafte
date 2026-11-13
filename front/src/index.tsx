@@ -24,8 +24,9 @@ const jss = create({
 });
 
 const AppWithTheme: React.FC = () => {
-  const { darkMode } = useThemeMode();
-  const activeTheme = darkMode ? Themes.darkTheme : Themes.lightTheme;
+  const { resolvedMode } = useThemeMode();
+  const activeTheme =
+    resolvedMode === 'dark' ? Themes.darkTheme : Themes.lightTheme;
   return (
     <StylesProvider jss={jss}>
       <ThemeProvider theme={activeTheme}>

@@ -5,6 +5,7 @@ import { InfoOutlined as InfoIcon } from '@mui/icons-material/';
 import { createStyles, makeStyles } from '@mui/styles';
 import { Theme } from '@mui/material/styles';
 import classnames from 'classnames';
+import { accentText } from '../../../styles/themes';
 
 interface Props {
   category: Category;
@@ -165,7 +166,7 @@ const CategoryProgress = (props: Props) => {
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     title: {
-      color: theme.palette.secondary.main,
+      color: accentText(theme),
       fontSize: '12pt',
     },
     subtitle: {
@@ -234,7 +235,7 @@ const useStyles = makeStyles((theme: Theme) =>
       borderColor: (props: StyleProps) =>
         props.progress < props.widthBreakVerified
           ? theme.palette.secondary.main
-          : theme.palette.primary.main,
+          : theme.palette.secondary.contrastText,
     },
     solidBorder: {
       borderStyle: 'solid',
