@@ -50,7 +50,12 @@ const QRPage = () => {
       <Typography variant={'h3'} className={classes.center}>
         {eventName}
       </Typography>
-      <QRCodeSVG value={QRUrl} size={QRCodeSize} className={classes.center} />
+      <QRCodeSVG
+        value={QRUrl}
+        size={QRCodeSize}
+        includeMargin
+        className={classes.center}
+      />
     </Box>
   );
 };

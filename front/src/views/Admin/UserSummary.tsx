@@ -22,6 +22,7 @@ import {
   Tooltip,
   Autocomplete,
   TextField,
+  useTheme,
 } from '@mui/material';
 import FilterListIcon from '@mui/icons-material/FilterList';
 import TuneIcon from '@mui/icons-material/Tune';
@@ -44,6 +45,7 @@ import {
 } from '../../types';
 import UserCard from './components/UserCard';
 import AdminLayout from './components/AdminLayout';
+import { errorText, successText, warningText } from '../../styles/themes';
 
 const PointStatusRenderer = (params: ICellRendererParams) => {
   const { value, colDef } = params;
@@ -60,7 +62,7 @@ const PointStatusRenderer = (params: ICellRendererParams) => {
       sx={{
         fontWeight: 700,
         bgcolor: isOk ? 'rgba(72, 187, 120, 0.1)' : 'rgba(245, 101, 101, 0.1)',
-        color: isOk ? '#2F855A' : '#C53030',
+        color: isOk ? successText : errorText,
         borderRadius: '8px',
         border: 'none',
         fontSize: '0.75rem',
@@ -70,6 +72,7 @@ const PointStatusRenderer = (params: ICellRendererParams) => {
 };
 
 const MandatoryRenderer = (params: ICellRendererParams) => {
+  const theme = useTheme();
   const isDone = params.value === true;
   return (
     <Chip
@@ -77,10 +80,12 @@ const MandatoryRenderer = (params: ICellRendererParams) => {
       size="small"
       sx={{
         fontWeight: 700,
-        bgcolor: isDone ? 'rgba(72, 187, 120, 0.1)' : '#f8fafc',
-        color: isDone ? '#2F855A' : '#718096',
+        bgcolor: isDone
+          ? 'rgba(72, 187, 120, 0.1)'
+          : theme.palette.action.hover,
+        color: isDone ? successText : 'text.secondary',
         borderRadius: '8px',
-        border: isDone ? 'none' : '1px solid #edf2f7',
+        border: isDone ? 'none' : `1px solid ${theme.palette.divider}`,
         fontSize: '0.75rem',
       }}
     />
@@ -91,7 +96,11 @@ const AllOkRenderer = (params: ICellRendererParams) => {
   const val = params.value;
   return (
     <Box display="flex" alignItems="center" gap={1}>
-      {val.allOk && <span style={{ color: '#436436', fontSize: 18 }}>●</span>}
+      {val.allOk && (
+        <Box component="span" sx={{ color: successText, fontSize: 18 }}>
+          ●
+        </Box>
+      )}
       <span>{val.name}</span>
     </Box>
   );
@@ -117,7 +126,7 @@ const PendingCountRenderer = (params: ICellRendererParams) => {
         sx={{
           fontWeight: 700,
           bgcolor: 'rgba(237, 137, 54, 0.1)',
-          color: '#C05621',
+          color: warningText,
           borderRadius: '8px',
           border: 'none',
           fontSize: '0.75rem',
@@ -155,6 +164,7 @@ const segBtnBad = {
 
 const UserSummary = () => {
   const classes = useStyles();
+  const muiTheme = useTheme();
   const events: Event[] = useSelector(
     EventSelector.allEventsOrderedByStartTime,
   );
@@ -503,7 +513,10 @@ const UserSummary = () => {
             borderRadius: '8px',
             ...(showOnlyPending
               ? { bgcolor: '#C05621', '&:hover': { bgcolor: '#9C4221' } }
-              : { borderColor: '#e2e8f0', color: '#718096' }),
+              : {
+                  borderColor: muiTheme.palette.divider,
+                  color: muiTheme.palette.text.secondary,
+                }),
           }}
         >
           Visa väntande
@@ -519,7 +532,7 @@ const UserSummary = () => {
                 bgcolor: showOnlyPending
                   ? 'rgba(255,255,255,0.25)'
                   : 'rgba(237, 137, 54, 0.15)',
-                color: showOnlyPending ? '#fff' : '#C05621',
+                color: showOnlyPending ? '#fff' : warningText,
               }}
             />
           )}
@@ -536,7 +549,10 @@ const UserSummary = () => {
             borderRadius: '8px',
             ...(activeFilters.length > 0
               ? { bgcolor: '#3182CE', '&:hover': { bgcolor: '#2B6CB0' } }
-              : { borderColor: '#e2e8f0', color: '#718096' }),
+              : {
+                  borderColor: muiTheme.palette.divider,
+                  color: muiTheme.palette.text.secondary,
+                }),
           }}
         >
           Poängfilter
@@ -559,7 +575,11 @@ const UserSummary = () => {
           <Button
             size="small"
             onClick={() => setActiveFilters([])}
-            sx={{ textTransform: 'none', color: '#718096', fontSize: '0.8rem' }}
+            sx={{
+              textTransform: 'none',
+              color: muiTheme.palette.text.secondary,
+              fontSize: '0.8rem',
+            }}
           >
             Rensa filter
           </Button>

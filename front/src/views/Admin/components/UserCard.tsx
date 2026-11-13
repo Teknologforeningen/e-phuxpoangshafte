@@ -35,6 +35,11 @@ import {
 } from '@mui/icons-material';
 import * as UserService from '../../../services/UserServices';
 import {
+  errorText,
+  successText,
+  warningText,
+} from '../../../styles/themes';
+import {
   ErrorNotification,
   InfoNotification,
   SuccessNotification,
@@ -242,21 +247,29 @@ const UserCard = (props: Props) => {
               bgcolor: user.capWithTF
                 ? 'rgba(72, 187, 120, 0.1)'
                 : 'rgba(245, 101, 101, 0.1)',
-              color: user.capWithTF ? '#2F855A' : '#C53030',
+              color: user.capWithTF ? successText : errorText,
             }}
           />
           <Chip
             label={user.email}
             size="small"
             variant="outlined"
-            sx={{ fontWeight: 500, fontSize: '0.75rem', color: '#718096' }}
+            sx={{
+              fontWeight: 500,
+              fontSize: '0.75rem',
+              color: 'text.secondary',
+            }}
           />
         </Box>
 
         {pendingWithInfo.length > 0 && (
           <Box sx={{ mb: 2 }}>
             <Box display="flex" alignItems="center" gap={1} mb={1}>
-              <Typography variant="subtitle2" fontWeight={700} color="#C05621">
+              <Typography
+                variant="subtitle2"
+                fontWeight={700}
+                sx={{ color: warningText }}
+              >
                 Väntande förfrågningar
               </Typography>
               <Chip
@@ -267,7 +280,7 @@ const UserCard = (props: Props) => {
                   fontWeight: 700,
                   fontSize: '0.7rem',
                   bgcolor: 'rgba(237, 137, 54, 0.15)',
-                  color: '#C05621',
+                  color: warningText,
                 }}
               />
             </Box>
@@ -290,7 +303,7 @@ const UserCard = (props: Props) => {
                   <Typography variant="body2" fontWeight={600}>
                     {event.name}
                   </Typography>
-                  <Typography variant="caption" color="#718096">
+                  <Typography variant="caption" color="text.secondary">
                     {event.points ? `${event.points} poäng` : 'Obligatorisk'}
                     {' · '}
                     {new Date(doneEvent.timeOfSignup).toLocaleDateString(
@@ -306,7 +319,7 @@ const UserCard = (props: Props) => {
                   <Tooltip title="Godkänn">
                     <IconButton
                       size="small"
-                      sx={{ color: '#2F855A' }}
+                      sx={{ color: successText }}
                       onClick={() => handleApprove(event)}
                     >
                       <CheckCircle fontSize="small" />
@@ -315,7 +328,7 @@ const UserCard = (props: Props) => {
                   <Tooltip title="Förkasta">
                     <IconButton
                       size="small"
-                      sx={{ color: '#C53030' }}
+                      sx={{ color: errorText }}
                       onClick={() => handleDecline(event)}
                     >
                       <Cancel fontSize="small" />

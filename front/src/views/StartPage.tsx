@@ -3,6 +3,7 @@ import { Box, Button, Link, Theme, Typography } from '@mui/material';
 import { createStyles, makeStyles } from '@mui/styles';
 import TFlogoSVG from '../styles/img/TFlogo';
 import { Routes } from '../types';
+import { accentText } from '../styles/themes';
 
 const StartPage = () => {
   const classes = useStyles();
@@ -56,7 +57,7 @@ const useStyles = makeStyles(
         justifyContent: 'space-evenly',
       },
       buttons: {
-        color: theme.palette.primary.main,
+        color: theme.palette.secondary.contrastText,
         backgroundColor: theme.palette.secondary.main,
         width: '100%',
         maxWidth: '200px',
@@ -64,15 +65,15 @@ const useStyles = makeStyles(
         borderRadius: 0,
       },
       outLinedButton: {
-        color: theme.palette.secondary.main,
-        border: `1px solid ${theme.palette.secondary.main}`,
+        color: accentText(theme),
+        border: `1px solid ${accentText(theme)}`,
         width: '100%',
         maxWidth: '200px',
         padding: theme.spacing(2, 5),
         borderRadius: 0,
       },
       logo: {
-        fill: theme.palette.secondary.main,
+        fill: accentText(theme),
         width: '60%',
         maxWidth: 400,
         maxHeight: 400,

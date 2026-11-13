@@ -10,12 +10,14 @@ import {
   ListItem,
   ListItemText,
   SwipeableDrawer,
+  ToggleButton,
+  ToggleButtonGroup,
   Toolbar,
   Typography,
   useMediaQuery,
 } from '@mui/material';
 import { Theme } from '@mui/material/styles';
-import * as Themes from '../../styles/themes';
+import { accentText } from '../../styles/themes';
 import { createStyles, makeStyles } from '@mui/styles';
 import { useSelector } from 'react-redux';
 import { useLocation } from 'react-router-dom';
@@ -32,8 +34,26 @@ import GavelIcon from '@mui/icons-material/Gavel';
 import SummarizeIcon from '@mui/icons-material/Summarize';
 import CategoryIcon from '@mui/icons-material/Category';
 import TaskAltIcon from '@mui/icons-material/TaskAlt';
+import DarkModeIcon from '@mui/icons-material/DarkMode';
+import LightModeIcon from '@mui/icons-material/LightMode';
+import SettingsBrightnessIcon from '@mui/icons-material/SettingsBrightness';
 import TFLogoSVG from '../../styles/img/TFlogo';
 import classNames from 'classnames';
+import { ThemeMode, useThemeMode } from '../../contexts/ThemeContext';
+
+const themeModeOptions: {
+  value: ThemeMode;
+  label: string;
+  icon: JSX.Element;
+}[] = [
+  { value: 'light', label: 'Ljust tema', icon: <LightModeIcon /> },
+  {
+    value: 'system',
+    label: 'Följ systemets tema',
+    icon: <SettingsBrightnessIcon />,
+  },
+  { value: 'dark', label: 'Mörkt tema', icon: <DarkModeIcon /> },
+];
 
 const NotLoggedInList = () => {
   const classes = useStyles();
@@ -123,10 +143,11 @@ const NavBar = () => {
   const authentication = useSelector(auth);
   const [drawerOpen, toggleDrawer] = useState<boolean>(false);
   const anchor = 'left';
+  const { mode, setMode } = useThemeMode();
 
   const isBrowser = typeof window !== 'undefined';
   const iOS = isBrowser && /iPad|iPhone|iPod/.test(navigator.userAgent);
-  const isMdUp = useMediaQuery(Themes.theme.breakpoints.up('md'));
+  const isMdUp = useMediaQuery((theme: Theme) => theme.breakpoints.up('md'));
 
   const location = useLocation();
 
@@ -242,6 +263,29 @@ const NavBar = () => {
 
           {authentication.userIsAutharized && (
             <List>
+              <ListItem key={'themeMode'} className={classes.themeModeItem}>
+                <ToggleButtonGroup
+                  exclusive
+                  fullWidth
+                  size="small"
+                  value={mode}
+                  aria-label="Färgtema"
+                  onChange={(_, next: ThemeMode | null) =>
+                    next && setMode(next)
+                  }
+                >
+                  {themeModeOptions.map(option => (
+                    <ToggleButton
+                      key={option.value}
+                      value={option.value}
+                      aria-label={option.label}
+                      title={option.label}
+                    >
+                      {option.icon}
+                    </ToggleButton>
+                  ))}
+                </ToggleButtonGroup>
+              </ListItem>
               <ListItem
                 key={'settings'}
                 component={NavLink}
@@ -282,28 +326,34 @@ const useStyles = makeStyles(
         display: 'flex',
       },
       navItem: {
-        margin: theme.spacing(0.5, 1),
+        margin: theme.spacing(0.5, 1.5),
         padding: theme.spacing(1, 1.5),
         borderRadius: theme.spacing(1.5),
-        color: '#718096',
+        color: theme.palette.text.secondary,
         textDecoration: 'none',
         transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
         '& .MuiListItemText-primary': {
           fontSize: '0.9rem',
         },
         '&:hover': {
-          backgroundColor: '#f1f5f9',
-          color: theme.palette.secondary.main,
+          backgroundColor: theme.palette.action.hover,
+          color: accentText(theme),
           '& $navIcon': {
-            color: theme.palette.secondary.main,
+            color: accentText(theme),
           },
         },
       },
+      themeModeItem: {
+        padding: theme.spacing(0.5, 1.5),
+        '& svg': {
+          fontSize: '1.25rem',
+        },
+      },
       navItemActive: {
-        backgroundColor: `${theme.palette.secondary.main}12`, // Very soft red tint
-        color: theme.palette.secondary.main,
+        backgroundColor: `${accentText(theme)}12`,
+        color: accentText(theme),
         '& $navIcon': {
-          color: theme.palette.secondary.main,
+          color: accentText(theme),
         },
         '& .MuiTypography-root': {
           fontWeight: 700,
@@ -313,7 +363,7 @@ const useStyles = makeStyles(
         display: 'flex',
         alignItems: 'center',
         marginRight: theme.spacing(1.5),
-        color: '#a0aec0',
+        color: theme.palette.text.disabled,
         transition: 'color 0.2s',
         '& svg': {
           fontSize: '1.25rem',
@@ -323,7 +373,7 @@ const useStyles = makeStyles(
         width: drawerWidth,
         '& .MuiDrawer-paper': {
           width: drawerWidth,
-          borderRight: '1px solid #edf2f7',
+          borderRight: `1px solid ${theme.palette.divider}`,
         },
       },
       categoryLinks: {

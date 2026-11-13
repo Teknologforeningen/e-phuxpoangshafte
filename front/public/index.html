@@ -26,6 +26,20 @@
       Learn how to configure a non-root public URL by running `npm run build`.
     -->
     <title>E-phuxpoängskort</title>
+    <script>
+      // Pick the colour scheme before first paint so dark mode doesn't flash white.
+      // Mirrors the resolution in src/contexts/ThemeContext.tsx.
+      (function () {
+        try {
+          var mode = localStorage.getItem('themeMode');
+          var dark =
+            mode === 'dark' ||
+            (mode !== 'light' &&
+              window.matchMedia('(prefers-color-scheme: dark)').matches);
+          document.documentElement.style.colorScheme = dark ? 'dark' : 'light';
+        } catch (e) {}
+      })();
+    </script>
     <!-- custom-insertion-point -->
   </head>
   <body>

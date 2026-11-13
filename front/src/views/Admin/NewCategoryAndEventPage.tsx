@@ -8,6 +8,7 @@ import EditEventForm from './components/EditEventForm';
 import EditCategoryForm from './components/EditCategoryForm';
 import SiteSettingsForm from './components/SiteSettingsForm';
 import AdminLayout from './components/AdminLayout';
+import { accentText } from '../../styles/themes';
 
 export const maxWidthAdminForms = 600;
 
@@ -113,9 +114,9 @@ const useStyles = makeStyles((theme: Theme) => ({
       fontWeight: 600,
       textTransform: 'none',
       fontSize: '0.95rem',
-      color: '#718096',
+      color: theme.palette.text.secondary,
       '&.Mui-selected': {
-        color: theme.palette.secondary.main,
+        color: accentText(theme),
       },
     },
   },

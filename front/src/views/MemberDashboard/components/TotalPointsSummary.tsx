@@ -1,6 +1,7 @@
 import React from 'react';
 import { Box, Card, CardContent, Typography, Theme } from '@mui/material';
 import { createStyles, makeStyles } from '@mui/styles';
+import { accentText } from '../../../styles/themes';
 
 interface Props {
   totalCompletedPoints: number;
@@ -88,11 +89,11 @@ const useStyles = makeStyles(
         alignItems: 'center',
       },
       summaryTitle: {
-        color: theme.palette.secondary.main,
+        color: accentText(theme),
         fontSize: '12pt',
       },
       summarySubtitle: {
-        color: '#454545',
+        color: theme.palette.text.secondary,
         fontSize: '10pt',
         marginBottom: theme.spacing(1),
       },
@@ -149,12 +150,12 @@ const useStyles = makeStyles(
       totalBarLabelLeft: {
         fontWeight: 'bold',
         fontSize: '1rem',
-        color: '#000', // ensure contrast
+        color: theme.palette.text.primary,
       },
       totalBarLabelRight: {
         fontWeight: 'bold',
         fontSize: '1rem',
-        color: '#000',
+        color: theme.palette.text.primary,
       },
     }),
   { index: 1 },

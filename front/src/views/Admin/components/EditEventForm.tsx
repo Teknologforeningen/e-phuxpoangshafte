@@ -365,7 +365,7 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
   submitButton: {
     backgroundColor: theme.palette.secondary.main,
-    color: theme.palette.primary.main,
+    color: theme.palette.secondary.contrastText,
     width: '100%',
     maxWidth: maxWidthAdminForms,
     padding: theme.spacing(2, 0),
@@ -373,7 +373,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     borderRadius: 0,
   },
   labelFocused: {
-    color: `${theme.palette.common.black} !important`,
+    color: `${theme.palette.text.primary} !important`,
   },
 }));
 

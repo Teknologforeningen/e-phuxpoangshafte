@@ -27,6 +27,7 @@ import {
 } from '../../../components/Notifications';
 import { createStyles, makeStyles } from '@mui/styles';
 import classNames from 'classnames';
+import { accentText } from '../../../styles/themes';
 import LockIcon from '@mui/icons-material/Lock';
 
 const EventCardTitle = ({
@@ -40,7 +41,7 @@ const EventCardTitle = ({
   return (
     <Box className={classes.horizontalSpacer}>
       <Box className={classes.titleText}>
-        <Typography variant={'h6'} color={'secondary'}>
+        <Typography variant={'h6'} sx={{ color: accentText }}>
           {event.name}{' '}
           {event.mandatory && <LockIcon className={classes.lockIcon} />}
         </Typography>
@@ -183,14 +184,14 @@ const useStyles = makeStyles(
         display: 'flex',
       },
       incompleteIcon: {
-        border: `2px solid black`,
+        border: `2px solid currentColor`,
         borderRadius: 24,
       },
       actionButton: {
         flex: '0 1 0',
         marginLeft: theme.spacing(1),
         minWidth: 120,
-        color: theme.palette.primary.main,
+        color: theme.palette.secondary.contrastText,
         backgroundColor: theme.palette.secondary.main,
         padding: theme.spacing(2, 2),
       },
