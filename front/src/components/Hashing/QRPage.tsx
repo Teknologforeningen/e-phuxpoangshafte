@@ -38,7 +38,8 @@ const QRPage = () => {
     process.env.NODE_ENV === 'development' ? 'development' : 'production';
   const domain = {
     development: 'http://localhost:3000',
-    production: 'https://xn--pong-moa.tf.fi',
+    // TODO: use environment variable for production domain
+    production: 'https://poäng.tf.fi',
   };
   const QRUrl = `${domain[env]}/poang/validation/${hash}`;
 

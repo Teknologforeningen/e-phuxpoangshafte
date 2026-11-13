@@ -1,0 +1,48 @@
+# =============================================================================
+# fnox.toml - Secret management for E-Phuxpoangshaefte
+# =============================================================================
+# Usage:
+#   fnox set SECRET "my-jwt-secret"         # Set a secret
+#   fnox list                                # List all secrets
+#   fnox get SECRET                          # Get a secret value
+#   fnox exec -- yarn --cwd back dev        # Run command with secrets loaded
+#
+# Secrets are encrypted with age using your SSH key and safe to commit to git.
+# See back/.env.template for descriptions of each variable.
+
+[providers]
+age = { type = "age", recipients = ["ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJG2uTlRRL+I2jeTCH90nry/M3yXR4eL7DOTc5DoaRVD"] }
+
+[secrets]
+# JWT secret used for authentication
+SECRET= { provider = "age", value = "YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IHNzaC1lZDI1NTE5IFdZSER2dyBUSCtpRDBlc08zR0tHMmZ3bDB4bE51eEh2MmxQWGZLOW5FS0lyczZEeld3CnlZcjNaUU1MTi9OR3crMWJQa3EvSTF2VU9hUmV4VzdVbUMyK0F6b0JBaDQKLT4gai1ncmVhc2UKNjhLNmdyU0VOWTNEZGNra2YrUThWNnd6Q05NRmJwdWFFbU9lZm5udkMxUGV2eTl5VFBkSVlLWDNJblVKbXJtWgo0aHhJd1VVb054Zk5nQnRTNE1mUmhTWlZLbkxxMlYyVEhXMTh1dTNzTGl5YUkvRURnOXRxMlFoamg4aHdVWHU5CgotLS0gdVpEVW5vbFdwd2UvSyt0VCtLL2JLZWdzUGJ5SmRkTmFIZ2RQS3NUSEVBRQqlwnLCEePxuWwpnFkgoGMj4EBNMm+tGzOcIIB0op2Niw9ntic06A9kNNd7edkn0Oac1Tlt", description = "JWT secret for token signing" }
+
+# Production database credentials
+DB_NAME= { provider = "age", value = "YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IHNzaC1lZDI1NTE5IFdZSER2dyAwK1h0ZEV4VG9VQWZtZEU2aUorU0xpazMwUzlZN0JreDJIZFgrNE5wUmswCkFtUWdGZElwSGxsTFJ0aEM5ZzNSU1V6ZWFhMmtDL1dPRjA2NloweVpPZjgKLT4gOyVVLC1ncmVhc2UKd2VvNEZUbFNJVlFaeUg5N2dHdGMzQm1QQld0c1hzVzh3M3JYT05qMlViZjdud1FaU2kwRXhiN3ViekhIRkdwKwo3NmgrMkJPMHhoZzFrMGJNVE5rCi0tLSBoYmJkd1RWaEF5enFlSjBubkhwQ3NTQ3N5QS9wM0tQbkhsZEl4SVhZY1ZrCoQDIjDzYnlHTwKY6hA8dAISDYfgSHwgd/373YR54r4gjEqBUgjQ", description = "Production database name" }
+DB_USER= { provider = "age", value = "YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IHNzaC1lZDI1NTE5IFdZSER2dyBFTkZuUCtaOXh3UThqWk1xcmFDaFJaSFJMakJEOUZOZFp4MWMxci9rMHpBCjJRdHVZUkRUeXFubUs2eWhSU3o3WFRjc3BGNmZDRFlxdmltWkhnMDBDdncKLT4gXy1ncmVhc2UgQlFiSS10JyIgKCdKUiBTJlxCW18gTStAYC46CmlndFBUaENjSHJjRy82UU82Rk9ETEdSTzB2OHkvVzNVblppb0tuUWd0Yk13MExEWlVKb3hoMTF0bjZzTzQwc1EKa0ZuYUxKNk1iSkJXbUFON3loczQ0cnRPYTUyWlZzdmxHYlNsY3JEWHNNN1F3NTZyMVZwbzJBCi0tLSByYW1TQkc4Q0xFSUdYYW14bmZERFEwTGVtQ3NRUDZZTXk5VVkyQVgzMEdNCspTlxsl/RsfE7y8ehIFEgnMQCgJlqk/UsZWHn1c+eTSnvsnrblQtJc=", description = "Production database user" }
+DB_PASSWORD= { provider = "age", value = "YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IHNzaC1lZDI1NTE5IFdZSER2dyBlNzJtNHdQWE1jRjNjOUVGTitLNFlXVmFvZVFJTXE3cDdleDlkRUpJbERzClhkcW5rU0tjMGV2NjhLUU5INmUzVnhOR0t6ZktXLzE4QjNQdDBHOWhUUWsKLT4gYnI8aC1ncmVhc2UgZksnRWEgYU4xWnoqCmErL0dpZE1zcUdlQ1Ywdi9iOGRhTUU3dWwxUi96dkxMMDkzN2VJQm5qc3N4SXpJcXNFSGNocGRsS1A1S1hHWVgKMnVvempFUHQwQ1BhcjFlYm11RVRTaFJFZkU1Q3pQeDlTZTdBN0R4aDdlRWhFdwotLS0gVWtNZ3dCYlRWdFVaRTRZLzJYR3VacUlMcHJ1S0dWNDlWbFhacExUcnBxMAooa2lkBcewaFVm22cr/yNNMfhPY7zbnBqEuE0rQSNb6DOCN3QTco1G", description = "Production database password" }
+DB_HOST= { provider = "age", value = "YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IHNzaC1lZDI1NTE5IFdZSER2dyA0cHUyZnVmTDZnMlZBY3JoMm9taUp4bC9nYTRJSW5LMW1KT3dMbHk3ODFRCjdVREhSRDBnemtOZmx3d3hja1VPYk9wMWk0UXJOOFhZdi8zdzdhSStxbFkKLT4gdE95R31BRVQtZ3JlYXNlIEdMRjBIJSBFenVXUwptNWlSQ3FHWEk4TVpaVFl1L0dYWDVkazBnN2tnU1FCaFBRCi0tLSBhK21YN29LRis4ekg0VmFseEoyUWg1aWNjSlhiUHNHTlVIeVZwT2RUdENjCrzGo5Z7+pqx3HFKHcIIzHWF84+t3P2sOO4QdOy96YBoyYlZYOdudGoh", description = "Production database host" }
+
+# SMTP configuration for password reset emails
+SMTP_HOST= { provider = "age", value = "YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IHNzaC1lZDI1NTE5IFdZSER2dyA4Z3RpZTZwYVArQkdBUTlNcWRucEd6Z0U4WHh6VUp5NHo3SFhBbTE3cXc4CkJOOVBhZ25uOUpGQUNEenhEcDVMYS9rdWZacVFDVGpEaEpLSUxyL1Y0Mk0KLT4gJT81QTxoWzQtZ3JlYXNlIGdUJDZcID5yU2lEPkkKMVVRM0laT2hLT2JDampaMAotLS0gbG1oTkpNUmlScmlMUURUbGJYNGRITENDLzdhQjFkREJiTGNmRnRmMW9Vcwrj/NusSBoY99qZj+WXa6idS19LXC622C3ldiP4Zsx3Ig==", description = "SMTP server hostname" }
+SMTP_PORT= { provider = "age", value = "YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IHNzaC1lZDI1NTE5IFdZSER2dyBzTmtVVVRRRFc4Nm40QytkaEgzdThocittVDV3WUlta2FGQVJwcWpDVkJJCkRjWFRrQ0Ura3RvaHdjZFR2bnltVXl4NG9RZURxUEZuMkQrdHJ5VzlpNzAKLT4gMSsmcW4tZ3JlYXNlIGdII2wjV2FIIG0gdk5jIF1yCm5kdzlGYlp1ZHhuUE1VTVNLWExtNnlZRXNYelVob2dNU1JjWXZFaWlEL2RLazYxeTRkQmRsa016ckQvVU42TFMKU3NKRklYeGtOM2p0NHQ2NkJESmFwRHNwcFdOdjU4RUt0dwotLS0geVZQanlRN1U0L2Q4YXVXMTdkdm0yNzUrTEllUmJmUFplU3BUcVY0cDltVQpxLf2dOBkaWVS/V3iAsfEo/yPrVIybS3zurzhRXPl4WQ==", description = "SMTP server port" }
+SMTP_USER= { provider = "age", value = "YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IHNzaC1lZDI1NTE5IFdZSER2dyAraDcwNkFEL2dmVUx3ejh2blJENWt1Y3pKY1Z4TFA0Ry9aMHVuNjl2TzJJCjZuTkJaTzBXYUdXUGMweHVCbm9ndTNCbnc5Mk4wZVg2ZWxuOW1hRDVrVUkKLT4gJ0F6djpdVXEtZ3JlYXNlCkZWaXNnTHBjMDkxMDZ3N1cxRUEKLS0tIEthTy9SRENBKzhKZW1sVWxGclp0enlwcGRYOWNGbzlrSnNKWENXellPL1kK2eN1XROfGMMS1oc72/231Hh2Ts/vy9/5tKbO3RnESdI=", description = "SMTP username" }
+SMTP_PW= { provider = "age", value = "YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IHNzaC1lZDI1NTE5IFdZSER2dyA3YVJsUnkwZjdRM0JnTks2NFh4WGhraXN5eUE1VERaOUNvUlhXUmlGUG5BClNyRWorb1JzNGRzK0RLRG9LdUpxY1pkSVQySnd3NDNzZDBKdE10VnRJS2sKLT4gJENpVFMtZ3JlYXNlIEMgW087bDZUICE+X3YgSQpNbWh1K2g2THZGQnEyTHBYa1A2S0w5NWo3YWRzRlB4eCs4RGVOOHFSMExvRnRDOSs4NWMzcWdTKzI5QnJ3TFgvCnJCcWkvRFBWd29FR2tCVkl6VEhTSWNUaG1xc2psa0tYaFBBREFZcVBCY3l0WnRsYzBxSQotLS0gMGh4aE9ERDBLWXE0RmxBVmI1TXJDaWtTZURicmt2R3BxUXMyeGR1Uklhawq+bXfGT/KT/SUOLxX2cECZIg16qh8Pl3kG+i4P7c1rgw==", description = "SMTP password" }
+MAIL_FROM= { provider = "age", value = "YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IHNzaC1lZDI1NTE5IFdZSER2dyBXMXRkd3UxaWZmNjNvdXJjMDRlQ1dpeVcxQVlRM25GYmFWaUphM3pUZUdFCjhscUU1TUJNcUtJN1I4bXlEb2Z6SkxuZTkyQTN4TDVqdmxvWit1RUdTT3MKLT4gKHBceyQ7aTUtZ3JlYXNlIGJ5ezdLbSBDZiB9ejpRNiBCaDsKa3I1LzZUenRSTkFBblAzN2ZGZlZRRUVBMk5ZcEJqNW5nNHB6NCtvc05qMWhZZDNxVWVsaUxRRFRxTVRQeEdsMQprZFZ2Ym9EVGhJUEx5bFBKd1Urd3Zud1RIbWNsVC9NCi0tLSBpYXFrb1BoMC8vWUlQOFBId2ZFdUdnZk5wd2pXZjdDbE9aR0lad2FORGx3ChVovjk+pncuKCNs3eo6fZndbUUpr0aTQOFfuRsW7k/K", description = "Sender address for password reset emails" }
+
+# -- Profiles -----------------------------------------------------------------
+
+[profiles.production.providers]
+age = { type = "age", recipients = ["ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJG2uTlRRL+I2jeTCH90nry/M3yXR4eL7DOTc5DoaRVD"] }
+
+[profiles.production.secrets]
+SECRET = { provider = "age", description = "Production JWT secret" }
+DB_NAME = { provider = "age", description = "Production database name" }
+DB_USER = { provider = "age", description = "Production database user" }
+DB_PASSWORD = { provider = "age", description = "Production database password" }
+DB_HOST = { provider = "age", description = "Production database host" }
+SMTP_HOST = { provider = "age", description = "Production SMTP host" }
+SMTP_PORT = { provider = "age", description = "Production SMTP port" }
+SMTP_USER = { provider = "age", description = "Production SMTP user" }
+SMTP_PW = { provider = "age", description = "Production SMTP password" }
+MAIL_FROM = { provider = "age", description = "Production sender email" }
